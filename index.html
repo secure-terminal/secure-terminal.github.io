@@ -8,13 +8,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal: a terminal where paste is safe</title>
-<meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default with no escape parser, a paste warning, three unicode display modes, and an opt-in TUI mode that runs ssh, editors and the Claude Code CLI while still filtering every character. The problem output-lies documents, removed by construction.">
+<meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default with no escape parser, a paste warning, three unicode display modes, and an opt-in TUI mode that runs ssh, vim and htop while still filtering every character. Memory-safe. The problem output-lies documents, removed by construction.">
 <link rel="canonical" href="https://secure-terminal.github.io/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
 <meta property="og:title" content="secure-terminal: a terminal where paste is safe">
-<meta property="og:description" content="ASCII-only by default, no escape parser, a paste warning and reveal modes. An opt-in TUI mode even runs the Claude Code CLI, still filtering every character. Copy commands in and text out without worrying about invisible characters.">
+<meta property="og:description" content="ASCII-only by default, no escape parser, a paste warning and reveal modes, memory-safe. An opt-in TUI mode runs ssh, vim and htop, still filtering every character. Copy commands in and text out without worrying about invisible characters.">
 <meta property="og:url" content="https://secure-terminal.github.io/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
 <meta property="og:image:width" content="1200">
@@ -45,6 +45,7 @@
   .nav > .wrap{display:flex;align-items:center;gap:14px;min-height:56px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
   .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:1.02rem}
   .brand .logo{width:1.4em;height:1.4em;flex:0 0 auto}
+  .brand .brandmark{height:30px;width:auto;display:block}
   .brand b{color:var(--accent)}
   .brand .tm{font-size:.72em;color:var(--muted);margin-left:.14em;font-weight:600;align-self:flex-start;line-height:1}
   .nav .status{margin-left:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--accent);border-radius:5px;padding:3px 8px;white-space:nowrap}
@@ -119,8 +120,8 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><svg class="logo" viewBox="0 0 26 26" aria-hidden="true" focusable="false"><rect x="2" y="2" width="22" height="22" rx="6" fill="#14161b"/><path d="M7 9 L11 13 L7 17" fill="none" stroke="#cfd3da" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.5" y="15" width="6.5" height="2.4" rx="1.1" fill="#1f8a54"/></svg><span>secure&#8209;terminal</span></a>
-    <span class="status" title="Working: usable, built with Python and Qt6">working</span>
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
+    <span class="status" title="Working: usable and memory-safe">working</span>
     <nav>
       <a href="#install">Install</a>
       <a href="#features">Features</a>
@@ -131,7 +132,7 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
 </header>
 
 <div class="notice"><div class="wrap">
-  <b>It works.</b> A usable terminal built in Python and Qt6: strict ASCII by default, with an opt-in mode that even runs the Claude Code CLI. Build it from source below.
+  <b>It works.</b> A usable terminal: strict ASCII by default, with an opt-in mode that runs ssh, vim, htop and other full-screen programs. Build it from source below.
 </div></div>
 
 <main>
@@ -149,11 +150,11 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
 </div></section>
 
 <div class="whatis"><div class="wrap">
-  <p><b>What is this?</b> A terminal built in Python and Qt6 whose display shows only printable ASCII by default
-    (everything else is neutralized, the way <code>stcat</code> does for logs) and which interprets no escape
-    sequences from program output. Paste a command you copied from the web, or read text a program printed, and
-    trust that what you see is what is there. When you need more, an <b>opt-in TUI mode</b> runs full-screen
-    programs, ssh, even the Claude Code CLI, through a restricted screen model that still filters every character.</p>
+  <p><b>What is this?</b> A terminal whose display shows only printable ASCII by default (everything else is
+    neutralized, the way <code>stcat</code> does for logs) and which interprets no escape sequences from program
+    output. Paste a command you copied from the web, or read text a program printed, and trust that what you see
+    is what is there. When you need more, an <b>opt-in TUI mode</b> runs full-screen programs, ssh, vim, htop,
+    through a restricted screen model that still filters every character.</p>
 </div></div>
 
 <section class="cat" id="design"><div class="wrap">
@@ -182,6 +183,14 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
       second line, because you see the exact bytes first. The signal keys send a <em>real</em> signal to the
       foreground process group, so <code>Ctrl+C</code> / <code>Ctrl+\</code> bite even a raw-mode program, and a
       <b>Terminate</b> button (SIGTERM then SIGKILL) means a stuck program can never trap you.</p>
+  </article>
+
+  <article class="issue">
+    <h3>Memory-safe</h3>
+    <p>The code that reads hostile bytes is written in a memory-safe language (Python). The traditional terminal
+      emulators, written in C, have a long history of memory-corruption bugs in exactly this parsing path; here
+      that entire class, buffer overflows and use-after-free driven by attacker-controlled output, cannot happen
+      by construction.</p>
   </article>
 </div></section>
 
@@ -219,9 +228,9 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
 
 <section class="cat" id="tui"><div class="wrap">
   <h2 class="catname">TUI mode: run full-screen programs</h2>
-  <p class="catdesc">When you need to run ssh, an editor, or the Claude Code CLI, opt in with your eyes open.</p>
+  <p class="catdesc">When you need to run ssh, an editor like vim, or htop, opt in with your eyes open.</p>
   <article class="issue risk">
-    <h3><span class="flag">Opt-in, clearly flagged</span> &middot; ssh, editors, Claude Code</h3>
+    <h3><span class="flag">Opt-in, clearly flagged</span> &middot; ssh, vim, htop, tmux</h3>
     <p>The strict default cannot run curses apps. TUI mode (per tab, off by default, marked with a yellow risk
       indicator) interprets escapes inside an isolated in-memory screen model (<code>pyte</code>) that has no OS
       reach: it <b>cannot set the window title or touch the clipboard</b>, so those spoofing vectors stay closed.
@@ -231,7 +240,7 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
       programs you trust. This is "restricted-emulator safe," not "safe by construction." The default line mode,
       and everything the guarantee rests on, is unchanged.</p>
     <div class="term" style="margin-top:10px"><span class="d"># in TUI mode, verified end to end:</span>
-tmux, an ssh session, and the <span class="y">Claude Code</span> CLI all render correctly,
+<span class="y">ssh</span>, <span class="y">vim</span>, <span class="y">htop</span>, <span class="y">tmux</span> and apt's progress bar all render correctly,
 with every cell still filtered and the title/clipboard still off-limits.</div>
   </article>
 </div></section>
@@ -262,8 +271,8 @@ sudo dpkg -i ../secure-terminal_*.deb
 
 <span class="c"># or run from the checkout, no install</span>
 ./usr/bin/secure-terminal</div>
-  <p class="catdesc" style="margin-top:14px">Depends on <code>python3-pyqt6</code>; TUI mode also uses
-    <code>python3-pyte</code> (both in Debian main). Then just run <code>secure-terminal</code>.</p>
+  <p class="catdesc" style="margin-top:14px">After <code>dpkg -i</code>, run <code>sudo apt-get install -f</code>
+    to pull the dependencies (all in Debian main). Then just run <code>secure-terminal</code>.</p>
   <div class="cta">
     <a class="btn primary" href="https://github.com/secure-terminal/secure-terminal">Get it on GitHub</a>
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
@@ -286,7 +295,7 @@ sudo dpkg -i ../secure-terminal_*.deb
 <footer>
   <div class="ftop">
     <div class="fbrand">
-      <span class="ftag"><svg class="logo" width="22" height="22" viewBox="0 0 26 26" aria-hidden="true" focusable="false"><rect x="2" y="2" width="22" height="22" rx="6" fill="#14161b"/><path d="M7 9 L11 13 L7 17" fill="none" stroke="#cfd3da" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.5" y="15" width="6.5" height="2.4" rx="1.1" fill="#1f8a54"/></svg>secure&#8209;terminal</span>
+      <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Nothing hides.</p>
     </div>
     <nav class="fcols">

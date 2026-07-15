@@ -1,0 +1,24 @@
+<!--
+  Horizontal logo lockup source for secure-terminal. AI-Assisted.
+  Rendered headless (transparent) + trimmed to logo-wide.png, used as a single <img> in nav/footer
+  so the symbol+wordmark can never wrap or break apart. Sibling of output-lies' lockup (same
+  typography), but its own symbol: a terminal prompt whose green cursor sits square and aligned
+  (safe), the mirror of output-lies' shifted red bar (a lie). "secure" carries the green accent.
+-->
+<meta charset="utf-8">
+<style>
+  html,body{margin:0;background:transparent}
+  body{display:inline-block}
+  .lock{display:inline-flex;align-items:center;gap:15px;padding:14px 18px;
+    font-family:"DejaVu Sans Mono","Cascadia Code",monospace;font-weight:700;font-size:74px;
+    color:#14161b;letter-spacing:-3.5px;white-space:nowrap}
+  .lock svg{width:82px;height:82px;flex:0 0 auto}
+  .wm .s{color:#1f8a54}
+  .wm .tm{font-size:.4em;color:#6b6f76;font-weight:600;vertical-align:super;margin-left:5px}
+</style>
+<body>
+  <div class="lock">
+    <svg viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="22" height="22" rx="6" fill="#14161b"/><path d="M7 9 L11 13 L7 17" fill="none" stroke="#cfd3da" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.5" y="15" width="6.5" height="2.9" rx="1.2" fill="#1f8a54"/></svg>
+    <span class="wm"><span class="s">secure</span>&#8209;terminal<span class="tm">&trade;</span></span>
+  </div>
+</body>
