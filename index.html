@@ -1,0 +1,241 @@
+<!--
+  secure-terminal: landing page. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+  Sibling of output-lies (shared design system, green "safe" accent).
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal: a terminal where paste is safe</title>
+<meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default, no escape-sequence interpretation, minimal signal keys. The problem output-lies documents, removed by construction.">
+<link rel="canonical" href="https://secure-terminal.github.io/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal: a terminal where paste is safe">
+<meta property="og:description" content="ASCII-only by default, no escape-sequence interpretation, minimal signal keys. Copy commands in and text out without worrying about invisible characters.">
+<meta property="og:url" content="https://secure-terminal.github.io/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal: a terminal where paste is safe">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal: a terminal where paste is safe">
+<meta name="twitter:description" content="ASCII-only by default, no escape interpretation, minimal signal keys.">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --bg:#f3f2ee; --card:#fbfbf9; --ink:#17181b; --muted:#6b6f76; --line:#e4e2da;
+    --accent:#1f8a54; --danger:#d83933;
+    --tbg:#14161b; --tfg:#cfd3da;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:70px}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  code{font-family:var(--mono);font-size:.88em;background:rgba(23,24,27,.06);padding:.11em .4em;border-radius:5px;unicode-bidi:isolate}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+  header.nav{position:sticky;top:0;z-index:10;background:rgba(243,242,238,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav > .wrap{display:flex;align-items:center;gap:14px;min-height:56px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+  .brand{font-family:var(--mono);font-weight:700;letter-spacing:-.02em;text-decoration:none;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;font-size:1.02rem}
+  .brand .logo{width:1.4em;height:1.4em;flex:0 0 auto}
+  .brand b{color:var(--accent)}
+  .brand .tm{font-size:.72em;color:var(--muted);margin-left:.14em;font-weight:600;align-self:flex-start;line-height:1}
+  .nav .status{margin-left:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--accent);border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .nav nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+  .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none}
+  .nav nav a:hover{color:var(--ink)}
+
+  .notice{background:#eef7f1;border-bottom:1px solid #cfe6da;color:#274b39}
+  .notice .wrap{padding:11px 20px;font-size:.92rem}
+  .notice b{color:var(--accent)}
+
+  .hero{padding:56px 0 30px}
+  .kicker{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+  .hero h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 18px;font-weight:800}
+  .hero h1 .u{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:6px}
+  .hero p.sub{font-size:clamp(1.05rem,2.4vw,1.3rem);color:#2c2e33;max-width:60ch;margin:0}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .btn{display:inline-block;padding:11px 18px;border-radius:9px;font-weight:650;text-decoration:none;font-size:.95rem;border:1px solid var(--ink)}
+  .btn.primary{background:var(--ink);color:var(--bg)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+
+  .whatis{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .whatis .wrap{padding:22px 20px}
+  .whatis p{margin:0;max-width:74ch;color:#33353a;font-size:1.02rem}
+  .whatis b{color:var(--accent)}
+
+  section.cat{padding:48px 0 8px}
+  .catname{font-size:.82rem;font-family:var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
+  .catdesc{margin:0 0 18px;color:var(--muted);max-width:66ch}
+  .issue{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
+  .issue h3{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.01em}
+  .issue p{margin:0 0 8px;color:#3a3c41;max-width:74ch}
+  .issue p:last-child{margin-bottom:0}
+  .no{color:var(--danger);font-weight:700}
+  .yes{color:var(--accent);font-weight:700}
+  .tbl{width:100%;border-collapse:collapse;margin:6px 0 0;font-size:.95rem}
+  .tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  .tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .tbl td code{font-family:var(--mono)}
+  .tbl tr:last-child td{border-bottom:0}
+  .term{background:var(--tbg);color:var(--tfg);font:.92rem/1.7 var(--mono);padding:16px;border-radius:11px;border:1px solid #23262e;overflow-x:auto;white-space:pre;unicode-bidi:isolate}
+  .term .g{color:#9ece6a}.term .r{color:#f7768e}.term .d{color:#727a8a}
+
+  footer{border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;margin-top:40px}
+  footer .ftop{display:flex;gap:40px 56px;flex-wrap:wrap;justify-content:space-between;padding:36px 20px 28px;max-width:1000px;margin:0 auto}
+  footer .fbrand .ftag{font-family:var(--mono);font-weight:700;font-size:1.05rem;color:var(--ink);letter-spacing:-.02em;display:inline-flex;align-items:center;gap:8px}
+  footer .fbrand .ftag b{color:var(--accent)}
+  footer .fbrand p{margin:8px 0 0;max-width:30ch;color:var(--muted)}
+  footer .fcols{display:flex;gap:52px;flex-wrap:wrap}
+  footer .fcol{display:flex;flex-direction:column;gap:9px}
+  footer .fcol h4{margin:0 0 3px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  footer .fcol a{color:var(--ink);text-decoration:none;font-size:.88rem}
+  footer .fcol a:hover{color:var(--accent)}
+  footer .fbot{display:flex;gap:20px;flex-wrap:wrap;padding:16px 20px 44px;border-top:1px solid var(--line);align-items:center;max-width:1000px;margin:0 auto}
+  footer .fbot .sp{margin-left:auto}
+  footer .fcopy{color:var(--muted);font-size:.84rem}
+  @media(max-width:640px){ footer .fcols{display:grid;grid-template-columns:1fr 1fr;gap:20px 22px} }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><svg class="logo" viewBox="0 0 26 26" aria-hidden="true" focusable="false"><rect x="2" y="2" width="22" height="22" rx="6" fill="#14161b"/><path d="M7 9 L11 13 L7 17" fill="none" stroke="#cfd3da" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.5" y="15" width="6.5" height="2.4" rx="1.1" fill="#1f8a54"/></svg><span>secure&#8209;terminal</span></a>
+    <span class="status" title="Early: design and first implementation in progress">early</span>
+    <nav>
+      <a href="https://github.com/secure-terminal">GitHub</a>
+      <a href="https://output-lies.github.io">output lies</a>
+    </nav>
+  </div>
+</header>
+
+<div class="notice"><div class="wrap">
+  <b>Early, work in progress.</b> The design is settled; the first implementation is being built. This page is AI-generated and pending human review.
+</div></div>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="kicker">A safe paste target</p>
+  <h1>A terminal where paste is <span class="u">safe</span>.</h1>
+  <p class="sub">Copy a command into it, or text out of it, without worrying about invisible characters, bidi
+    overrides or escape sequences. secure-terminal accepts and shows plain printable ASCII by default and nothing
+    else, so a pasted lie has nothing to hide in.</p>
+  <div class="cta">
+    <a class="btn primary" href="#design">How it stays safe</a>
+    <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
+  </div>
+</div></section>
+
+<div class="whatis"><div class="wrap">
+  <p><b>What is this?</b> A small, line-oriented terminal built in Python and Qt6. Its display shows only printable
+    ASCII (everything else is neutralized, the way <code>stcat</code> does for logs), and it interprets no escape
+    or control sequences from program output. It is a place to paste commands you copied from the web, or to read
+    text a program printed, and trust that what you see is what is there. It is not a general-purpose terminal
+    emulator, and that limit is the point.</p>
+</div></div>
+
+<section class="cat" id="design"><div class="wrap">
+  <h2 class="catname">Safe by construction</h2>
+  <p class="catdesc">The security property is not a filter bolted on. It is what the terminal can and cannot do.</p>
+
+  <article class="issue">
+    <h3>Output is ASCII-only, always</h3>
+    <p>Program output is rendered as printable ASCII plus newline and tab. Bidi overrides, zero-width characters,
+      homoglyphs, ANSI escapes and control bytes never reach the screen as anything but their neutralized form.
+      A hostile filename in <code>ls</code>, a forged <code>[ OK ]</code> in a log, a Trojan-Source comment:
+      none of them can redraw or reorder what you read.</p>
+  </article>
+
+  <article class="issue">
+    <h3>No escape-sequence interpretation</h3>
+    <p>There is no ANSI parser to attack. The terminal does not honor cursor moves, alternate screens, colors or
+      OSC hyperlinks from the child process. Parsing attacker-influenced escapes is the entire vulnerability
+      class; a terminal that cannot parse them cannot fall for them.</p>
+  </article>
+
+  <article class="issue">
+    <h3>Input is a tiny allowlist</h3>
+    <p>You type printable ASCII, and a small set of control keys that generate signals. Nothing you paste can
+      auto-run a hidden second line, because the terminal is line-oriented and shows you the exact bytes first.</p>
+  </article>
+</div></section>
+
+<section class="cat" id="keys"><div class="wrap">
+  <h2 class="catname">The keys it forwards</h2>
+  <p class="catdesc">One-directional and minimal. The signal keys you actually reach for, and nothing that needs
+    an escape parser.</p>
+  <table class="tbl">
+    <thead><tr><th>Key</th><th>Signal</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><code>Ctrl+C</code></td><td><code>SIGINT</code></td><td>interrupt the running command (the essential one)</td></tr>
+      <tr><td><code>Ctrl+Z</code></td><td><code>SIGTSTP</code></td><td>suspend to the background (e.g. a <code>gitk</code> during review)</td></tr>
+      <tr><td><code>Ctrl+\</code></td><td><code>SIGQUIT</code></td><td>the "no, really quit" when <code>Ctrl+C</code> is ignored</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section class="cat" id="wont"><div class="wrap">
+  <h2 class="catname">What it will not do</h2>
+  <p class="catdesc">On purpose. The omissions are the safety.</p>
+  <article class="issue">
+    <h3><span class="no">No</span> full-screen TUIs (nano, vim, emacs, htop)</h3>
+    <p>Curses applications are driven entirely by control and escape sequences, cursor moves, alternate screens.
+      Supporting them means parsing exactly the bytes secure-terminal exists to refuse. That is probably too hard
+      to do safely, so it is out of scope. Run those in a normal terminal, in a window you already treat as
+      untrusted.</p>
+  </article>
+  <article class="issue">
+    <h3><span class="no">No</span> non-ASCII by default</h3>
+    <p>Additional character sets may become opt-in in a later version, much later, and always as an explicit
+      allowlist rather than a general decoder. The default stays ASCII, because "safe unless you opt out" is the
+      only default worth shipping.</p>
+  </article>
+</section>
+
+<section class="cat" id="related"><div class="wrap">
+  <h2 class="catname">Related</h2>
+  <div class="issue">
+    <p><a href="https://output-lies.github.io"><b>output lies</b></a> documents the problem in depth, with a live
+      analyzer, a quiz, and real-world cases (Trojan Source, homoglyph domains, pastejacking). secure-terminal is
+      the tool that removes it at the source.</p>
+    <p><a href="https://github.com/org-ai-assisted"><b>org-ai-assisted</b></a> explains how these AI-assisted
+      projects are built and reviewed.</p>
+  </div>
+</div></section>
+</main>
+
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><svg class="logo" width="22" height="22" viewBox="0 0 26 26" aria-hidden="true" focusable="false"><rect x="2" y="2" width="22" height="22" rx="6" fill="#14161b"/><path d="M7 9 L11 13 L7 17" fill="none" stroke="#cfd3da" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="13.5" y="15" width="6.5" height="2.4" rx="1.1" fill="#1f8a54"/></svg>secure&#8209;terminal</span>
+      <p>Paste in, read out. Nothing hides.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h4>Project</h4>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h4>Family</h4>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a href="https://github.com/org-ai-assisted">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h4>Safe text</h4>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy">Operated by <a href="https://github.com/adrelanos">@adrelanos</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
