@@ -7,21 +7,21 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
-<title>secure-terminal: a terminal where paste is safe</title>
+<title>secure-terminal: safe to paste, safe to read</title>
 <meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default with no escape parser, a paste warning, three unicode display modes, and an opt-in TUI mode that runs ssh, vim and htop while still filtering every character. Memory-safe. The problem output-lies documents, removed by construction.">
 <link rel="canonical" href="https://secure-terminal.github.io/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
-<meta property="og:title" content="secure-terminal: a terminal where paste is safe">
+<meta property="og:title" content="secure-terminal: safe to paste, safe to read">
 <meta property="og:description" content="ASCII-only by default, no escape parser, a paste warning and reveal modes, memory-safe. An opt-in TUI mode runs ssh, vim and htop, still filtering every character. Copy commands in and text out without worrying about invisible characters.">
 <meta property="og:url" content="https://secure-terminal.github.io/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="secure-terminal: a terminal where paste is safe">
+<meta property="og:image:alt" content="secure-terminal: safe to paste, safe to read">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="secure-terminal: a terminal where paste is safe">
+<meta name="twitter:title" content="secure-terminal: safe to paste, safe to read">
 <meta name="twitter:description" content="ASCII-only by default, no escape interpretation, minimal signal keys.">
 <meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
 <meta name="theme-color" content="#f3f2ee">
@@ -137,11 +137,12 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
 
 <main>
 <section class="hero"><div class="wrap">
-  <p class="kicker">A safe paste target</p>
-  <h1>A terminal where paste is <span class="u">safe</span>.</h1>
-  <p class="sub">Copy a command into it, or text out of it, without worrying about invisible characters, bidi
-    overrides or escape sequences. secure-terminal accepts and shows plain printable ASCII by default and nothing
-    else, so a pasted lie has nothing to hide in.</p>
+  <p class="kicker">Safe in both directions</p>
+  <h1>Safe to paste. Safe to <span class="u">read</span>.</h1>
+  <p class="sub">Pasted commands are sanitized and program output is neutralized, so neither what you copy in
+    nor what a program prints out can hide invisible characters, bidi overrides or escape sequences. secure-terminal
+    accepts and shows plain printable ASCII by default and nothing else, so a lie has nothing to hide in whether it
+    arrives by paste or by <code>cat</code>.</p>
   <div class="cta">
     <a class="btn primary" href="#install">Get it</a>
     <a class="btn ghost" href="#features">What makes it different</a>
