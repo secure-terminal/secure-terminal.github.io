@@ -31,7 +31,7 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
-    <span class="status" title="Working: usable and memory-safe">working</span>
+    <span class="status" title="This site is AI-generated and pending human review">needs human review</span>
     <nav>
       <a href="#compare">Compare</a>
       <a href="#features">Features</a>
@@ -127,6 +127,11 @@
         legitimate unicode so you can read a log, while the invisible, bidi and homoglyph classes are still
         neutralized), and <b>Reveal</b> (every non-ASCII character as a <code>&lt;U+XXXX&gt;</code> badge, to
         inspect exactly what is there).</p>
+      <p class="modenote"><b>Show does not mean run.</b> All three modes remove escape sequences first
+        (there is no escape parser at all), so the escape-sequence RCE class (the "<code>cat</code> a crafted
+        file and it opens a calculator" bug) cannot happen in <b>any</b> mode, Show included. A bare escape or
+        control byte is still neutralized to <code>_</code> in Show; the mode only changes how the remaining,
+        already-safe characters are drawn, never whether escapes are interpreted.</p>
     </article>
     <article class="issue">
       <h3>Transcripts safe to open anywhere</h3>
@@ -161,6 +166,7 @@
     </tbody>
   </table>
   </div>
+  <p class="cmp-hint" aria-hidden="true">Swipe the table to see the secure-terminal column -&gt;</p>
   <p class="catdesc" style="margin-top:14px"><b>Honest about the limits:</b> a plain multi-line ASCII paste still submits its lines - that is not deception, and no terminal treats it as such. In TUI mode a program can still draw a misleading interface within its own screen, so only run programs you trust. secure-terminal makes <em>display and paste</em> safe; it is not a sandbox for what you deliberately choose to run.</p>
   <p class="catdesc" style="margin-top:12px"><b>No terminal protects you from a harmful command itself.</b> Deciding that <code>curl x | sh</code> or a subtly wrong <code>rm</code> is dangerous is a judgment call, not a parsing rule, so no terminal - this one included - can catch it by construction. Doing so needs something that can pause a command deemed unsafe and ask you to confirm. secure-terminal keeps that judgment <em>out</em> of the terminal but provides an opt-in <b><a href="/plugins/">hook</a></b>: before a command runs in line mode it can call an external handler you configure, which judges the command and may warn, suggest a safer one, or ask you to confirm. The terminal ships no AI and no policy of its own; the logic lives in the handler. It includes two examples: a rules-based one (blocks a remote script piped into a root shell, asks on <code>curl | sh</code> and force-pushes) and an AI one that pipes the command to <code>claude --print</code> (or any model), with the command and scrollback framed as untrusted data so a hostile log cannot inject the judge. Honest limit: the hook sees the line you typed, not what the shell expands it to, and only in line mode.</p>
   <p class="catdesc" style="margin-top:12px"><b>Two forms: GUI and CLI.</b> secure-terminal is a graphical application, and <code>secure-terminal-cli</code> is the same safe core as a command-line wrapper: it runs a shell or command in a pseudo-terminal and sanitizes the output before it reaches your existing terminal - so a plain console or an SSH session, exposed to the very same output attacks, gets safe display without the GUI. It sanitizes what a program <em>displays</em>; it does not gate your keystrokes or judge commands (that is the hook's job, below).</p>
@@ -225,8 +231,8 @@ sudo dpkg -i ../secure-terminal_*.deb
   <h2 class="catname">FAQ</h2>
   <p class="catdesc">The questions worth answering before you trust a terminal.</p>
   <div class="issue">
-    <h3>Is it open source? What licence?</h3>
-    <p>Yes. secure-terminal is free software under the <b>AGPL-3+</b>, developed in
+    <h3>Is it Open Source? What licence?</h3>
+    <p>Yes. secure-terminal is Free Software under the <b>AGPL-3+</b>, developed in
       the open on <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>.
       Read the source, build it yourself, audit exactly what it does.</p>
   </div>
@@ -299,7 +305,8 @@ sudo dpkg -i ../secure-terminal_*.deb
       <div class="fcol">
         <h4>Family</h4>
         <a href="https://output-lies.github.io">output lies</a>
-        <a href="https://github.com/org-ai-assisted">org-ai-assisted</a>
+        <a class="self" href="https://secure-terminal.github.io" aria-current="page">secure-terminal</a>
+        <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
       </div>
       <div class="fcol">
         <h4>Safe text</h4>

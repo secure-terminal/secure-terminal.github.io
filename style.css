@@ -19,7 +19,7 @@
   .brand .brandmark{height:30px;width:auto;display:block}
   .brand b{color:var(--accent)}
   .brand .tm{font-size:.72em;color:var(--muted);margin-left:.14em;font-weight:600;align-self:flex-start;line-height:1}
-  .nav .status{margin-left:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--accent);border-radius:5px;padding:3px 8px;white-space:nowrap}
+  .nav .status{margin-left:12px;font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--danger);border-radius:5px;padding:3px 8px;white-space:nowrap}
   .nav nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
   .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none}
   .nav nav a:hover{color:var(--ink)}
@@ -50,6 +50,8 @@
   .issue h3{margin:0 0 8px;font-size:1.2rem;letter-spacing:-.01em}
   .issue p{margin:0 0 8px;color:#3a3c41;max-width:74ch}
   .issue p:last-child{margin-bottom:0}
+  .modenote{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+  .modenote b{color:var(--ink)}
   .no{color:var(--danger);font-weight:700}
   .yes{color:var(--accent);font-weight:700}
   .tbl{width:100%;border-collapse:collapse;margin:6px 0 0;font-size:.95rem}
@@ -65,7 +67,23 @@
   .risk{border-left:4px solid #e5a50a;background:#fbf6ec}
   .flag{color:#b9770a;font-weight:700}
   .pre{background:var(--tbg);color:var(--tfg);font:.9rem/1.65 var(--mono);padding:16px;border-radius:11px;border:1px solid #23262e;overflow-x:auto;white-space:pre;unicode-bidi:isolate}
-  .cmp-wrap{overflow-x:auto;margin:16px 0}
+  .cmp-wrap{overflow-x:auto;margin:16px 0;
+    /* self-hiding scroll shadows: a soft shadow appears on whichever edge still
+       has table to scroll to, so the hidden third column (secure-terminal) is
+       discoverable on narrow screens. Pure CSS, no script. */
+    background:
+      linear-gradient(to right, var(--bg) 20%, rgba(243,242,238,0)) left center,
+      linear-gradient(to left,  var(--bg) 20%, rgba(243,242,238,0)) right center,
+      linear-gradient(to right, rgba(0,0,0,.13), rgba(0,0,0,0)) left center,
+      linear-gradient(to left,  rgba(0,0,0,.13), rgba(0,0,0,0)) right center;
+    background-repeat:no-repeat;
+    background-size:36px 100%,36px 100%,16px 100%,16px 100%;
+    background-attachment:local,local,scroll,scroll}
+  .cmp-hint{display:none}
+  @media(max-width:640px){
+    .cmp-hint{display:block;margin:8px 2px 0;text-align:right;color:var(--muted);
+      font-family:var(--mono);font-size:.72rem;letter-spacing:.02em}
+  }
   .cmp{width:100%;border-collapse:collapse;font-size:.95rem;min-width:560px}
   .cmp th,.cmp td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
   .cmp thead th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -84,6 +102,10 @@
   footer .fcol h4{margin:0 0 3px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
   footer .fcol a{color:var(--ink);text-decoration:none;font-size:.88rem}
   footer .fcol a:hover{color:var(--accent)}
+  /* self-link: the current site appears in the uniform Family list but is not
+     clickable and is marked as the current page. */
+  footer .fcol a.self{color:var(--muted);pointer-events:none;cursor:default;text-decoration:none}
+  footer .fcol a.self::after{content:" (this site)";font-size:.8em;opacity:.7}
   footer .fbot{display:flex;gap:20px;flex-wrap:wrap;padding:16px 20px 44px;border-top:1px solid var(--line);align-items:center;max-width:1000px;margin:0 auto}
   footer .fbot .sp{margin-left:auto}
   footer .fcopy{color:var(--muted);font-size:.84rem}
