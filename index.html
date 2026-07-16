@@ -94,6 +94,13 @@
   .risk{border-left:4px solid #e5a50a;background:#fbf6ec}
   .flag{color:#b9770a;font-weight:700}
   .pre{background:var(--tbg);color:var(--tfg);font:.9rem/1.65 var(--mono);padding:16px;border-radius:11px;border:1px solid #23262e;overflow-x:auto;white-space:pre;unicode-bidi:isolate}
+  .cmp-wrap{overflow-x:auto;margin:16px 0}
+  .cmp{width:100%;border-collapse:collapse;font-size:.95rem;min-width:560px}
+  .cmp th,.cmp td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  .cmp thead th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .cmp td:first-child{font-weight:600;color:var(--ink)}
+  .cmp .trad{color:#5a5c61}
+  @media(max-width:640px){ .cmp{font-size:.86rem} .cmp th,.cmp td{padding:9px 8px} }
   .pre .c{color:#727a8a}
 
   footer{border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;margin-top:40px}
@@ -123,8 +130,9 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
     <span class="status" title="Working: usable and memory-safe">working</span>
     <nav>
-      <a href="#install">Install</a>
+      <a href="#compare">Compare</a>
       <a href="#features">Features</a>
+      <a href="#install">Install</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
       <a href="https://output-lies.github.io">output lies</a>
     </nav>
@@ -180,10 +188,12 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
 
   <article class="issue">
     <h3>Line-oriented input, with a real escape hatch</h3>
-    <p>You type printable ASCII and a tiny allowlist of control keys. Nothing you paste can auto-run a hidden
-      second line, because you see the exact bytes first. The signal keys send a <em>real</em> signal to the
-      foreground process group, so <code>Ctrl+C</code> / <code>Ctrl+\</code> bite even a raw-mode program, and a
-      <b>Terminate</b> button (SIGTERM then SIGKILL) means a stuck program can never trap you.</p>
+    <p>You type printable ASCII and the usual control keys (<code>Ctrl+C</code>, <code>Ctrl+A</code>,
+      <code>Ctrl+R</code> and the rest). They send the control byte exactly as a real terminal does, so a cooked
+      shell interrupts on <code>Ctrl+C</code> while a raw-mode program &mdash; an editor, or a CLI that shows
+      &ldquo;press Ctrl+C again to exit&rdquo; &mdash; reads the byte itself. A <b>Terminate</b> button (SIGTERM
+      then SIGKILL) is the guaranteed escape hatch for a program that ignores everything, so you can never get
+      stuck.</p>
   </article>
 
   <article class="issue">
@@ -225,6 +235,29 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
         that ignores everything. You are never stuck inside something you cannot get out of.</p>
     </article>
   </div>
+</div></section>
+
+<section class="cat" id="compare"><div class="wrap">
+  <h2 class="catname">Traditional terminal vs secure-terminal</h2>
+  <p class="catdesc">What a normal terminal emulator does with untrusted output and paste, and what secure-terminal does instead. Honest where mainstream terminals have since caught up.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Behaviour</th><th>Traditional terminal</th><th>secure-terminal</th></tr></thead>
+    <tbody>
+      <tr><td>Escape sequences in program output</td><td class="trad">Interpreted: output can move the cursor, erase and repaint lines, hide or fake text.</td><td><span class="yes">Never parsed.</span> Shown as an inert <code>_</code>, so nothing a program prints can redraw the screen.</td></tr>
+      <tr><td>Merely viewing a file (<code>cat</code>, a log, a diff)</td><td class="trad">Can trigger every escape trick above; that is the whole attack class.</td><td><span class="yes">Safe</span> to <code>cat</code> anything: output is reduced to printable ASCII first.</td></tr>
+      <tr><td>Escape-sequence RCE (a title/clipboard/status query reflected back into input)</td><td class="trad">A real, 20-year CVE class: viewing a crafted file can inject keystrokes, sometimes run commands.</td><td><span class="yes">Impossible by design.</span> No escape parser, and it answers no query sequences.</td></tr>
+      <tr><td>Invisible, bidi and homoglyph characters (Trojan Source)</td><td class="trad">Rendered as-is; text can read as something other than its bytes.</td><td><span class="yes">Neutralized</span> to <code>_</code> by default, or revealed as <code>&lt;U+XXXX&gt;</code> on demand.</td></tr>
+      <tr><td>Pasted command with a hidden second line or control bytes</td><td class="trad">Historically auto-ran. Modern shells mitigate with bracketed paste, but it is opt-in and not universal.</td><td>Paste is sanitized to ASCII; any hidden control or unicode is stripped and <span class="yes">warned on</span> before it reaches the shell.</td></tr>
+      <tr><td>Clipboard read/write from program output (OSC&nbsp;52)</td><td class="trad">Some terminals allow it, so a remote program can read or poison your clipboard.</td><td><span class="yes">Blocked.</span></td></tr>
+      <tr><td>Window title / desktop notifications from output (OSC&nbsp;0/2/9)</td><td class="trad">Set by any program output: a spoofing surface.</td><td><span class="yes">Off by default</span>; sanitized to plain ASCII when you opt in.</td></tr>
+      <tr><td>Full-screen programs (ssh, vim, htop, tmux)</td><td class="trad">Yes.</td><td><span class="yes">Yes</span>, opt-in, and every cell is still character-filtered.</td></tr>
+      <tr><td>Memory safety of the code parsing hostile bytes</td><td class="trad">Often C: memory-unsafe.</td><td><span class="yes">Memory-safe</span> language.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:14px"><b>Honest about the limits:</b> a plain multi-line ASCII paste still submits its lines &mdash; that is not deception, and no terminal treats it as such. In TUI mode a program can still draw a misleading interface within its own screen, so only run programs you trust. secure-terminal makes <em>display and paste</em> safe; it is not a sandbox for what you deliberately choose to run.</p>
+  <p class="catdesc" style="margin-top:12px"><b>GUI today; a CLI would fit too.</b> secure-terminal is a graphical application. The same safe core could also run as a command-line tool that wraps an already-open terminal (a tty) &mdash; a local console or an SSH session is exposed to the very same output attacks, so a drop-in that sanitizes what an existing terminal displays is a natural companion. That is a direction, not a shipped feature yet.</p>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
