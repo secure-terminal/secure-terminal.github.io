@@ -101,3 +101,6 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .freebadge img{height:32px;width:auto;opacity:.8}
 .freebadge:hover{color:var(--ink)}
 .freebadge:hover img{opacity:1}
+@media(max-width:640px){
+  footer .ffree{flex-direction:column;align-items:flex-start;gap:11px;padding-bottom:10px}
+}
