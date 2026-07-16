@@ -211,19 +211,63 @@ with every cell still filtered and the title/clipboard still off-limits.</div>
 
 <section class="cat" id="install"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#install">Install</a></h2>
-  <p class="catdesc">A standard Debian source package (Debian trixie). Build it, or run it straight from a checkout.</p>
-  <div class="pre"><span class="c"># build and install</span>
-git clone https://github.com/secure-terminal/secure-terminal
+  <p class="catdesc">A standard Debian source package (Debian trixie). Pick a method; click to expand.</p>
+
+  <details class="inst" open>
+    <summary><svg class="ilogo" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg>
+      <span class="ititle">Run from a checkout</span><span class="ibadge ok">no install</span></summary>
+    <div class="ibody">
+      <p>Clone and run it in place, no packaging step:</p>
+      <div class="pre">git clone https://github.com/secure-terminal/secure-terminal
+cd secure-terminal
+./usr/bin/secure-terminal              <span class="c"># the GUI</span>
+./usr/bin/secure-terminal-cli          <span class="c"># the sanitizing CLI wrapper</span></div>
+      <p>Needs PyQt6 (and python3-pyte for TUI mode), both in Debian main.</p>
+    </div>
+  </details>
+
+  <details class="inst">
+    <summary><svg class="ilogo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7zM12 4.2 18.5 8 12 11.8 5.5 8zM5 9.6l6 3.5v7L5 16.6zm14 0v7l-6 3.5v-7z"/></svg>
+      <span class="ititle">Build the Debian package</span><span class="ibadge ok">.deb</span></summary>
+    <div class="ibody">
+      <div class="pre">git clone https://github.com/secure-terminal/secure-terminal
 cd secure-terminal
 dpkg-buildpackage -us -uc -b
 sudo dpkg -i ../secure-terminal_*.deb
+sudo apt-get install -f                <span class="c"># pull dependencies (Debian main)</span></div>
+      <p>Then run <code>secure-terminal</code> for the GUI, or <code>secure-terminal-cli</code>
+        to wrap a shell or command in the terminal you are already in.</p>
+    </div>
+  </details>
 
-<span class="c"># or run from the checkout, no install</span>
-./usr/bin/secure-terminal              <span class="c"># the GUI</span>
-./usr/bin/secure-terminal-cli          <span class="c"># the sanitizing CLI wrapper</span></div>
-  <p class="catdesc" style="margin-top:14px">After <code>dpkg -i</code>, run <code>sudo apt-get install -f</code>
-    to pull the dependencies (all in Debian main). Then run <code>secure-terminal</code> for the GUI, or
-    <code>secure-terminal-cli</code> to wrap a shell or command in the terminal you are already in.</p>
+  <details class="inst">
+    <summary><svg class="ilogo" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zm0 3c0 1.7 3.6 3 8 3s8-1.3 8-3v4c0 1.7-3.6 3-8 3s-8-1.3-8-3zm0 7c0 1.7 3.6 3 8 3s8-1.3 8-3v2c0 1.7-3.6 3-8 3s-8-1.3-8-3z"/></svg>
+      <span class="ititle">Kicksecure repository</span><span class="ibadge soon">coming soon</span></summary>
+    <div class="ibody">
+      <p>An <code>apt</code> install from the Kicksecure repository is planned, so updates
+        arrive with your normal system upgrades. Not available yet.</p>
+    </div>
+  </details>
+
+  <details class="inst">
+    <summary><svg class="ilogo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V5zm0 2.2 6 2.2V11c0 3.8-2.4 6.8-6 8.7z"/></svg>
+      <span class="ititle">Kicksecure</span><span class="ibadge soon">coming soon</span></summary>
+    <div class="ibody">
+      <p>secure-terminal is planned to be <b>installed by default in
+        <a href="https://www.kicksecure.com">Kicksecure</a></b>, so a hardened system ships
+        with a safe terminal out of the box. Not available yet.</p>
+    </div>
+  </details>
+
+  <details class="inst">
+    <summary><svg class="ilogo" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 8 4 12l5 4-1.4 1.4L1 12l6.6-5.4zm6 0 1.4-1.4L23 12l-6.6 5.4L15 16l5-4zM13.6 4l1.9.5-3.1 15.5-1.9-.5z"/></svg>
+      <span class="ititle">Source code</span><span class="ibadge ok">AGPL-3+</span></summary>
+    <div class="ibody">
+      <p>Read, audit and build every line: <a href="https://github.com/secure-terminal/secure-terminal">github.com/secure-terminal/secure-terminal</a>.
+        Free Software under the AGPL-3+.</p>
+    </div>
+  </details>
+
   <div class="cta">
     <a class="btn primary" href="https://github.com/secure-terminal/secure-terminal">Get it on GitHub</a>
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
