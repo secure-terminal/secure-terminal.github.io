@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal: safe to paste, safe to read</title>
-<meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default with no escape parser, a paste warning, three unicode display modes, and an opt-in TUI mode that runs ssh, vim and htop while still filtering every character. Memory-safe. The problem output-lies documents, removed by construction.">
+<meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default with no escape parser, a paste warning, four unicode display modes, and an opt-in TUI mode that runs ssh, vim and htop while still filtering every character. Memory-safe. The problem output-lies documents, removed by construction.">
 <link rel="canonical" href="https://secure-terminal.github.io/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
@@ -96,9 +96,10 @@
     <p>You type printable ASCII and the usual control keys (<code>Ctrl+C</code>, <code>Ctrl+A</code>,
       <code>Ctrl+R</code> and the rest). They send the control byte exactly as a real terminal does, so a cooked
       shell interrupts on <code>Ctrl+C</code> while a raw-mode program - an editor, or a CLI that shows
-      "press Ctrl+C again to exit" - reads the byte itself. A <b>Terminate</b> button (SIGTERM
-      then SIGKILL) is the guaranteed escape hatch for a program that ignores everything, so you can never get
-      stuck.</p>
+      "press Ctrl+C again to exit" - reads the byte itself. A signal key is echoed in caret notation
+      (<code>^C</code>, <code>^\</code>) so you always see the interrupt you sent, even when the shell would
+      print nothing. A <b>Terminate</b> button (SIGTERM then SIGKILL) is the guaranteed escape hatch for a
+      program that ignores everything, so you can never get stuck.</p>
   </article>
 
   <article class="issue">
@@ -122,12 +123,14 @@
         paste through. A plain-ASCII paste is not interrupted.</p>
     </article>
     <article class="issue">
-      <h3>Three unicode display modes</h3>
-      <p>Per tab: <b>Strip</b> (non-ASCII becomes <code>_</code>, the safe default), <b>Show</b> (render
+      <h3>Four unicode display modes</h3>
+      <p>Per tab: <b>Strip</b> (non-ASCII becomes <code>_</code>, the safe default), <b>Reveal</b> (every
+        non-ASCII character as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there),
+        <b>Detail</b> (the same badge with the codepoint's Unicode name inline, <code>&lt;U+041D CYRILLIC
+        CAPITAL LETTER EN&gt;</code>, what <code>unicode-show</code> annotates), and <b>Show</b> (render
         legitimate unicode so you can read a log, while the invisible, bidi and homoglyph classes are still
-        neutralized), and <b>Reveal</b> (every non-ASCII character as a <code>&lt;U+XXXX&gt;</code> badge, to
-        inspect exactly what is there).</p>
-      <p class="modenote"><b>Show does not mean run.</b> All three modes remove escape sequences first
+        neutralized).</p>
+      <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first
         (there is no escape parser at all), so the escape-sequence RCE class (the "<code>cat</code> a crafted
         file and it opens a calculator" bug) cannot happen in <b>any</b> mode, Show included. A bare escape or
         control byte is still neutralized to <code>_</code> in Show; the mode only changes how the remaining,
