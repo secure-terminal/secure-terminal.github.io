@@ -305,9 +305,11 @@ dpkg-buildpackage -us -uc -b
 sudo dpkg -i ../secure-terminal_*.deb
 
 <span class="c"># or run from the checkout, no install</span>
-./usr/bin/secure-terminal</div>
+./usr/bin/secure-terminal              <span class="c"># the GUI</span>
+./usr/bin/secure-terminal-cli          <span class="c"># the sanitizing CLI wrapper</span></div>
   <p class="catdesc" style="margin-top:14px">After <code>dpkg -i</code>, run <code>sudo apt-get install -f</code>
-    to pull the dependencies (all in Debian main). Then just run <code>secure-terminal</code>.</p>
+    to pull the dependencies (all in Debian main). Then run <code>secure-terminal</code> for the GUI, or
+    <code>secure-terminal-cli</code> to wrap a shell or command in the terminal you are already in.</p>
   <div class="cta">
     <a class="btn primary" href="https://github.com/secure-terminal/secure-terminal">Get it on GitHub</a>
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
