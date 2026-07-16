@@ -190,8 +190,8 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
     <h3>Line-oriented input, with a real escape hatch</h3>
     <p>You type printable ASCII and the usual control keys (<code>Ctrl+C</code>, <code>Ctrl+A</code>,
       <code>Ctrl+R</code> and the rest). They send the control byte exactly as a real terminal does, so a cooked
-      shell interrupts on <code>Ctrl+C</code> while a raw-mode program &mdash; an editor, or a CLI that shows
-      &ldquo;press Ctrl+C again to exit&rdquo; &mdash; reads the byte itself. A <b>Terminate</b> button (SIGTERM
+      shell interrupts on <code>Ctrl+C</code> while a raw-mode program - an editor, or a CLI that shows
+      "press Ctrl+C again to exit" - reads the byte itself. A <b>Terminate</b> button (SIGTERM
       then SIGKILL) is the guaranteed escape hatch for a program that ignores everything, so you can never get
       stuck.</p>
   </article>
@@ -256,16 +256,16 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
     </tbody>
   </table>
   </div>
-  <p class="catdesc" style="margin-top:14px"><b>Honest about the limits:</b> a plain multi-line ASCII paste still submits its lines &mdash; that is not deception, and no terminal treats it as such. In TUI mode a program can still draw a misleading interface within its own screen, so only run programs you trust. secure-terminal makes <em>display and paste</em> safe; it is not a sandbox for what you deliberately choose to run.</p>
-  <p class="catdesc" style="margin-top:12px"><b>No terminal protects you from a harmful command itself.</b> Deciding that <code>curl x | sh</code> or a subtly wrong <code>rm</code> is dangerous is a judgment call, not a parsing rule, so no terminal &mdash; this one included &mdash; can catch it by construction. Doing so needs something that can pause a command deemed unsafe and ask you to confirm. secure-terminal keeps that judgment <em>out</em> of the terminal but is adding an opt-in <b>hook</b>: before a command runs it can call an external handler you configure &mdash; your own script, or a pipe to an AI &mdash; which judges the command and may warn, suggest a safer one, or ask you to confirm. The terminal ships no AI of its own; it only provides the hook.</p>
-  <p class="catdesc" style="margin-top:12px"><b>Two forms: GUI and CLI.</b> secure-terminal is a graphical application, and <code>secure-terminal-cli</code> is the same safe core as a command-line wrapper: it runs a shell or command in a pseudo-terminal and sanitizes the output before it reaches your existing terminal &mdash; so a plain console or an SSH session, exposed to the very same output attacks, gets safe display without the GUI. It sanitizes what a program <em>displays</em>; it does not gate your keystrokes or judge commands (that is the hook's job, below).</p>
+  <p class="catdesc" style="margin-top:14px"><b>Honest about the limits:</b> a plain multi-line ASCII paste still submits its lines - that is not deception, and no terminal treats it as such. In TUI mode a program can still draw a misleading interface within its own screen, so only run programs you trust. secure-terminal makes <em>display and paste</em> safe; it is not a sandbox for what you deliberately choose to run.</p>
+  <p class="catdesc" style="margin-top:12px"><b>No terminal protects you from a harmful command itself.</b> Deciding that <code>curl x | sh</code> or a subtly wrong <code>rm</code> is dangerous is a judgment call, not a parsing rule, so no terminal - this one included - can catch it by construction. Doing so needs something that can pause a command deemed unsafe and ask you to confirm. secure-terminal keeps that judgment <em>out</em> of the terminal but is adding an opt-in <b>hook</b>: before a command runs it can call an external handler you configure - your own script, or a pipe to an AI - which judges the command and may warn, suggest a safer one, or ask you to confirm. The terminal ships no AI of its own; it only provides the hook.</p>
+  <p class="catdesc" style="margin-top:12px"><b>Two forms: GUI and CLI.</b> secure-terminal is a graphical application, and <code>secure-terminal-cli</code> is the same safe core as a command-line wrapper: it runs a shell or command in a pseudo-terminal and sanitizes the output before it reaches your existing terminal - so a plain console or an SSH session, exposed to the very same output attacks, gets safe display without the GUI. It sanitizes what a program <em>displays</em>; it does not gate your keystrokes or judge commands (that is the hook's job, below).</p>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
   <h2 class="catname">TUI mode: run full-screen programs</h2>
   <p class="catdesc">When you need to run ssh, an editor like vim, or htop, opt in with your eyes open.</p>
   <article class="issue risk">
-    <h3><span class="flag">Opt-in, clearly flagged</span> &middot; ssh, vim, htop, tmux</h3>
+    <h3><span class="flag">Opt-in, clearly flagged</span> / ssh, vim, htop, tmux</h3>
     <p>The strict default cannot run curses apps. TUI mode (per tab, off by default, marked with a yellow risk
       indicator) interprets escapes inside an isolated in-memory screen model (<code>pyte</code>) that has no OS
       reach: it <b>cannot set the window title or touch the clipboard</b>, so those spoofing vectors stay closed.
