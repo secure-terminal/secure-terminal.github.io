@@ -1,0 +1,218 @@
+<!--
+  secure-terminal: plugins / command hook. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+-->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal plugins: the command hook</title>
+<meta name="description" content="secure-terminal ships no AI and no policy. It provides one opt-in extension point: a command hook that calls an external handler to judge a command before it runs in line mode. A tiny JSON protocol, two example handlers, and a fail-open, injection-framed design.">
+<link rel="canonical" href="https://secure-terminal.github.io/plugins/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal plugins: the command hook">
+<meta property="og:description" content="One opt-in extension point: an external handler judges a command before it runs, over a tiny JSON protocol. Two example handlers (rules and AI), fail-open, with the command framed as untrusted data.">
+<meta property="og:url" content="https://secure-terminal.github.io/plugins/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal plugins: the command hook">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal plugins: the command hook">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
+    <span class="status" title="Working: usable and memory-safe">working</span>
+    <nav>
+      <a href="/#compare">Compare</a>
+      <a href="/#features">Features</a>
+      <a href="/#install">Install</a>
+      <a href="/plugins/" class="active">Plugins</a>
+      <a href="/#faq">FAQ</a>
+      <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">PLUGINS: THE COMMAND HOOK</p>
+  <h1>The terminal ships no policy.<br>You bring the judgment.</h1>
+  <p class="lede">No terminal can decide by construction that <code>curl x | sh</code> or a
+    subtly wrong <code>rm</code> is dangerous - that is a judgment call, not a parsing
+    rule. So secure-terminal keeps judgment <em>out</em> of the terminal and gives you one
+    opt-in extension point: a <b>command hook</b>. Before a command runs in line mode, the
+    terminal can call an external handler you configure, which may allow it, warn, suggest a
+    safer command, or block it. The terminal ships no AI and no rules of its own; the logic
+    lives entirely in your handler.</p>
+</div></section>
+
+<section class="cat" id="protocol"><div class="wrap">
+  <h2 class="catname">A tiny JSON protocol</h2>
+  <p class="catdesc">The handler is any executable. It reads a JSON request on stdin and writes a JSON verdict on stdout. That is the whole interface.</p>
+  <div class="pre"><span class="c"># request (stdin): the command you are about to run</span>
+{"version":1,"command":"git push --force","cwd":"/home/user/repo","tab":"repo"}
+
+<span class="c"># verdict (stdout): one of allow | block | ask | need_transcript</span>
+{"verdict":"ask","message":"Force-push rewrites history.","suggestion":"git push --force-with-lease"}</div>
+  <p class="catdesc" style="margin-top:14px">Four verdicts. <b>allow</b> runs the command;
+    <b>block</b> refuses it with your message; <b>ask</b> shows your message and makes you
+    confirm; a <b>suggestion</b>, if present, is offered as a safer command (sanitised before
+    it can reach the shell). The fourth, <b>need_transcript</b>, is the interesting one.</p>
+</div></section>
+
+<section class="cat" id="escalate"><div class="wrap">
+  <h2 class="catname">Cheap first, escalate only if needed</h2>
+  <p class="catdesc">The scrollback is long, expensive to process, and the most injection-prone input there is. So it is not sent unless your handler asks.</p>
+  <div class="issue">
+    <p>On the first call the handler sees only the command. If it can decide from that
+      (most commands), it answers <code>allow</code>/<code>block</code>/<code>ask</code> and
+      you are done. If it needs context, it replies <code>need_transcript</code>, and
+      secure-terminal calls it a second time with the recent scrollback attached. A local
+      rules handler almost never needs it; an AI handler asks for it only on the commands
+      that are ambiguous without context.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="examples"><div class="wrap">
+  <h2 class="catname">Two example handlers</h2>
+  <p class="catdesc">secure-terminal ships two samples under <code>/usr/share/secure-terminal/hooks/</code>. Point the terminal at one, or write your own.</p>
+  <div class="issue">
+    <h3>example-hook - local rules, no network</h3>
+    <p>A fast, dependency-free handler using only local pattern rules: it blocks a downloaded
+      script piped straight into a root shell, and asks before <code>curl | sh</code> and
+      <code>git push --force</code>. Fully offline, milliseconds per call. A good starting
+      point to copy and edit.</p>
+  </div>
+  <div class="issue">
+    <h3>ai-judge-hook - ask a model</h3>
+    <p>Pipes the command (and, when it escalates, the scrollback) to a model you choose
+      - <code>claude --print</code> by default, any command via
+      <code>SECURE_TERMINAL_AI</code>. Crucially, the command and transcript are framed to the
+      model as <em>untrusted data to be judged</em>, never as instructions, so a hostile log
+      line cannot talk the judge into approving itself. It fails open with a visible note if
+      the model is unavailable, and has a fast path so trivial commands never hit the network.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="enable"><div class="wrap">
+  <h2 class="catname">Enable it</h2>
+  <p class="catdesc">Off by default. Turn it on with a settings drop-in.</p>
+  <div class="pre"><span class="c"># ~/.config/secure-terminal.d/50_user.conf</span>
+command_hook=/usr/share/secure-terminal/hooks/example-hook
+command_hook_on_error=allow          <span class="c"># or 'block' to fail closed</span>
+command_hook_transcript=none         <span class="c"># 'ask' lets the handler request scrollback</span></div>
+  <p class="catdesc" style="margin-top:14px">Write your own handler in any language: read the
+    JSON request from stdin, print a JSON verdict to stdout, exit 0. Keep the policy in the
+    handler, where you can read and change it - not baked into the terminal.</p>
+</div></section>
+
+<section class="cat" id="limits"><div class="wrap">
+  <h2 class="catname">Honest limits</h2>
+  <div class="issue">
+    <p>The hook sees the command line you typed, <b>not</b> what the shell expands it to
+      (aliases, variables, globs), and it runs in <b>line mode only</b> - a shell prompt
+      inside a full-screen TUI program is not hooked. It is a deliberate speed bump for the
+      commands you type, not a sandbox: it cannot stop a program you have already chosen to
+      run from doing what it does. For what the terminal <em>can</em> guarantee by
+      construction - safe display and safe paste - see the
+      <a href="/#compare">comparison</a>.</p>
+  </div>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/secure-terminal/secure-terminal/tree/master/usr/share/secure-terminal/hooks">Read the example hooks</a>
+    <a class="btn ghost" href="/#install">Install secure-terminal</a>
+  </div>
+</div></section>
+</main>
+
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <p>Paste in, read out. Nothing hides.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h4>Project</h4>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h4>Family</h4>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a href="https://github.com/org-ai-assisted">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h4>Safe text</h4>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fshare">
+    <span class="fshare-l">Share:</span>
+    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
+    <a class="sh" data-net="email">Email</a>
+    <button class="sh" data-net="copy" type="button">Copy link</button>
+    <button class="sh" data-net="md" type="button">Copy as Markdown</button>
+    <span class="sh-msg" aria-live="polite"></span>
+  </div>
+  <script>
+    /* Local-only share links. No third-party script or resource is loaded; a
+       target opens only when the user clicks it. */
+    (function () {
+      var u = encodeURIComponent(location.href), t = encodeURIComponent(document.title);
+      var L = {
+        x: 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t,
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + u,
+        telegram: 'https://t.me/share/url?url=' + u + '&text=' + t,
+        reddit: 'https://www.reddit.com/submit?url=' + u + '&title=' + t,
+        whatsapp: 'https://api.whatsapp.com/send?text=' + t + '%20' + u,
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + u,
+        hn: 'https://news.ycombinator.com/submitlink?u=' + u + '&t=' + t,
+        email: 'mailto:?subject=' + t + '&body=' + u
+      };
+      document.querySelectorAll('.fshare a.sh').forEach(function (a) {
+        var n = a.getAttribute('data-net');
+        if (L[n]) { a.href = L[n]; if (n !== 'email') { a.target = '_blank'; } }
+      });
+      var m = document.querySelector('.fshare [data-net=mastodon]');
+      if (m) m.addEventListener('click', function (e) {
+        e.preventDefault();
+        var i = prompt('Your Mastodon instance (e.g. mastodon.social):');
+        if (i) { i = i.replace('https://', '').replace('http://', '').replace(/\/+$/, '');
+          window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); }
+      });
+      var msg = document.querySelector('.fshare .sh-msg');
+      function flash(x) { if (msg) { msg.textContent = x; setTimeout(function () { msg.textContent = ''; }, 2000); } }
+      var c = document.querySelector('.fshare [data-net=copy]');
+      if (c) c.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { flash('link copied'); });
+      });
+      var md = document.querySelector('.fshare [data-net=md]');
+      if (md) md.addEventListener('click', function () {
+        var text = '[' + document.title + '](' + location.href + ')';
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { flash('markdown copied'); });
+      });
+    })();
+  </script>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy">Operated by <a href="https://github.com/adrelanos">@adrelanos</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
