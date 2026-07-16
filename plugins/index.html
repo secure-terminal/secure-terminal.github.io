@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal plugins: the command hook</title>
-<meta name="description" content="secure-terminal ships no AI and no policy. It provides one opt-in extension point: a command hook that calls an external handler to judge a command before it runs in line mode. A tiny JSON protocol, two example handlers, and a fail-open, injection-framed design.">
+<meta name="description" content="secure-terminal ships no AI and no policy. It provides one opt-in extension point: a command hook that calls an external handler to judge a command before it runs in CLI mode. A tiny JSON protocol, two example handlers, and a fail-open, injection-framed design.">
 <link rel="canonical" href="https://secure-terminal.github.io/plugins/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
@@ -48,7 +48,7 @@
   <p class="lede">No terminal can decide by construction that <code>curl x | sh</code> or a
     subtly wrong <code>rm</code> is dangerous - that is a judgment call, not a parsing
     rule. So secure-terminal keeps judgment <em>out</em> of the terminal and gives you one
-    opt-in extension point: a <b>command hook</b>. Before a command runs in line mode, the
+    opt-in extension point: a <b>command hook</b>. Before a command runs in CLI mode, the
     terminal can call an external handler you configure, which may allow it, warn, suggest a
     safer command, or block it. The terminal ships no AI and no rules of its own; the logic
     lives entirely in your handler.</p>
@@ -118,7 +118,7 @@ command_hook_transcript=none         <span class="c"># 'ask' lets the handler re
   <h2 class="catname">Honest limits</h2>
   <div class="issue">
     <p>The hook sees the command line you typed, <b>not</b> what the shell expands it to
-      (aliases, variables, globs), and it runs in <b>line mode only</b> - a shell prompt
+      (aliases, variables, globs), and it runs in <b>CLI mode only</b> - a shell prompt
       inside a full-screen TUI program is not hooked. It is a deliberate speed bump for the
       commands you type, not a sandbox: it cannot stop a program you have already chosen to
       run from doing what it does. For what the terminal <em>can</em> guarantee by
