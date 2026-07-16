@@ -133,6 +133,7 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
       <a href="#compare">Compare</a>
       <a href="#features">Features</a>
       <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
       <a href="https://output-lies.github.io">output lies</a>
     </nav>
@@ -246,7 +247,7 @@ footer .fshare .sh-msg{color:var(--safe);font-family:var(--mono);font-size:.8rem
     <tbody>
       <tr><td>Escape sequences in program output</td><td class="trad">Interpreted: output can move the cursor, erase and repaint lines, hide or fake text.</td><td><span class="yes">Never parsed.</span> Shown as an inert <code>_</code>, so nothing a program prints can redraw the screen.</td></tr>
       <tr><td>Merely viewing a file (<code>cat</code>, a log, a diff)</td><td class="trad">Can trigger every escape trick above; that is the whole attack class.</td><td><span class="yes">Safe</span> to <code>cat</code> anything: output is reduced to printable ASCII first.</td></tr>
-      <tr><td>Escape-sequence RCE (a title/clipboard/status query reflected back into input)</td><td class="trad">A real, 20-year CVE class: viewing a crafted file can inject keystrokes, sometimes run commands.</td><td><span class="yes">Impossible by design.</span> No escape parser, and it answers no query sequences.</td></tr>
+      <tr><td>Escape-sequence RCE (a title/clipboard/status query reflected back into input)</td><td class="trad">A real, 20-year CVE class: viewing a crafted file can inject keystrokes, sometimes run commands. (Responsibly disclosed CVEs and demos; none confirmed exploited in the wild.)</td><td><span class="yes">Impossible by design.</span> No escape parser, and it answers no query sequences.</td></tr>
       <tr><td>Invisible, bidi and homoglyph characters (Trojan Source)</td><td class="trad">Rendered as-is; text can read as something other than its bytes.</td><td><span class="yes">Neutralized</span> to <code>_</code> by default, or revealed as <code>&lt;U+XXXX&gt;</code> on demand.</td></tr>
       <tr><td>Pasted command with a hidden second line or control bytes</td><td class="trad">Historically auto-ran. Modern shells mitigate with bracketed paste, but it is opt-in and not universal.</td><td>Paste is sanitized to ASCII; any hidden control or unicode is stripped and <span class="yes">warned on</span> before it reaches the shell.</td></tr>
       <tr><td>Clipboard read/write from program output (OSC&nbsp;52)</td><td class="trad">Some terminals allow it, so a remote program can read or poison your clipboard.</td><td><span class="yes">Blocked.</span></td></tr>
@@ -313,6 +314,56 @@ sudo dpkg -i ../secure-terminal_*.deb
   <div class="cta">
     <a class="btn primary" href="https://github.com/secure-terminal/secure-terminal">Get it on GitHub</a>
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
+  </div>
+</div></section>
+
+<section class="cat" id="faq"><div class="wrap">
+  <h2 class="catname">FAQ</h2>
+  <p class="catdesc">The questions worth answering before you trust a terminal.</p>
+  <div class="issue">
+    <h3>Is it open source? What licence?</h3>
+    <p>Yes. secure-terminal is free software under the <b>AGPL-3+</b>, developed in
+      the open on <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>.
+      Read the source, build it yourself, audit exactly what it does.</p>
+  </div>
+  <div class="issue">
+    <h3>Does it send my data anywhere?</h3>
+    <p><b>No.</b> It runs entirely on your machine: no telemetry, no network calls,
+      nothing about what you type or what your programs print leaves the terminal.
+      The single exception is opt-in and explicit: if you enable the AI command
+      <b>hook</b>, it sends the command line you are about to run plus recent
+      scrollback to the model handler you configure (for example
+      <code>claude --print</code>) so it can judge the command. That hook is off by
+      default, you choose the handler, and nothing else is ever transmitted.</p>
+  </div>
+  <div class="issue">
+    <h3>What platforms does it run on?</h3>
+    <p>Linux. It ships as a standard Debian source package (Debian trixie and
+      derivatives such as Kicksecure and Whonix); it is a PyQt6 application, so it
+      runs anywhere PyQt6 and a pseudo-terminal are available. The
+      <code>secure-terminal-cli</code> wrapper needs only Python and a POSIX pty.</p>
+  </div>
+  <div class="issue">
+    <h3>Is it memory-safe?</h3>
+    <p>Yes. It is written in Python (PyQt6); there is no hand-written C parser of
+      untrusted output to overflow. The whole point is that untrusted bytes meet a
+      small, auditable sanitiser, not a sprawling escape-sequence interpreter.</p>
+  </div>
+  <div class="issue">
+    <h3>How is this different from my normal terminal?</h3>
+    <p>A normal terminal <em>interprets</em> whatever a program prints, including
+      attacker-controlled escape sequences, invisible characters and homoglyphs.
+      secure-terminal does not: by default it parses no escapes, shows every
+      character as itself (or a visible marker), and warns before a paste with
+      hidden characters reaches the shell. See the
+      <a href="#compare">comparison</a> for the specifics.</p>
+  </div>
+  <div class="issue">
+    <h3>Was this built with AI?</h3>
+    <p>Yes: secure-terminal is an AI-assisted project, written and reviewed with
+      the process documented at
+      <a href="https://github.com/org-ai-assisted">org-ai-assisted</a>. The code is
+      open for you to audit regardless of how it was produced.</p>
   </div>
 </div></section>
 
