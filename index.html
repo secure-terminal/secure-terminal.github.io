@@ -30,7 +30,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="755" height="70" alt="secure-terminal"></a>
     <span class="status" title="This site is AI-generated and pending human review">needs human review</span>
     <nav>
       <a href="#compare">Compare</a>
@@ -87,8 +87,10 @@
     <h3>No escape parser in the default mode</h3>
     <p>By default there is no ANSI parser to attack. The terminal honors no cursor moves, alternate screens or OSC
       hyperlinks from the child process. Parsing attacker-influenced escapes is the entire vulnerability class; a
-      terminal that will not parse them cannot fall for them. And it has no terminal side-effects at all: no
-      window-title control, no clipboard-write escape (OSC&nbsp;52), no hyperlinks, in any mode.</p>
+      terminal that will not parse them cannot fall for them. Out of the box it has no terminal side-effects at
+      all: no window-title control, no clipboard-write escape (OSC&nbsp;52), no hyperlinks. Each of those OSC
+      features is a separate, off-by-default toggle you may enable at your own risk, and turning one on dims a
+      security indicator so the extra surface is never invisible.</p>
   </article>
 
   <article class="issue">
@@ -147,6 +149,16 @@
       <p>Signal keys reach the foreground program even in raw mode, and the Terminate action force-kills a program
         that ignores everything. You are never stuck inside something you cannot get out of.</p>
     </article>
+    <article class="issue">
+      <h3>Granular escape-feature controls</h3>
+      <p>The OSC escapes that reach out of the grid - window title, desktop notification, clickable hyperlink,
+        clipboard write, palette change, working-directory report, iTerm2 extensions - are each a <b>separate,
+        off-by-default toggle</b> with a one-line plain-language note on what it exposes. A three-part
+        <b>security indicator</b> reflects your choices, dimming from green toward red as you enable riskier
+        features (clipboard write and the iTerm2 extensions weigh most). When a program tries to use a feature you
+        have left off, a dismissible banner tells you <b>once per feature per tab</b>, so the attempt is visible
+        but never nagging - and you can silence the notice globally or per feature.</p>
+    </article>
   </div>
 </div></section>
 
@@ -162,8 +174,8 @@
       <tr><td>Escape-sequence RCE (a title/clipboard/status query reflected back into input)</td><td class="trad">A real, 20-year CVE class: viewing a crafted file can inject keystrokes, sometimes run commands. (Responsibly disclosed CVEs and demos; none confirmed exploited in the wild.)</td><td><span class="yes">Impossible by design.</span> No escape parser, and it answers no query sequences.</td></tr>
       <tr><td>Invisible, bidi and homoglyph characters (Trojan Source)</td><td class="trad">Rendered as-is; text can read as something other than its bytes.</td><td><span class="yes">Neutralized</span> to <code>_</code> by default, or revealed as <code>&lt;U+XXXX&gt;</code> on demand.</td></tr>
       <tr><td>Pasted command with a hidden second line or control bytes</td><td class="trad">Historically auto-ran. Modern shells mitigate with bracketed paste, but it is opt-in and not universal.</td><td>Paste is sanitized to ASCII; any hidden control or unicode is stripped and <span class="yes">warned on</span> before it reaches the shell.</td></tr>
-      <tr><td>Clipboard read/write from program output (OSC&nbsp;52)</td><td class="trad">Some terminals allow it, so a remote program can read or poison your clipboard.</td><td><span class="yes">Blocked.</span></td></tr>
-      <tr><td>Window title / desktop notifications from output (OSC&nbsp;0/2/9)</td><td class="trad">Set by any program output: a spoofing surface.</td><td><span class="yes">Off by default</span>; sanitized to plain ASCII when you opt in.</td></tr>
+      <tr><td>Clipboard read/write from program output (OSC&nbsp;52)</td><td class="trad">Some terminals allow it, so a remote program can read or poison your clipboard.</td><td><span class="yes">Off by default.</span> An opt-in, write-only toggle; reading the clipboard is always refused, so output can never exfiltrate it.</td></tr>
+      <tr><td>Window title / desktop notifications from output (OSC&nbsp;0/2/9)</td><td class="trad">Set by any program output: a spoofing surface.</td><td><span class="yes">Off by default</span>, individually toggleable; sanitized to plain ASCII when you opt in.</td></tr>
       <tr><td>Full-screen programs (ssh, vim, htop, tmux)</td><td class="trad">Yes.</td><td><span class="yes">Yes</span>, opt-in, and every cell is still character-filtered.</td></tr>
       <tr><td>Memory safety of the code parsing hostile bytes</td><td class="trad">Often C: memory-unsafe.</td><td><span class="yes">Memory-safe</span> language.</td></tr>
     </tbody>
@@ -182,9 +194,10 @@
     <h3><span class="flag">Opt-in, clearly flagged</span> / ssh, vim, htop, tmux</h3>
     <p>The strict default cannot run curses apps. TUI mode (per tab, off by default, marked with a yellow risk
       indicator) interprets escapes inside an isolated in-memory screen model (<code>pyte</code>) that has no OS
-      reach: it <b>cannot set the window title or touch the clipboard</b>, so those spoofing vectors stay closed.
-      Every character it places is <b>still ASCII/unicode-filtered</b>, and colours use a contrast guard so
-      nothing can be painted invisibly.</p>
+      reach: by default it <b>cannot set the window title or touch the clipboard</b>. Each such OSC side-effect is
+      a separate opt-in toggle (off by default) that dims a security indicator when enabled, so those spoofing
+      vectors stay closed unless you deliberately open one. Every character it places is <b>still
+      ASCII/unicode-filtered</b>, and colours use a contrast guard so nothing can be painted invisibly.</p>
     <p>What you give up: a program can draw a <em>misleading interface</em> within its own screen, so only run
       programs you trust. This is "restricted-emulator safe," not "safe by construction." The default CLI mode,
       and everything the guarantee rests on, is unchanged.</p>
@@ -340,7 +353,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
 <footer>
   <div class="ftop">
     <div class="fbrand">
-      <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <span class="ftag"><img src="/logo-wide.png" width="755" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
       <p>Paste in, read out. Nothing hides.</p>
     </div>
     <nav class="fcols">
