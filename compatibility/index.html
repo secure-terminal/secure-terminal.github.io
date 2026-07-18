@@ -7,13 +7,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal compatibility: what runs in it</title>
-<meta name="description" content="What runs in secure-terminal: the most popular Debian CLI and TUI programs tested in both modes, the conformance suites we track, and exactly how environment variables, capability-query protocols, control characters and OSC sequences are handled.">
+<meta name="description" content="What runs in secure-terminal: the most popular CLI and TUI programs tested in both modes, the conformance suites we track, and exactly how environment variables, capability-query protocols, control characters and OSC sequences are handled.">
 <link rel="canonical" href="https://secure-terminal.github.io/compatibility/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
 <meta property="og:title" content="secure-terminal compatibility: what runs in it">
-<meta property="og:description" content="The top Debian CLI and TUI programs tested in both modes, plus the exact handling of environment variables, capability queries, control characters and OSC sequences.">
+<meta property="og:description" content="The top CLI and TUI programs tested in both modes, plus the exact handling of environment variables, capability queries, control characters and OSC sequences.">
 <meta property="og:url" content="https://secure-terminal.github.io/compatibility/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
 <meta property="og:image:width" content="1200">
@@ -54,7 +54,7 @@
     log cannot redraw your screen. <b>TUI mode</b> (opt-in, per tab) interprets escapes inside
     an isolated in-memory screen so full-screen programs render, while every cell is still
     character-filtered and the terminal still answers no query and touches no clipboard. The tables below are backed by real tests,
-    not claims: the top Debian programs run in both modes, and every protocol, control byte
+    not claims: the top programs run in both modes, and every protocol, control byte
     and OSC code is accounted for.</p>
   <p class="catdesc" style="margin-top:14px"><b>How this was tested.</b> CLI mode was
     exercised through the shipped <code>secure-terminal-cli</code> wrapper; TUI mode through
@@ -73,7 +73,7 @@
     or character set, and can silently rewrite your window or tab title to attacker-chosen text.
     secure-terminal reduces the identical bytes to inert printable ASCII: no title change, no
     charset tricks, no clipboard write, and only its own bounded, contrast-guarded colour - never
-    the attacker's. We measured this against ten Debian terminal emulators, with screenshots -
+    the attacker's. We measured this against ten terminal emulators, with screenshots -
     every one was corrupted, secure-terminal was not.</p>
   <div class="cta"><a class="btn primary" href="/comparison/">See the full comparison + screenshots</a></div>
 </div></section>

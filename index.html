@@ -192,7 +192,7 @@
   <p class="catdesc" style="margin-top:12px"><b>Two forms: GUI and CLI.</b> secure-terminal is a graphical application, and <code>secure-terminal-cli</code> is the same safe core as a command-line wrapper: it runs a shell or command in a pseudo-terminal and sanitizes the output before it reaches your existing terminal - so a plain console or an SSH session, exposed to the very same output attacks, gets safe display without the GUI. It sanitizes what a program <em>displays</em>; it does not gate your keystrokes or judge commands (that is the hook's job, below).</p>
   <p class="catdesc" style="margin-top:14px"><b>Hostile byte streams, shown side by side.</b> The table above is the argument; the
     <a href="/comparison/">comparison page</a> is the evidence. We piped the same untrusted bytes - random data and a
-    crafted log that hijacks the window title - into ten Debian terminal emulators and into secure-terminal, and
+    crafted log that hijacks the window title - into ten terminal emulators and into secure-terminal, and
     captured what each one did. Every mainstream terminal garbled, mis-coloured or had its title silently rewritten;
     secure-terminal showed inert ASCII. <a href="/comparison/">See the screenshots</a>.</p>
 </div></section>

@@ -102,7 +102,7 @@
     <ul style="margin:6px 0 0 0; padding-left:20px; color:var(--muted); line-height:1.7">
       <li>A simple <code>cat /dev/random</code> is enough to garble the screen and, on many
         terminals, silently rewrite the window title - <a href="/comparison/">we measured this</a>
-        against ten Debian emulators.</li>
+        against ten terminal emulators.</li>
       <li>Merely <em>viewing</em> a crafted file can, in vulnerable terminals, inject keystrokes and
         - via the title/answerback reflection class - <b>run commands you never typed</b>. That is a
         real, 20-year CVE class, not a hypothetical
@@ -115,7 +115,7 @@
       <li>The code that parses those hostile bytes is usually written in a memory-unsafe language (C),
         with a long history of memory-corruption bugs in exactly that path.</li>
     </ul>
-    <p style="margin-top:12px">The official mitigation for the paste problem -
+    <p style="margin-top:12px">The documented workaround for the paste problem -
       <a href="https://www.kicksecure.com/wiki/Shell#Protection_from_Hidden_Text_Attacks" rel="noopener">copy to a text file, scan it, then copy to the terminal</a> - is real, but so cumbersome that
       almost nobody does it every time. And crucially, these traditional-terminal weaknesses are, to
       our knowledge, <b>not even being worked on</b>: they are considered out of scope, a different
