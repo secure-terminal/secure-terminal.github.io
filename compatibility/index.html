@@ -29,7 +29,7 @@
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
-    <span class="status" title="Working: usable and memory-safe">working</span>
+    <span class="status" title="This site is AI-generated and pending human review">needs human review</span>
     <nav>
       <a href="/#compare">Compare</a>
       <a href="/#features">Features</a>
@@ -81,11 +81,11 @@
   <table class="cmp">
     <thead><tr><th>Terminal</th><th>What the hostile stream did</th><th>Cleared by <code>reset</code>?</th></tr></thead>
     <tbody>
-      <tr><td>xterm, urxvt, st</td><td>Screen garbled, colours stuck, <b>title hijacked</b> to attacker text.</td><td>Screen yes; the title only on st.</td></tr>
-      <tr><td>xfce4-terminal, mate-terminal, lxterminal (VTE)</td><td>Garbled, colours stuck, <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
-      <tr><td>konsole (KDE)</td><td>Garbled, colours stuck, line-drawing <b>charset stuck</b>. (Its default profile ignored the title-set.)</td><td>Screen yes.</td></tr>
-      <tr><td>qterminal (LXQt)</td><td>Garbled, colours stuck, charset stuck, <b>title hijacked</b> (shown in the tab).</td><td>Screen yes; title no.</td></tr>
-      <tr><td>alacritty, kitty (modern, GPU)</td><td>Garbled, colours stuck, <b>title hijacked</b> - no more resilient than xterm.</td><td>Screen yes; title no.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, colours stuck, <b>title hijacked</b> to attacker text.</td><td>Screen yes; the title only on st.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a>, <a href="https://packages.debian.org/lxterminal" rel="noopener">lxterminal</a> (VTE)</td><td>Garbled, colours stuck, <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
+      <tr><td><a href="https://packages.debian.org/konsole" rel="noopener">konsole</a> (KDE)</td><td>Garbled, colours stuck, line-drawing <b>charset stuck</b>. (Its default profile ignored the title-set.)</td><td>Screen yes.</td></tr>
+      <tr><td><a href="https://packages.debian.org/qterminal" rel="noopener">qterminal</a> (LXQt)</td><td>Garbled, colours stuck, charset stuck, <b>title hijacked</b> (shown in the tab).</td><td>Screen yes; title no.</td></tr>
+      <tr><td><a href="https://packages.debian.org/alacritty" rel="noopener">alacritty</a>, <a href="https://packages.debian.org/kitty" rel="noopener">kitty</a> (modern, GPU)</td><td>Garbled, colours stuck, <b>title hijacked</b> - no more resilient than xterm.</td><td>Screen yes; title no.</td></tr>
       <tr><td><b>secure-terminal</b></td><td><span class="yes">Nothing.</span> 20,000 random bytes shown as inert ASCII (non-printable to <code>_</code>); no colour, no charset shift; the title, clipboard and charset escapes stripped.</td><td>Nothing to clear.</td></tr>
     </tbody>
   </table>
@@ -142,11 +142,12 @@
   <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
     so they need the opt-in TUI mode. There they render through the confined screen model;
     every one below was run and its interface captured. How box-drawing and other non-ASCII
-    glyphs appear depends on the unicode display mode: the default <b>Strip</b> mode shows them
-    as <code>_</code>, while <b>Show</b> or <b>Detail</b> renders the real glyphs (line-drawing
-    borders and the like) - and the invisible, bidi and homoglyph classes stay neutralised in
-    every mode. Either way, layout and text are faithful, and the terminal still answers no
-    query and cannot set the title or touch the clipboard.</p>
+    glyphs appear depends on the unicode display mode: the default <b>Strip mode</b> shows each
+    as a red box (which you copy or save as an ASCII <code>_</code>), while <b>Show mode</b> or
+    <b>Detail mode</b> renders the real glyphs (line-drawing borders and the like) - and the
+    invisible, bidi and homoglyph classes stay neutralised in every mode. Either way, layout and
+    text are faithful, and the terminal still answers no query and cannot set the title or touch
+    the clipboard.</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>Program (package)</th><th>Popcon rank</th><th>TUI mode (opt-in)</th></tr></thead>
@@ -163,10 +164,15 @@
       <tr><td>w3m</td><td>2547</td><td><span class="yes">Renders.</span> Text-mode web page layout.</td></tr>
       <tr><td>ncdu (bonus)</td><td>3600</td><td><span class="yes">Renders.</span> Disk-usage browser.</td></tr>
       <tr><td>btop (bonus)</td><td>4017</td><td><span class="yes">Renders.</span> Full resource dashboard, colour and meters.</td></tr>
-      <tr><td>Claude Code (claude)</td><td>npm, not in Debian</td><td><span class="yes">Renders</span> in TUI mode (Ink renderer); <code>claude --print</code> / <code>--version</code> work in CLI mode.</td></tr>
     </tbody>
   </table>
   </div>
+  <p class="catdesc" style="margin-top:12px"><b>Honorable mention: Claude Code</b> (the
+    <code>claude</code> CLI). Not a Debian package (it ships via npm), so it is not in the
+    popularity list above - included because it is one of the most <em>complex</em> TUIs in
+    common use: a Node.js/Ink renderer that leans hard on the alternate screen, cursor
+    addressing, colour and capability queries. It <span class="yes">renders</span> in TUI mode;
+    <code>claude --print</code> / <code>--version</code> work in CLI mode.</p>
   <p class="catdesc" style="margin-top:12px"><b>The trade-off, stated plainly.</b> Because TUI
     mode lets a program position the cursor, a program you run can draw a misleading interface
     or overwrite a line you already read - so only run programs you trust in it. A good habit,
@@ -282,8 +288,10 @@
     edit the current line, drops the rest, and removes every escape sequence outright - there
     is no parser to attack. In TUI mode the confined screen model interprets cursor and colour
     escapes, but every resulting cell is still ASCII/unicode-filtered. For the neutralised
-    bytes below, <em>how</em> they are shown follows the unicode display mode: an inert
-    <code>_</code> in Strip (the default), or a <code>&lt;U+XXXX&gt;</code> badge in Reveal.</p>
+    bytes below, <em>how</em> they are shown follows the unicode display mode: a red box in
+    <b>Strip mode</b> (the default) that you copy or save as an ASCII <code>_</code>, or a
+    <code>&lt;U+XXXX&gt;</code> badge in <b>Reveal mode</b>. Whatever the display, everything you
+    copy or save is pure ASCII.</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>Byte</th><th>Name</th><th>CLI mode</th></tr></thead>
@@ -292,7 +300,7 @@
       <tr><td><code>0x0A</code></td><td>Newline (LF)</td><td><span class="yes">Passed through</span> (ends the line).</td></tr>
       <tr><td><code>0x0D</code></td><td>Carriage return (CR)</td><td><span class="yes">Honoured</span> - moves to column 0 (line-local).</td></tr>
       <tr><td><code>0x08</code></td><td>Backspace (BS)</td><td><span class="yes">Honoured</span> - one cell left; never crosses a line, so it cannot rewrite earlier output.</td></tr>
-      <tr><td><code>0x07</code></td><td>Bell (BEL)</td><td>Consumed - drives the bell policy; not displayed.</td></tr>
+      <tr><td><code>0x07</code></td><td>Bell (BEL)</td><td>Honored per the bell setting (default: silent; options: audible / visual / tray). Not shown on screen.</td></tr>
       <tr><td><code>0x1B</code></td><td>Escape (ESC) + any sequence</td><td><span class="yes">Removed entirely.</span> No ANSI/OSC/APC/DCS parser exists.</td></tr>
       <tr><td><code>0x20</code>-<code>0x7E</code></td><td>Printable ASCII</td><td><span class="yes">Shown verbatim.</span></td></tr>
       <tr><td><code>0x00</code>-<code>0x06</code>, <code>0x0B</code>, <code>0x0C</code>, <code>0x0E</code>-<code>0x1F</code></td><td>Other C0 controls</td><td>Neutralised; shown per the unicode mode (see above).</td></tr>
@@ -337,7 +345,7 @@
 
 <section class="cat" id="osc"><div class="wrap">
   <h2 class="catname">OSC sequences</h2>
-  <p class="catdesc">Operating System Command (OSC) escapes are the ones that act beyond the
+  <p class="catdesc"><a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Operating_System_Command_sequences" rel="noopener">Operating System Command</a> (OSC) escapes are the ones that act beyond the
     text on screen - setting the window title, the system clipboard, a desktop notification, or
     a hyperlink. Every one is a registered feature, <b>off by default</b> (neutralised); each
     can be individually turned on at your own risk, and even then its value is validated and
@@ -354,7 +362,7 @@
       <tr><td>4, 10, 11, 12</td><td>Palette / colours</td><td><span class="yes">Off</span></td><td>Yes</td><td>medium</td><td>Applied under the contrast guard, so nothing can be painted invisibly. (Colour rendering itself is a separate setting, on by default.)</td></tr>
       <tr><td>52 (write)</td><td>System clipboard write</td><td><span class="yes">Off</span></td><td>Yes</td><td>high</td><td>Write only, when enabled.</td></tr>
       <tr><td>52 (read)</td><td>System clipboard read</td><td><span class="yes">Off</span></td><td>Yes (gated)</td><td>high</td><td>Asked once per tab, with a delayed Allow and rate-limited reply.</td></tr>
-      <tr><td>1337</td><td>iTerm2 extensions (file transfer, variables)</td><td><span class="yes">Off</span></td><td>Yes</td><td>high</td><td>Enables the iTerm2 proprietary protocol - a very large surface; only for a trusted local workflow.</td></tr>
+      <tr><td>1337</td><td>iTerm2 extensions (file transfer, variables)</td><td><span class="yes">Off</span></td><td>n/a (stub)</td><td>-</td><td>Recognized and stripped. secure-terminal has no iTerm2 implementation, so even when the toggle is on it performs no action (a deliberate stub); the file-transfer / variable surface a conformant iTerm2 would expose stays closed either way.</td></tr>
     </tbody>
   </table>
   </div>
