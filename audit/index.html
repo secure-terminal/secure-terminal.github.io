@@ -61,20 +61,54 @@
     <b>21</b> proofs-of-concept drawn from actual, publicly-disclosed terminal vulnerabilities -
     answerback injection, DECRQSS and device-status reflection, bracketed-paste bypass, charset-shift
     deception, cursor-addressing spoofs, homoglyph and Trojan-Source text, iTerm2 title-report
-    injection, and more. Each is hex-encoded, canary-forked and sandbox-only (see the corpus
-    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/SAFETY.md" rel="noopener">SAFETY</a>
-    notes), and each carries a machine assertion that secure-terminal <em>neutralises</em> it.
-    That corpus is what proves the guarantees; the conformance suites only confirm ordinary
+    injection, and more. Each carries a machine assertion that secure-terminal <em>neutralises</em>
+    it. That corpus is what proves the guarantees; the conformance suites only confirm ordinary
     programs still render.</p>
+  <div class="issue">
+    <p>Because the corpus stores real attack payloads, it is handled carefully - three properties,
+      documented in the corpus
+      <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/SAFETY.md" rel="noopener">SAFETY</a>
+      notes:</p>
+    <p><b>Hex-encoded.</b> Each payload is stored as hexadecimal in a <code>payload.hex</code> file,
+      not as raw bytes, so <em>browsing or grepping the repository</em> can never accidentally feed a
+      live escape sequence to your own terminal or a code viewer. It is decoded only at run time,
+      inside the sandbox.</p>
+    <p><b>Canary-forked.</b> Each attack is paired with a variant that, <em>on a vulnerable
+      terminal</em>, would write a known "canary" marker file. The harness runs it and checks for
+      the marker, so it can tell "the terminal actively neutralised this" apart from "the test
+      silently did nothing" - the test proves the attack <em>would</em> have fired.</p>
+    <p><b>Sandbox-only.</b> Payloads are decoded and fed to the terminal-under-test only inside a
+      disposable sandbox VM, never against your real terminal, and the harness refuses to run
+      outside it without an explicit override.</p>
+  </div>
 </div></section>
 
 <section class="cat" id="invariant"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#invariant">2. A security invariant over the whole spec surface</a></h2>
   <p class="catdesc">Beyond hand-picked attacks, the conformance harness feeds the entire
-    reflection-class spec surface - <b>557 escape sequences</b>, from the primary/secondary/tertiary
-    device-attribute queries through DECRQSS, XTVERSION, XTGETTCAP, the cursor-position and
-    device-status reports, ENQ answerback, and the window/colour queries - to secure-terminal in
-    CLI mode and checks three invariants on every one:</p>
+    reflection-class spec surface - <b>557 escape sequences</b> - to secure-terminal in CLI mode and
+    checks three invariants on every one. These are the query and report sequences a terminal
+    historically answers, and answering them is the "output becomes input" bug class; each is
+    documented in the
+    <a href="https://invisible-island.net/xterm/ctlseqs/ctlseqs.html" rel="noopener">XTerm Control Sequences</a>
+    reference:</p>
+  <ul class="catdesc" style="margin:0 0 14px 0; padding-left:20px">
+    <li>the primary, secondary and tertiary
+      <a href="https://vt100.net/docs/vt510-rm/DA1.html" rel="noopener">device-attribute</a> queries
+      (<code>DA1</code>/<code>DA2</code>/<code>DA3</code>);</li>
+    <li><a href="https://vt100.net/docs/vt510-rm/DECRQSS.html" rel="noopener">DECRQSS</a> (request a
+      setting the program just set), and the
+      <a href="https://invisible-island.net/xterm/ctlseqs/ctlseqs.html" rel="noopener">XTVERSION</a>
+      and <a href="https://invisible-island.net/xterm/ctlseqs/ctlseqs.html" rel="noopener">XTGETTCAP</a>
+      name/version and terminfo queries;</li>
+    <li>the cursor-position and device-status reports
+      (<a href="https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences" rel="noopener">DSR/CPR</a>),
+      and <a href="https://en.wikipedia.org/wiki/Enquiry_character" rel="noopener">ENQ</a> answerback;</li>
+    <li>the window-size/position and palette/colour queries.</li>
+  </ul>
+  <p class="catdesc">The class, and why answering any of them is dangerous, is laid out in David
+    Leadbeater's <a href="https://dgl.cx/2023/09/ansi-terminal-security" rel="noopener">2023 terminal-security review</a>.
+    On each sequence the harness checks:</p>
   <div class="issue">
     <p><b>i. Nothing is written back to the pty.</b> A vulnerable terminal answers a query by
       writing its reply onto the same channel - which is the program's keyboard. secure-terminal
@@ -118,15 +152,55 @@
       <tr><td>Core sanitizer (<code>test_secure_terminal</code>)</td><td>~240 assertions over the Qt-free sanitizer: escape stripping, the four unicode display modes, paste sanitisation, bell detection, the render invariants.</td></tr>
       <tr><td>Widget / GUI (<code>test_widget</code>)</td><td>~380 assertions driving the real Qt widget headless: line editing, scrollback, the paste warning, caret handling - and the character-inspect copy guard that asserts the popup copies the <code>\uXXXX</code> escape and <b>never</b> the raw glyph.</td></tr>
       <tr><td>Corpus runner (<code>test_corpus</code>)</td><td>Runs the 21 PoCs against the shipped code, so the corpus gates the package, not just the standalone harness.</td></tr>
-      <tr><td>Property + fuzz (<code>test_fuzz</code>, <code>fuzz_secure_terminal</code>)</td><td>Hypothesis property tests (idempotency, ASCII-only output, box-to-underscore export) plus a randomized fuzzer that throws adversarial input at the parse/render path and asserts no crash and every invariant, printing the seed on failure.</td></tr>
+      <tr><td>Property + fuzz (<code>test_fuzz</code>, <code>fuzz_secure_terminal</code>)</td><td><a href="https://hypothesis.readthedocs.io/" rel="noopener">Hypothesis</a> property tests (idempotency, ASCII-only output, box-to-underscore export) plus a randomized fuzzer that throws adversarial input at the parse/render path and asserts no crash and every invariant, printing the seed on failure.</td></tr>
+      <tr><td>Coverage-guided fuzzing (<a href="https://google.github.io/clusterfuzzlite/" rel="noopener">ClusterFuzzLite</a> + <a href="https://github.com/google/atheris" rel="noopener">Atheris</a>)</td><td>Three in-tree <a href="https://github.com/secure-terminal/secure-terminal/tree/master/fuzz" rel="noopener">fuzz harnesses</a> (the line editor, the strip renderer, the paste sanitiser) run under the OSS-Fuzz engine on every PR that touches the parse path, via <a href="https://github.com/secure-terminal/secure-terminal/blob/master/.github/workflows/local-python-fuzz.yml" rel="noopener">local-python-fuzz.yml</a>.</td></tr>
       <tr><td>AppArmor (<code>secure-terminal-tests-apparmor</code>)</td><td>Confirms the shipped AppArmor profile loads and confines the application (defence in depth around the memory-safe core).</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px"><b>Coverage.</b> Measured line coverage from the core and
+    widget suites (2026-07-18): <b>98%</b> of the security-critical
+    <a href="https://github.com/secure-terminal/secure-terminal/blob/master/usr/lib/python3/dist-packages/secure_terminal/sanitize.py" rel="noopener">sanitizer</a>,
+    84% of the terminal widget, and 77% across the whole codebase including the GUI. The parts that
+    matter most for safety - the escape-stripping and rendering core - are the most thoroughly
+    exercised.</p>
+</div></section>
+
+<section class="cat" id="scanners"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#scanners">5. Static analysis and continuous scanners</a></h2>
+  <p class="catdesc">Alongside the tests, several static analysers run on the repository. Each is a
+    committed GitHub Actions workflow.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Scanner</th><th>What it looks for</th><th>Runs</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://bandit.readthedocs.io/" rel="noopener">Bandit</a></td><td>Common Python security anti-patterns (unsafe subprocess, eval, temp-file races, weak crypto).</td><td><span class="yes">On every change</span> (<a href="https://github.com/secure-terminal/secure-terminal/blob/master/.github/workflows/consumer-bandit.yml" rel="noopener">consumer-bandit.yml</a>).</td></tr>
+      <tr><td><a href="https://codeql.github.com/" rel="noopener">CodeQL</a> (Python)</td><td>Dataflow / taint analysis over the Python code - untrusted input reaching a sensitive sink.</td><td><span class="yes">On every change</span> (<a href="https://github.com/secure-terminal/secure-terminal/blob/master/.github/workflows/consumer-codeql-python.yml" rel="noopener">consumer-codeql-python.yml</a>).</td></tr>
+      <tr><td>CodeQL (Actions)</td><td>The same analysis applied to the GitHub Actions workflows themselves (injection, unpinned actions).</td><td><span class="yes">On every change</span> (<a href="https://github.com/secure-terminal/secure-terminal/blob/master/.github/workflows/consumer-codeql-actions.yml" rel="noopener">consumer-codeql-actions.yml</a>).</td></tr>
+      <tr><td><a href="https://scan.coverity.com/" rel="noopener">Coverity</a></td><td>Deeper interprocedural static analysis.</td><td>Configured (<a href="https://github.com/secure-terminal/secure-terminal/blob/master/.github/workflows/consumer-coverity.yml" rel="noopener">consumer-coverity.yml</a>); activates once its scan token is set.</td></tr>
     </tbody>
   </table>
   </div>
 </div></section>
 
+<section class="cat" id="review"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#review">6. Independent AI review</a></h2>
+  <p class="catdesc">Because the code is AI-authored, it is also AI-<em>reviewed</em> - by different
+    models than wrote it, with fresh context, as an adversarial second opinion. Unlike the checks
+    above, this is run on demand (before a change lands), not on a schedule:</p>
+  <div class="issue">
+    <p><a href="https://github.com/openai/codex" rel="noopener">Codex</a> and
+      <a href="https://www.coderabbit.ai/" rel="noopener">CodeRabbit</a> review the diff for logic,
+      design and security defects; a fresh-context Claude reviewer does a final local sweep. The
+      findings are reconciled by hand - each one verified against the code, applied if real, dropped
+      with a reason if not - so the reviewers are advisors, not an autopilot. (The two P2 issues in
+      the most recent tab-numbering and icon change, for instance, were caught this way and fixed.)
+      Everything a human still needs to review is exactly what the banner says.</p>
+  </div>
+</div></section>
+
 <section class="cat" id="resilience"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#resilience">5. The real-emulator resilience test</a></h2>
+  <h2 class="catname"><a class="h-anchor" href="#resilience">7. The real-emulator resilience test</a></h2>
   <p class="catdesc">An opt-in test (<code>terminal-resilience-tests</code>) drives a real
     traditional emulator on a private headless display, feeds it the crafted hostile log, and
     asserts two things: the traditional emulator's window title <em>is</em> hijacked to the marker
@@ -134,15 +208,6 @@
     escape byte and no title marker (proving it does not). This is the automated, always-green
     version of the <a href="/comparison/">comparison</a> you can see in screenshots - and you can
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/comparison" rel="noopener">reproduce it yourself</a>.</p>
-</div></section>
-
-<section class="cat" id="site"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#site">6. Even this website is audited</a></h2>
-  <p class="catdesc">These pages make security claims, so they are checked too. A site-consistency
-    guard verifies every internal link resolves, the footer and the "needs human review" banner are
-    present and consistent, the Content-Security-Policy is intact, and no supply-chain-risky
-    external resource crept in. A separate mobile guard renders each page at a 390px viewport and
-    fails on any horizontal overflow. The robots keep the marketing honest, not just the code.</p>
   <div class="cta">
     <a class="btn primary" href="https://github.com/secure-terminal/terminal-poc-corpus">Read the corpus</a>
     <a class="btn ghost" href="/comparison/">See the comparison</a>
