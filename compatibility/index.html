@@ -137,6 +137,31 @@
   </div>
 </div></section>
 
+<section class="cat" id="terminfo"><div class="wrap">
+  <h2 class="catname">Optional: a restricted terminfo that tells programs the truth</h2>
+  <p class="catdesc">By default a CLI-mode tab reports <code>TERM=xterm-256color</code> and the
+    renderer simply strips whatever a program emits that it does not draw. That always works, but
+    a program still <em>tries</em> to move the cursor or probe the terminal, and you see nothing
+    back. An opt-in setting closes that gap at the source.</p>
+  <div class="issue">
+    <p>Turn on <code>cli_terminfo</code> and new CLI-mode tabs advertise a custom
+      <b><code>secure-terminal</code></b> terminfo entry instead. It inherits the correct colour
+      and SGR capabilities from <code>xterm-16color</code>, then <b>cancels</b> every capability
+      CLI mode does not render - cursor addressing, the alternate screen, clear/erase-display,
+      insert/delete line and character, scroll regions, save/restore cursor, tab stops, the
+      title and status line, mouse - <em>and</em> the <code>u6</code>/<code>u7</code>/<code>u8</code>/<code>u9</code>
+      device-query capabilities. So a well-behaved program emits only what this terminal actually
+      shows (line-local moves plus colour) and <b>never probes a terminal that will not answer</b>.
+      It is defence in depth, not the guarantee: the renderer strips those sequences regardless of
+      <code>TERM</code>; this just stops them being generated.</p>
+    <p>Off by default, because <code>TERM</code> is fixed when a shell starts, so it applies to new
+      tabs, and because a remote host (over ssh) or a full-screen TUI program needs the fuller
+      <code>xterm-256color</code> entry it does not have. Keep it off if you ssh or use TUI mode.
+      The entry is a short, readable source file:
+      <a href="https://github.com/secure-terminal/secure-terminal/blob/master/usr/share/secure-terminal/terminfo/secure-terminal.ti" rel="noopener"><code>secure-terminal.ti</code></a>.</p>
+  </div>
+</div></section>
+
 <section class="cat" id="tui"><div class="wrap">
   <h2 class="catname">The 10 most popular full-screen (TUI) programs</h2>
   <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
@@ -381,6 +406,29 @@
     <a class="btn primary" href="/#install">Install secure-terminal</a>
     <a class="btn ghost" href="https://github.com/secure-terminal/terminal-poc-corpus">See the attack corpus</a>
   </div>
+</div></section>
+
+<section class="cat" id="unsupported"><div class="wrap">
+  <h2 class="catname">Deliberately not supported: in-terminal graphics</h2>
+  <p class="catdesc">Some modern terminals can draw pictures in the grid - a chart from a CLI tool,
+    a thumbnail, a plot. secure-terminal does not, and that is a design choice, not a gap: every
+    one of these protocols works by having the terminal parse an escape sequence and render
+    arbitrary attacker-supplied bytes, which is exactly the parser and the attack surface the
+    default mode removes by construction.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Feature</th><th>How it works</th><th>Used by</th><th>secure-terminal</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://en.wikipedia.org/wiki/Sixel" rel="noopener">Sixel graphics</a></td><td>A DCS escape carrying a bitmap, drawn into the character grid.</td><td>img2sixel, mpv, gnuplot, some pagers</td><td><span class="yes">Not implemented.</span> The DCS escape is stripped like any other; no image is rendered.</td></tr>
+      <tr><td><a href="https://sw.kovidgoyal.net/kitty/graphics-protocol/" rel="noopener">kitty graphics protocol</a></td><td>An APC escape (<code>ESC _G</code>) streaming PNG/raw pixels, optionally from a shared file or memory.</td><td>kitty's <code>icat</code>, timg, some file managers</td><td><span class="yes">Not implemented.</span> APC is not parsed; the shared-file/memory variant (a local-file read primitive) never runs.</td></tr>
+      <tr><td>iTerm2 inline images (<a href="https://iterm2.com/documentation-images.html" rel="noopener">OSC 1337</a>)</td><td>An OSC 1337 payload carrying a base64 image (and file transfer, shell variables).</td><td>iTerm2's <code>imgcat</code>, <code>it2dl</code></td><td><span class="yes">Not implemented (stub).</span> Recognised and stripped; the toggle performs no action even when on. See the OSC table above.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px">If you need inline images, that is a legitimate need -
+    and a legitimate reason to open a dedicated graphical terminal in a separate tab for that task.
+    secure-terminal's promise is that reading text and pasting commands is safe by construction;
+    rendering arbitrary remote image bytes is not a promise it can keep while keeping that one.</p>
 </div></section>
 </main>
 
