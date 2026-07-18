@@ -70,7 +70,7 @@
       illustrative marker (<code>root@prod-db:~#</code>), a stuck colour that is never reset, and
       a DEC line-drawing charset shift that is never reset. This is the deliberate attack a log
       file or program output can carry. The exact bytes are a short, readable script:
-      <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/comparison/hostile-log.sh" rel="noopener"><code>hostile-log.sh</code></a>.</p>
+      <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/comparison/hostile-script.sh" rel="noopener"><code>hostile-script.sh</code></a>.</p>
   </div>
 </div></section>
 
@@ -152,14 +152,14 @@
   <div class="pre"><span class="c"># see the exact crafted bytes (Case B)</span>
 git clone https://github.com/secure-terminal/terminal-poc-corpus
 cd terminal-poc-corpus/comparison
-./hostile-log.sh | cat -v
+./hostile-script.sh | cat -v
 
 <span class="c"># reproduce the screenshots headless (installs nothing itself; install the</span>
 <span class="c"># emulators you want first - see the README), pointing at a secure-terminal checkout</span>
 ST_REPO=/path/to/secure-terminal ./capture.sh
 
 <span class="c"># or just watch a title get hijacked in your own terminal:</span>
-./hostile-log.sh            <span class="c"># then check your window title</span></div>
+./hostile-script.sh            <span class="c"># then check your window title</span></div>
   <p class="catdesc" style="margin-top:12px">An automated, always-on version ships as the opt-in
     <code>terminal-resilience-tests</code> in
     <a href="https://github.com/org-ai-assisted/dist-ai" rel="noopener">dist-ai</a>: it asserts a
