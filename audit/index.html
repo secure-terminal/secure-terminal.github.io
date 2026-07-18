@@ -1,0 +1,242 @@
+<!--
+  secure-terminal: AI Audit / robot audit. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+-->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal AI Audit: what the robots check</title>
+<meta name="description" content="Every automated security check behind secure-terminal: an adversarial corpus of 21 disclosed terminal attacks, a spec-surface invariant over hundreds of escape sequences, unit and GUI tests, property tests and fuzzing, an AppArmor confinement test, a real-emulator resilience test, and website consistency guards. AI-authored, continuously run.">
+<link rel="canonical" href="https://secure-terminal.github.io/audit/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal AI Audit: what the robots check">
+<meta property="og:description" content="The automated checks behind secure-terminal: an adversarial corpus, a spec-surface invariant, unit + GUI tests, fuzzing, AppArmor, a real-emulator resilience test, and site guards. AI-authored, continuously run.">
+<meta property="og:url" content="https://secure-terminal.github.io/audit/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal AI Audit">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal AI Audit: what the robots check">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
+    <span class="status" title="This site is AI-generated and pending human review">needs human review</span>
+    <nav>
+      <a href="/#compare">Compare</a>
+      <a href="/#install">Install</a>
+      <a href="/plugins/">Plugins</a>
+      <a href="/compatibility/">Compatibility</a>
+      <a href="/comparison/">Comparison</a>
+      <a href="/audit/" class="active">AI Audit</a>
+      <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">AI AUDIT: WHAT THE ROBOTS CHECK</p>
+  <h1>This project is written by AI.<br>So it is checked by robots, hard.</h1>
+  <p class="lede">secure-terminal is AI-assisted software, and its site says so - every page is a
+    draft pending human review. That is exactly why the security claims do not rest on trust: they
+    rest on a large, automated, adversarial test suite that runs on every change. This page lists
+    what those robots actually check, so you can read the tests, not just the marketing. The
+    banner says <b>needs human review</b> for the prose; the guarantees below are what the machines
+    verify continuously in the meantime.</p>
+</div></section>
+
+<section class="cat" id="corpus"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#corpus">1. The adversarial corpus: real, disclosed attacks</a></h2>
+  <p class="catdesc">The core of the audit is the
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>:
+    <b>21</b> proofs-of-concept drawn from actual, publicly-disclosed terminal vulnerabilities -
+    answerback injection, DECRQSS and device-status reflection, bracketed-paste bypass, charset-shift
+    deception, cursor-addressing spoofs, homoglyph and Trojan-Source text, iTerm2 title-report
+    injection, and more. Each is hex-encoded, canary-forked and sandbox-only (see the corpus
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/SAFETY.md" rel="noopener">SAFETY</a>
+    notes), and each carries a machine assertion that secure-terminal <em>neutralises</em> it.
+    That corpus is what proves the guarantees; the conformance suites only confirm ordinary
+    programs still render.</p>
+</div></section>
+
+<section class="cat" id="invariant"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#invariant">2. A security invariant over the whole spec surface</a></h2>
+  <p class="catdesc">Beyond hand-picked attacks, the conformance harness feeds the entire
+    reflection-class spec surface - <b>557 escape sequences</b>, from the primary/secondary/tertiary
+    device-attribute queries through DECRQSS, XTVERSION, XTGETTCAP, the cursor-position and
+    device-status reports, ENQ answerback, and the window/colour queries - to secure-terminal in
+    CLI mode and checks three invariants on every one:</p>
+  <div class="issue">
+    <p><b>i. Nothing is written back to the pty.</b> A vulnerable terminal answers a query by
+      writing its reply onto the same channel - which is the program's keyboard. secure-terminal
+      must write <em>zero</em> bytes back, for every query. This is the whole "output becomes
+      input" attack class, closed and asserted.</p>
+    <p><b>ii. Nothing non-ASCII is smuggled to the screen.</b> The rendered text may contain only
+      printable ASCII plus tab, newline, and the two documented line-local cursor controls
+      (backspace, carriage return). Any other control byte, or any codepoint above <code>0x7e</code>
+      (the invisible / bidi / homoglyph classes), is a violation.</p>
+    <p><b>iii. Nothing crashes.</b> Every sequence must render in bounded time without an exception,
+      including deliberately malformed and over-long ones.</p>
+  </div>
+  <p class="catdesc" style="margin-top:12px"><b>The harness checks its own honesty, too.</b> A
+    <em>positive control</em> feeds a deliberately-vulnerable result and asserts the check FLAGS it;
+    a <em>negative control</em> runs the same predicate over a known-bad terminal to prove the check
+    can actually detect a failure. And a dedicated check asserts that CLI mode never even
+    instantiates the pyte screen engine - so there is no VT state machine to attack in the default
+    mode. A test that cannot fail proves nothing; these can.</p>
+</div></section>
+
+<section class="cat" id="reference"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#reference">3. Reference-parser self-tests</a></h2>
+  <p class="catdesc">TUI mode renders through a confined
+    <a href="https://github.com/selectel/pyte" rel="noopener">pyte</a> screen model. The audit runs
+    pyte's <em>own</em> test suite at the reviewed pin, and cross-checks against
+    <a href="https://github.com/neovim/libvterm" rel="noopener">libvterm</a>, so the engine
+    secure-terminal relies on is held to its own correctness bar. The public conformance suites
+    (esctest2, pyte, libvterm, vttest) are tracked not to pass them - CLI mode "fails" them by
+    design - but as a corpus of every sequence a real program might emit. Full detail on the
+    <a href="/compatibility/#conformance">compatibility page</a>.</p>
+</div></section>
+
+<section class="cat" id="unit"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#unit">4. Unit, GUI, property and fuzz tests</a></h2>
+  <p class="catdesc">The application itself carries a large suite that runs in CI on every change,
+    shipped as packages in <a href="https://github.com/org-ai-assisted/dist-ai" rel="noopener">dist-ai</a>.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Suite</th><th>What it checks</th></tr></thead>
+    <tbody>
+      <tr><td>Core sanitizer (<code>test_secure_terminal</code>)</td><td>~240 assertions over the Qt-free sanitizer: escape stripping, the four unicode display modes, paste sanitisation, bell detection, the render invariants.</td></tr>
+      <tr><td>Widget / GUI (<code>test_widget</code>)</td><td>~380 assertions driving the real Qt widget headless: line editing, scrollback, the paste warning, caret handling - and the character-inspect copy guard that asserts the popup copies the <code>\uXXXX</code> escape and <b>never</b> the raw glyph.</td></tr>
+      <tr><td>Corpus runner (<code>test_corpus</code>)</td><td>Runs the 21 PoCs against the shipped code, so the corpus gates the package, not just the standalone harness.</td></tr>
+      <tr><td>Property + fuzz (<code>test_fuzz</code>, <code>fuzz_secure_terminal</code>)</td><td>Hypothesis property tests (idempotency, ASCII-only output, box-to-underscore export) plus a randomized fuzzer that throws adversarial input at the parse/render path and asserts no crash and every invariant, printing the seed on failure.</td></tr>
+      <tr><td>AppArmor (<code>secure-terminal-tests-apparmor</code>)</td><td>Confirms the shipped AppArmor profile loads and confines the application (defence in depth around the memory-safe core).</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div></section>
+
+<section class="cat" id="resilience"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#resilience">5. The real-emulator resilience test</a></h2>
+  <p class="catdesc">An opt-in test (<code>terminal-resilience-tests</code>) drives a real
+    traditional emulator on a private headless display, feeds it the crafted hostile log, and
+    asserts two things: the traditional emulator's window title <em>is</em> hijacked to the marker
+    (proving a normal terminal acts on untrusted output), and secure-terminal's output carries no
+    escape byte and no title marker (proving it does not). This is the automated, always-green
+    version of the <a href="/comparison/">comparison</a> you can see in screenshots - and you can
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/comparison" rel="noopener">reproduce it yourself</a>.</p>
+</div></section>
+
+<section class="cat" id="site"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#site">6. Even this website is audited</a></h2>
+  <p class="catdesc">These pages make security claims, so they are checked too. A site-consistency
+    guard verifies every internal link resolves, the footer and the "needs human review" banner are
+    present and consistent, the Content-Security-Policy is intact, and no supply-chain-risky
+    external resource crept in. A separate mobile guard renders each page at a 390px viewport and
+    fails on any horizontal overflow. The robots keep the marketing honest, not just the code.</p>
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/secure-terminal/terminal-poc-corpus">Read the corpus</a>
+    <a class="btn ghost" href="/comparison/">See the comparison</a>
+    <a class="btn ghost" href="/compatibility/">Compatibility detail</a>
+  </div>
+</div></section>
+</main>
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <p>Paste in, read out. Nothing hides.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h4>Project</h4>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h4>Family</h4>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a class="self" href="https://secure-terminal.github.io" aria-current="page">secure-terminal</a>
+        <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h4>Safe text</h4>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fshare">
+    <span class="fshare-l">Share:</span>
+    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
+    <a class="sh" data-net="email">Email</a>
+    <button class="sh" data-net="copy" type="button">Copy link</button>
+    <button class="sh" data-net="md" type="button">Copy as Markdown</button>
+    <span class="sh-msg" aria-live="polite"></span>
+  </div>
+  <script>
+    /* Local-only share links. No third-party script or resource is loaded; a
+       target opens only when the user clicks it. */
+    (function () {
+      var u = encodeURIComponent(location.href), t = encodeURIComponent(document.title);
+      var L = {
+        x: 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t,
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + u,
+        telegram: 'https://t.me/share/url?url=' + u + '&text=' + t,
+        reddit: 'https://www.reddit.com/submit?url=' + u + '&title=' + t,
+        whatsapp: 'https://api.whatsapp.com/send?text=' + t + '%20' + u,
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + u,
+        hn: 'https://news.ycombinator.com/submitlink?u=' + u + '&t=' + t,
+        email: 'mailto:?subject=' + t + '&body=' + u
+      };
+      document.querySelectorAll('.fshare a.sh').forEach(function (a) {
+        var n = a.getAttribute('data-net');
+        if (L[n]) { a.href = L[n]; if (n !== 'email') { a.target = '_blank'; } }
+      });
+      var m = document.querySelector('.fshare [data-net=mastodon]');
+      if (m) m.addEventListener('click', function (e) {
+        e.preventDefault();
+        var i = prompt('Your Mastodon instance (e.g. mastodon.social):');
+        if (i) { i = i.replace('https://', '').replace('http://', '').replace(/\/+$/, '');
+          window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); }
+      });
+      var msg = document.querySelector('.fshare .sh-msg');
+      function flash(x) { if (msg) { msg.textContent = x; setTimeout(function () { msg.textContent = ''; }, 2000); } }
+      var c = document.querySelector('.fshare [data-net=copy]');
+      if (c) c.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { flash('link copied'); });
+      });
+      var md = document.querySelector('.fshare [data-net=md]');
+      if (md) md.addEventListener('click', function () {
+        var text = '[' + document.title + '](' + location.href + ')';
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { flash('markdown copied'); });
+      });
+    })();
+  </script>
+  <div class="ffree">
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.png" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.png" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
+  </div>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy">Operated by <a href="https://github.com/adrelanos">@adrelanos</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
