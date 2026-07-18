@@ -49,7 +49,7 @@
   <h1>Written by AI.<br>Held to an unusually strict test bar.</h1>
   <p class="lede">secure-terminal is AI-assisted software. Precisely because a machine wrote it, the
     security claims are not asked to rest on trust: they rest on a large, automated, adversarial
-    test suite and independent analysis that run on every change. This page lists exactly what is
+    test suite and separate analysis passes that run on every change. This page lists exactly what is
     checked, so you can read the tests, not just the marketing. Every claim below is something you
     can verify in the code.</p>
 </div></section>
@@ -123,7 +123,7 @@
     <p><b>iii. Nothing crashes.</b> Every sequence must render in bounded time without an exception,
       including deliberately malformed and over-long ones.</p>
   </div>
-  <p class="catdesc" style="margin-top:12px"><b>The harness checks its own honesty, too.</b> A
+  <p class="catdesc" style="margin-top:12px"><b>The harness checks itself, too.</b> A
     <em>positive control</em> feeds a deliberately-vulnerable result and asserts the check FLAGS it;
     a <em>negative control</em> runs the same predicate over a known-bad terminal to prove the check
     can actually detect a failure. And a dedicated check asserts that CLI mode never even
@@ -186,9 +186,11 @@
 </div></section>
 
 <section class="cat" id="review"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#review">6. Independent AI review</a></h2>
+  <h2 class="catname"><a class="h-anchor" href="#review">6. AI review by other models</a></h2>
   <p class="catdesc">Because the code is AI-authored, it is also AI-<em>reviewed</em> - by different
-    models than wrote it, with fresh context, as an adversarial second opinion. Unlike the checks
+    models than wrote it, with fresh context, as a second opinion. This is not an
+    independent third-party audit; it is a different tool looking for defects the
+    authoring model missed. Unlike the checks
     above, this is run on demand (before a change lands), not on a schedule:</p>
   <div class="issue">
     <p><a href="https://github.com/openai/codex" rel="noopener">Codex</a> and

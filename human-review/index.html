@@ -1,26 +1,26 @@
 <!--
-  secure-terminal: human review status + the honest case. AI-Assisted.
+  secure-terminal: human review status + the case for using it. AI-Assisted.
   Source: https://github.com/secure-terminal/secure-terminal.github.io
 -->
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
-<title>secure-terminal: human review status, and the honest case for using it</title>
-<meta name="description" content="secure-terminal is AI-authored and not yet human-security-audited. Here is what that means, why you might still prefer it to a traditional terminal with known, unfixed attack classes, and how to read that trade-off honestly.">
+<title>secure-terminal: human review status, and the case for using it</title>
+<meta name="description" content="secure-terminal is AI-authored and not yet human-security-audited. Here is what that means, why you might still prefer it to a traditional terminal with known, unfixed attack classes,.">
 <link rel="canonical" href="https://secure-terminal.github.io/human-review/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
-<meta property="og:title" content="secure-terminal: human review status, and the honest case">
-<meta property="og:description" content="AI-authored, not yet human-security-audited. Why that trade-off can still beat a traditional terminal with known, unfixed attack classes - stated honestly.">
+<meta property="og:title" content="secure-terminal: human review status, and the case">
+<meta property="og:description" content="AI-authored, not yet human-security-audited. Why that trade-off can still beat a traditional terminal with known, unfixed attack classes.">
 <meta property="og:url" content="https://secure-terminal.github.io/human-review/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="secure-terminal human review status">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="secure-terminal: human review status, and the honest case">
+<meta name="twitter:title" content="secure-terminal: human review status, and the case">
 <meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
 <meta name="theme-color" content="#f3f2ee">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -56,9 +56,8 @@
 <main>
 <section class="hero"><div class="wrap">
   <p class="eyebrow">HUMAN REVIEW: WHERE THIS STANDS</p>
-  <h1>Not yet human-audited.<br>Here is the honest trade-off.</h1>
-  <p class="lede">secure-terminal is AI-authored. It has not had a full human security audit, and we
-    are not going to pretend otherwise. This page lays out exactly what review it has had, what it
+  <h1>Not yet human-audited.<br>Here is the trade-off.</h1>
+  <p class="lede">secure-terminal is AI-authored. It has not had a full human security audit. This page lays out exactly what review it has had, what it
     has not, and why - even so - it can be the safer choice than a traditional terminal whose attack
     classes are known, decades old, and largely unaddressed. Decide with the facts, not a slogan.</p>
 </div></section>
@@ -72,7 +71,7 @@
       <p class="when">Today</p>
       <h3>1. Purely AI-generated <span class="tag">current status</span></h3>
       <p>Written by AI, checked by an extensive <a href="/ai-review/">automated suite</a> - adversarial
-        corpus, spec-surface invariant, fuzzing, static analysers, and independent AI review - but
+        corpus, spec-surface invariant, fuzzing, static analysers, and cross-model AI review - but
         <b>not</b> yet reviewed line-by-line by a human. This is why every page carries the red
         <b>needs human review</b> marker.</p>
     </div>
@@ -95,7 +94,7 @@
 
 <section class="cat" id="wait"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#wait">Should you wait for the audit? No - and here is why</a></h2>
-  <p class="catdesc">The honest comparison is not "audited software vs unaudited software." It is
+  <p class="catdesc">The comparison that matters is not "audited software vs unaudited software." It is
     "unaudited secure-terminal vs a traditional terminal with known, unfixed weaknesses."</p>
   <div class="issue">
     <p>A traditional terminal emulator is not a neutral, safe baseline. It interprets whatever bytes
@@ -142,7 +141,7 @@
       a tool that can produce working software, and the output can be held to a bar most hand-written
       code never is. That is the entire point of the <a href="/ai-review/">AI Review</a>: this project is
       not "trust the AI," it is "here are the adversarial tests, the fuzzers, the scanners and the
-      independent reviews the code has to survive - go read them."</p>
+      cross-model reviews the code has to survive - go read them."</p>
   </div>
 </div></section>
 
@@ -156,8 +155,8 @@
       and every edge case programs rely on. Established emulators are typically maintained by a single
       person or a small team and have been developed and hardened over <b>years</b>, not weeks. For a
       project like Kicksecure, writing a secure terminal from scratch - and then giving it a full,
-      independent security audit - cannot realistically be a side project done overnight. Being honest
-      about that is the point of this page.</p>
+      independent security audit - cannot realistically be a side project done overnight - which is exactly why this
+      page exists rather than an implied clean bill of health.</p>
     <p>So the plan is staged: ship it with the automated safety net in place, complete the human
       non-malicious review next (removing the backdoor question), and pursue a deeper audit over time.
       Meanwhile you get to make an informed choice instead of an implied-perfect one.</p>

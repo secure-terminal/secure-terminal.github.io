@@ -59,7 +59,7 @@
 
 <section class="cat" id="method"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#method">What we fed them</a></h2>
-  <p class="catdesc">One payload, two honest cases, fed to ten Debian terminal emulators and to
+  <p class="catdesc">One payload, two cases, fed to ten Debian terminal emulators and to
     secure-terminal, each on its own isolated headless display. Tested <b>2026-07-18</b>. Both
     payloads and the capture harness are published so you can
     <a href="#reproduce">reproduce it</a>.</p>
@@ -137,7 +137,7 @@
     garble clears with <code>reset</code>, but the silent title change usually does not, and only
     if you notice and type <code>reset</code> at a screen that may be unusable. Nothing crashed
     or hung; the danger is the silent title hijack and the clipboard write, not instability.</p>
-  <p class="catdesc" style="margin-top:10px"><b>Honest about secure-terminal's colour.</b> It is
+  <p class="catdesc" style="margin-top:10px"><b>secure-terminal's colour.</b> It is
     not colourless: safe ANSI colour is on by default (turn it off with the Colors toggle or
     <code>NO_COLOR</code>). The difference is the <a href="/compatibility/#contrast-guard">contrast guard</a> -
     it forces any colour to stay readable against the background, so the crafted log's stuck
