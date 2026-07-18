@@ -1,0 +1,276 @@
+<!--
+  secure-terminal: human review status + the honest case. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+-->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal: human review status, and the honest case for using it</title>
+<meta name="description" content="secure-terminal is AI-authored and not yet human-security-audited. Here is what that means, why you might still prefer it to a traditional terminal with known, unfixed attack classes, and how to read that trade-off honestly.">
+<link rel="canonical" href="https://secure-terminal.github.io/human-review/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal: human review status, and the honest case">
+<meta property="og:description" content="AI-authored, not yet human-security-audited. Why that trade-off can still beat a traditional terminal with known, unfixed attack classes - stated honestly.">
+<meta property="og:url" content="https://secure-terminal.github.io/human-review/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal human review status">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal: human review status, and the honest case">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+<style>
+  .levels{display:grid;gap:14px;margin:8px 0 0}
+  .level{border:1px solid var(--line);border-left-width:6px;border-radius:10px;padding:14px 16px;background:var(--card)}
+  .level h3{margin:0 0 4px;font-size:1.05rem}
+  .level .when{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .level.now{border-left-color:#e5484d}
+  .level.soon{border-left-color:#e5a50a}
+  .level.later{border-left-color:#1f8a54}
+  .level .tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+  .level.now .tag{background:#e5484d;color:#fff}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
+    <span class="status" title="This site is AI-generated and pending human review">needs human review</span>
+    <nav>
+      <a href="/#compare">Compare</a>
+      <a href="/#install">Install</a>
+      <a href="/compatibility/">Compatibility</a>
+      <a href="/comparison/">Comparison</a>
+      <a href="/audit/">AI Audit</a>
+      <a href="/human-review/" class="active">Human Review</a>
+      <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">HUMAN REVIEW: WHERE THIS STANDS</p>
+  <h1>Not yet human-audited.<br>Here is the honest trade-off.</h1>
+  <p class="lede">secure-terminal is AI-authored. It has not had a full human security audit, and we
+    are not going to pretend otherwise. This page lays out exactly what review it has had, what it
+    has not, and why - even so - it can be the safer choice than a traditional terminal whose attack
+    classes are known, decades old, and largely unaddressed. Decide with the facts, not a slogan.</p>
+</div></section>
+
+<section class="cat" id="levels"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#levels">Three levels of review</a></h2>
+  <p class="catdesc">Trustworthiness is not binary. There are at least three meaningfully different
+    levels of review a codebase can have. We tell you which one applies today.</p>
+  <div class="levels">
+    <div class="level now">
+      <p class="when">Today</p>
+      <h3>1. Purely AI-generated <span class="tag">current status</span></h3>
+      <p>Written by AI, checked by an extensive <a href="/audit/">automated suite</a> - adversarial
+        corpus, spec-surface invariant, fuzzing, static analysers, and independent AI review - but
+        <b>not</b> yet reviewed line-by-line by a human. This is why every page carries the red
+        <b>needs human review</b> marker.</p>
+    </div>
+    <div class="level soon">
+      <p class="when">Near future</p>
+      <h3>2. Human non-malicious review</h3>
+      <p>A human reads the code well enough to confirm it does what it claims and contains no
+        <a href="https://www.kicksecure.com/wiki/Backdoor" rel="noopener">backdoor</a> or obvious
+        sabotage. This does not find every subtle bug, but it removes the "did an AI slip something
+        malicious in?" question.</p>
+    </div>
+    <div class="level later">
+      <p class="when">Long term</p>
+      <h3>3. Full human security audit</h3>
+      <p>An expert audits the whole design and implementation for exploitable flaws. This is the gold
+        standard - and, as explained below, a genuinely large undertaking for software this size.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="cat" id="wait"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#wait">Should you wait for the audit? No - and here is why</a></h2>
+  <p class="catdesc">The honest comparison is not "audited software vs unaudited software." It is
+    "unaudited secure-terminal vs a traditional terminal with known, unfixed weaknesses."</p>
+  <div class="issue">
+    <p>A traditional terminal emulator is not a neutral, safe baseline. It interprets whatever bytes
+      a program prints, and that has well-documented consequences:</p>
+    <ul style="margin:6px 0 0 0; padding-left:20px; color:var(--muted); line-height:1.7">
+      <li>A simple <code>cat /dev/random</code> is enough to garble the screen and, on many
+        terminals, silently rewrite the window title - <a href="/comparison/">we measured this</a>
+        against ten Debian emulators.</li>
+      <li>Merely <em>viewing</em> a crafted file can, in vulnerable terminals, inject keystrokes and
+        - via the title/answerback reflection class - <b>run commands you never typed</b>. That is a
+        real, 20-year CVE class, not a hypothetical
+        (<a href="https://nvd.nist.gov/vuln/detail/CVE-2003-0063" rel="noopener">CVE-2003-0063</a>,
+        and <a href="https://dgl.cx/2023/09/ansi-terminal-security" rel="noopener">ten more found in 2023</a>).</li>
+      <li>Any command you copy from a website, a Stack Exchange answer, or an AI chat interface can
+        carry <b>hidden Unicode or control characters</b> that read differently from what runs -
+        the <a href="https://trojansource.codes/" rel="noopener">Trojan-Source</a> class - and paste
+        straight into your shell without you noticing.</li>
+      <li>The code that parses those hostile bytes is usually written in a memory-unsafe language (C),
+        with a long history of memory-corruption bugs in exactly that path.</li>
+    </ul>
+    <p style="margin-top:12px">The official mitigation for the paste problem -
+      <a href="https://www.kicksecure.com/wiki/Shell#Protection_from_Hidden_Text_Attacks" rel="noopener">copy to a text file, scan it, then copy to the terminal</a> - is real, but so cumbersome that
+      almost nobody does it every time. And crucially, these traditional-terminal weaknesses are, to
+      our knowledge, <b>not even being worked on</b>: they are considered out of scope, a different
+      threat model. secure-terminal removes the whole class <em>by construction</em>. So the choice
+      is between a known-vulnerable terminal and an AI-authored one that closes those attacks but has
+      not yet had a human security audit.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="slop"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#slop">"But AI code is slop, insecure, you shouldn't use it"</a></h2>
+  <p class="catdesc">A fair objection, and one we take seriously rather than wave away.</p>
+  <div class="issue">
+    <p>There are real, documented
+      <a href="https://www.kicksecure.com/wiki/Artificial_intelligence" rel="noopener">problems with AI</a>,
+      which is exactly why Kicksecure has a
+      <a href="https://www.kicksecure.com/wiki/Policy_On_Artificial_Intelligence" rel="noopener">policy on artificial intelligence</a>
+      and has itself received - and rejected -
+      <a href="https://www.kicksecure.com/wiki/Policy_On_Artificial_Intelligence#Examples_of_Nonsensical_AI_Generated_Posts" rel="noopener">nonsensical AI-generated contributions</a>.
+      AI in the hands of a non-programmer will most likely generate nonsensical code.</p>
+    <p>The distinction that matters is <em>who drives it</em>. Used by an experienced developer who
+      reviews, tests and constrains it - not by a "fire everyone, the AI does it all" fantasy - AI is
+      a tool that can produce working software, and the output can be held to a bar most hand-written
+      code never is. That is the entire point of the <a href="/audit/">AI Audit</a>: this project is
+      not "trust the AI," it is "here are the adversarial tests, the fuzzers, the scanners and the
+      independent reviews the code has to survive - go read them."</p>
+  </div>
+</div></section>
+
+<section class="cat" id="scale"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#scale">Why we can't simply audit it all ourselves</a></h2>
+  <p class="catdesc">Writing - and fully auditing - a terminal emulator is a big job, not a weekend
+    side project.</p>
+  <div class="issue">
+    <p>secure-terminal is roughly <b>7,600 lines</b> of code today, and a terminal emulator is a
+      notoriously fiddly thing to get right: escape-sequence parsing, a screen model, input handling,
+      and every edge case programs rely on. Established emulators are typically maintained by a single
+      person or a small team and have been developed and hardened over <b>years</b>, not weeks. For a
+      project like Kicksecure, writing a secure terminal from scratch - and then giving it a full,
+      independent security audit - cannot realistically be a side project done overnight. Being honest
+      about that is the point of this page.</p>
+    <p>So the plan is staged: ship it with the automated safety net in place, complete the human
+      non-malicious review next (removing the backdoor question), and pursue a deeper audit over time.
+      Meanwhile you get to make an informed choice instead of an implied-perfect one.</p>
+  </div>
+</div></section>
+
+<section class="cat" id="why"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#why">So why use it now?</a></h2>
+  <div class="issue">
+    <p>Because even with the audit still outstanding, the concrete, known attacks that a traditional
+      terminal is exposed to - screen and title hijacking, reflection-to-command-injection, hidden-
+      character paste, memory-corruption in the parser - are <b>mitigated by construction</b> here,
+      and demonstrably so. And once the human non-malicious review is complete, you also get
+      confidence that there is no
+      <a href="https://www.kicksecure.com/wiki/Backdoor" rel="noopener">backdoor</a>. That is a
+      different, and for many people better, risk profile than the status quo - offered without
+      overstating it.</p>
+  </div>
+  <div class="cta">
+    <a class="btn primary" href="/audit/">See the automated audit</a>
+    <a class="btn ghost" href="/comparison/">See the attacks it stops</a>
+    <a class="btn ghost" href="/#install">Build it from source</a>
+  </div>
+</div></section>
+</main>
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <p>Paste in, read out. Nothing hides.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h4>Project</h4>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h4>Family</h4>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a class="self" href="https://secure-terminal.github.io" aria-current="page">secure-terminal</a>
+        <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h4>Safe text</h4>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fshare">
+    <span class="fshare-l">Share:</span>
+    <noscript><style>.fshare a.sh,.fshare button.sh{display:none}</style><span class="sh-msg" style="color:var(--muted)">Sharing needs JavaScript, which is off - copy this page's address from your browser to share it.</span></noscript>
+    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
+    <a class="sh" data-net="email">Email</a>
+    <button class="sh" data-net="copy" type="button">Copy link</button>
+    <button class="sh" data-net="md" type="button">Copy as Markdown</button>
+    <span class="sh-msg" aria-live="polite"></span>
+  </div>
+  <script>
+    /* Local-only share links. No third-party script or resource is loaded; a
+       target opens only when the user clicks it. */
+    (function () {
+      var u = encodeURIComponent(location.href), t = encodeURIComponent(document.title);
+      var L = {
+        x: 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t,
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + u,
+        telegram: 'https://t.me/share/url?url=' + u + '&text=' + t,
+        reddit: 'https://www.reddit.com/submit?url=' + u + '&title=' + t,
+        whatsapp: 'https://api.whatsapp.com/send?text=' + t + '%20' + u,
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + u,
+        hn: 'https://news.ycombinator.com/submitlink?u=' + u + '&t=' + t,
+        email: 'mailto:?subject=' + t + '&body=' + u
+      };
+      document.querySelectorAll('.fshare a.sh').forEach(function (a) {
+        var n = a.getAttribute('data-net');
+        if (L[n]) { a.href = L[n]; if (n !== 'email') { a.target = '_blank'; } }
+      });
+      var m = document.querySelector('.fshare [data-net=mastodon]');
+      if (m) m.addEventListener('click', function (e) {
+        e.preventDefault();
+        var i = prompt('Your Mastodon instance (e.g. mastodon.social):');
+        if (i) { i = i.replace('https://', '').replace('http://', '').replace(/\/+$/, '');
+          window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); }
+      });
+      var msg = document.querySelector('.fshare .sh-msg');
+      function flash(x) { if (msg) { msg.textContent = x; setTimeout(function () { msg.textContent = ''; }, 2000); } }
+      var c = document.querySelector('.fshare [data-net=copy]');
+      if (c) c.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { flash('link copied'); });
+      });
+      var md = document.querySelector('.fshare [data-net=md]');
+      if (md) md.addEventListener('click', function () {
+        var text = '[' + document.title + '](' + location.href + ')';
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { flash('markdown copied'); });
+      });
+    })();
+  </script>
+  <div class="ffree">
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.png" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.png" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
+  </div>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy">Operated by <a href="https://github.com/adrelanos">@adrelanos</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
