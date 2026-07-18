@@ -1,18 +1,18 @@
 <!--
-  secure-terminal: AI Audit / robot audit. AI-Assisted.
+  secure-terminal: AI Audit / automated checks. AI-Assisted.
   Source: https://github.com/secure-terminal/secure-terminal.github.io
 -->
 <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
-<title>secure-terminal AI Audit: what the robots check</title>
+<title>secure-terminal AI Audit: the automated checks</title>
 <meta name="description" content="Every automated security check behind secure-terminal: an adversarial corpus of 21 disclosed terminal attacks, a spec-surface invariant over hundreds of escape sequences, unit and GUI tests, property tests and fuzzing, an AppArmor confinement test, a real-emulator resilience test, and website consistency guards. AI-authored, continuously run.">
 <link rel="canonical" href="https://secure-terminal.github.io/audit/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
-<meta property="og:title" content="secure-terminal AI Audit: what the robots check">
+<meta property="og:title" content="secure-terminal AI Audit: the automated checks">
 <meta property="og:description" content="The automated checks behind secure-terminal: an adversarial corpus, a spec-surface invariant, unit + GUI tests, fuzzing, AppArmor, a real-emulator resilience test, and site guards. AI-authored, continuously run.">
 <meta property="og:url" content="https://secure-terminal.github.io/audit/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
@@ -20,7 +20,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="secure-terminal AI Audit">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="secure-terminal AI Audit: what the robots check">
+<meta name="twitter:title" content="secure-terminal AI Audit: the automated checks">
 <meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
 <meta name="theme-color" content="#f3f2ee">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -44,14 +44,13 @@
 
 <main>
 <section class="hero"><div class="wrap">
-  <p class="eyebrow">AI AUDIT: WHAT THE ROBOTS CHECK</p>
-  <h1>This project is written by AI.<br>So it is checked by robots, hard.</h1>
-  <p class="lede">secure-terminal is AI-assisted software, and its site says so - every page is a
-    draft pending human review. That is exactly why the security claims do not rest on trust: they
-    rest on a large, automated, adversarial test suite that runs on every change. This page lists
-    what those robots actually check, so you can read the tests, not just the marketing. The
-    banner says <b>needs human review</b> for the prose; the guarantees below are what the machines
-    verify continuously in the meantime.</p>
+  <p class="eyebrow">AI AUDIT: THE AUTOMATED CHECKS</p>
+  <h1>Written by AI.<br>Held to an unusually strict test bar.</h1>
+  <p class="lede">secure-terminal is AI-assisted software. Precisely because a machine wrote it, the
+    security claims are not asked to rest on trust: they rest on a large, automated, adversarial
+    test suite and independent analysis that run on every change. This page lists exactly what is
+    checked, so you can read the tests, not just the marketing. Every claim below is something you
+    can verify in the code.</p>
 </div></section>
 
 <section class="cat" id="corpus"><div class="wrap">
@@ -191,23 +190,25 @@
   <div class="issue">
     <p><a href="https://github.com/openai/codex" rel="noopener">Codex</a> and
       <a href="https://www.coderabbit.ai/" rel="noopener">CodeRabbit</a> review the diff for logic,
-      design and security defects; a fresh-context Claude reviewer does a final local sweep. The
-      findings are reconciled by hand - each one verified against the code, applied if real, dropped
-      with a reason if not - so the reviewers are advisors, not an autopilot. (The two P2 issues in
-      the most recent tab-numbering and icon change, for instance, were caught this way and fixed.)
-      Everything a human still needs to review is exactly what the banner says.</p>
+      design and security defects; a fresh-context Claude reviewer does a final local sweep. Each
+      finding is then reconciled individually - verified against the code, applied if real, dropped
+      with a stated reason if not - rather than applied blindly, so the reviewers are advisors, not
+      an autopilot. Real defects caught this way are fixed before the change lands.</p>
   </div>
 </div></section>
 
 <section class="cat" id="resilience"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#resilience">7. The real-emulator resilience test</a></h2>
-  <p class="catdesc">An opt-in test (<code>terminal-resilience-tests</code>) drives a real
-    traditional emulator on a private headless display, feeds it the crafted hostile log, and
-    asserts two things: the traditional emulator's window title <em>is</em> hijacked to the marker
-    (proving a normal terminal acts on untrusted output), and secure-terminal's output carries no
-    escape byte and no title marker (proving it does not). This is the automated, always-green
-    version of the <a href="/comparison/">comparison</a> you can see in screenshots - and you can
-    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/comparison" rel="noopener">reproduce it yourself</a>.</p>
+  <h2 class="catname"><a class="h-anchor" href="#resilience">7. A live differential regression test</a></h2>
+  <p class="catdesc">An opt-in test (<code>terminal-resilience-tests</code>) feeds the crafted hostile
+    log to secure-terminal and <b>asserts the neutralisation directly</b>: the output carries no
+    escape byte and no title marker, on every run. That is the part that protects you - a
+    continuous guard that the safe behaviour has not regressed.</p>
+  <p class="catdesc" style="margin-top:10px">The same test also feeds the payload to a real
+    traditional emulator and checks its window title <em>is</em> hijacked. That is not a claim that
+    benefits you; it is a <em>positive control</em> - if a known-vulnerable terminal is somehow
+    <em>not</em> hijacked, the harness itself is broken and the secure-terminal half would be
+    meaningless. It is the automated version of the <a href="/comparison/">comparison</a>, and you
+    can <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/comparison" rel="noopener">reproduce it yourself</a>.</p>
   <div class="cta">
     <a class="btn primary" href="https://github.com/secure-terminal/terminal-poc-corpus">Read the corpus</a>
     <a class="btn ghost" href="/comparison/">See the comparison</a>
