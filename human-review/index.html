@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal: human review status, and the case for using it</title>
-<meta name="description" content="secure-terminal is AI-authored and not yet human-security-audited. Here is what that means, why you might still prefer it to a traditional terminal with known, unfixed attack classes,.">
+<meta name="description" content="secure-terminal is AI-authored and not yet human-security-audited. Here is what that means, why you might still prefer it to a traditional terminal with known, unfixed attack classes.">
 <link rel="canonical" href="https://secure-terminal.github.io/human-review/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
@@ -157,6 +157,26 @@
       project like Kicksecure, writing a secure terminal from scratch - and then giving it a full,
       independent security audit - cannot realistically be a side project done overnight - which is exactly why this
       page exists rather than an implied clean bill of health.</p>
+    <p>For scale, here is roughly how much code each terminal we compared against carries, counted
+      with <a href="https://github.com/AlDanial/cloc" rel="noopener">cloc</a> over the primary
+      source (approximate; AI-checked):</p>
+    <div class="cmp-wrap">
+    <table class="cmp">
+      <thead><tr><th>Terminal</th><th>Approx. lines of code</th><th>Language</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://git.suckless.org/st/" rel="noopener">st</a></td><td>~4,000</td><td>C (deliberately minimal)</td></tr>
+        <tr><td><b>secure-terminal</b></td><td><b>~7,600</b></td><td><b>Python (memory-safe)</b></td></tr>
+        <tr><td><a href="https://github.com/alacritty/alacritty" rel="noopener">alacritty</a></td><td>~25,000</td><td>Rust (memory-safe)</td></tr>
+        <tr><td><a href="https://invent.kde.org/utilities/konsole" rel="noopener">konsole</a></td><td>~50,000</td><td>C++</td></tr>
+        <tr><td><a href="https://invisible-island.net/xterm/" rel="noopener">xterm</a></td><td>~90,000</td><td>C</td></tr>
+        <tr><td><a href="https://github.com/kovidgoyal/kitty" rel="noopener">kitty</a></td><td>~128,000</td><td>C and Python</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="catdesc" style="margin-top:10px">Except for the deliberately minimal st, these are far
+      larger than secure-terminal and - apart from alacritty's Rust - written in memory-unsafe C or
+      C++, developed and hardened over years. Small does not mean safe on its own, but it does mean
+      the whole thing is far more reviewable.</p>
     <p>So the plan is staged: ship it with the automated safety net in place, complete the human
       non-malicious review next (removing the backdoor question), and pursue a deeper audit over time.
       Meanwhile you get to make an informed choice instead of an implied-perfect one.</p>
@@ -167,8 +187,12 @@
   <h2 class="catname"><a class="h-anchor" href="#why">So why use it now?</a></h2>
   <div class="issue">
     <p>Because even with the audit still outstanding, the concrete, known attacks that a traditional
-      terminal is exposed to - screen and title hijacking, reflection-to-command-injection, hidden-
-      character paste, memory-corruption in the parser - are <b>mitigated by construction</b> here,
+      terminal is exposed to -
+      <a href="/comparison/">screen and title hijacking</a>,
+      <a href="https://dgl.cx/2023/09/ansi-terminal-security" rel="noopener">reflection-to-command-injection</a>,
+      <a href="https://trojansource.codes/" rel="noopener">hidden-character paste</a>,
+      <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-27135" rel="noopener">memory-corruption in the parser</a>
+      - are <b>mitigated by construction</b> here,
       and demonstrably so. And once the human non-malicious review is complete, you also get
       confidence that there is no
       <a href="https://www.kicksecure.com/wiki/Backdoor" rel="noopener">backdoor</a>. That is a
