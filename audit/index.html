@@ -59,27 +59,29 @@
   <p class="catdesc">The core of the audit is the
     <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>:
     <b>21</b> proofs-of-concept drawn from actual, publicly-disclosed terminal vulnerabilities -
-    answerback injection, DECRQSS and device-status reflection, bracketed-paste bypass, charset-shift
-    deception, cursor-addressing spoofs, homoglyph and Trojan-Source text, iTerm2 title-report
-    injection, and more. Each carries a machine assertion that secure-terminal <em>neutralises</em>
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/answerback-injection" rel="noopener">answerback injection</a>,
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/decrqss-reflection-2023" rel="noopener">DECRQSS</a> and
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/device-status-reflection-rxvt-2021" rel="noopener">device-status reflection</a>,
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">bracketed-paste bypass</a>,
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/charset-shift-deception" rel="noopener">charset-shift deception</a>,
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/cursor-addressing-spoof" rel="noopener">cursor-addressing spoofs</a>,
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener">homoglyph</a> and
+    <a href="https://trojansource.codes/" rel="noopener">Trojan-Source</a> text,
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/iterm2-title-report-tmux-2024" rel="noopener">iTerm2 title-report injection</a>,
+    and more. Each carries a machine assertion that secure-terminal <em>neutralises</em>
     it. That corpus is what proves the guarantees; the conformance suites only confirm ordinary
     programs still render.</p>
   <div class="issue">
-    <p>Because the corpus stores real attack payloads, it is handled carefully - three properties,
-      documented in the corpus
+    <p>Because the corpus stores real attack payloads, it is handled carefully - see the corpus
       <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/SAFETY.md" rel="noopener">SAFETY</a>
-      notes:</p>
+      notes for the full handling. Two properties matter most:</p>
     <p><b>Hex-encoded.</b> Each payload is stored as hexadecimal in a <code>payload.hex</code> file,
       not as raw bytes, so <em>browsing or grepping the repository</em> can never accidentally feed a
-      live escape sequence to your own terminal or a code viewer. It is decoded only at run time,
-      inside the sandbox.</p>
+      live escape sequence to your own terminal or a code viewer. It is decoded only at run time.</p>
     <p><b>Canary-forked.</b> Each attack is paired with a variant that, <em>on a vulnerable
       terminal</em>, would write a known "canary" marker file. The harness runs it and checks for
       the marker, so it can tell "the terminal actively neutralised this" apart from "the test
       silently did nothing" - the test proves the attack <em>would</em> have fired.</p>
-    <p><b>Sandbox-only.</b> Payloads are decoded and fed to the terminal-under-test only inside a
-      disposable sandbox VM, never against your real terminal, and the harness refuses to run
-      outside it without an explicit override.</p>
   </div>
 </div></section>
 
