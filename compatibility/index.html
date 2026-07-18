@@ -55,10 +55,48 @@
     and OSC code is accounted for.</p>
   <p class="catdesc" style="margin-top:14px"><b>How this was tested.</b> CLI mode was
     exercised through the shipped <code>secure-terminal-cli</code> wrapper; TUI mode through
-    the exact <code>pyte</code> screen engine secure-terminal drives. Program popularity is
+    the exact <code>pyte</code> screen engine secure-terminal drives, and the real Qt GUI was
+    driven headless on an isolated display to confirm it renders (vim and htop, colour
+    included). Program popularity is
     the Debian <a href="https://popcon.debian.org/by_inst" rel="noopener">popularity-contest</a>
     install rank. Every "works" below means the program was run and its output or interface
     was captured and checked, on Debian trixie.</p>
+</div></section>
+
+<section class="cat" id="hostile"><div class="wrap">
+  <h2 class="catname">Hostile byte streams: the difference, shown</h2>
+  <p class="catdesc">Pipe a burst of untrusted bytes into a normal terminal - random data
+    (<code>cat /dev/urandom</code>), a program's output, a hostile log - and, because those
+    bytes are interpreted as escape sequences, it garbles the screen, sticks it in the wrong
+    colours or character set, and can silently rewrite your window or tab title to
+    attacker-chosen text. A <code>reset</code> clears the visible mess, but usually not the
+    hijacked title. secure-terminal displays the identical bytes as inert plain ASCII: no
+    colours, no charset tricks, no title change, no clipboard write - nothing to clean up.</p>
+  <p class="catdesc" style="margin-top:12px">We measured this. One payload - two ASCII lines,
+    then 20,000 random bytes, then a title-set, an OSC 52 clipboard write, a stuck colour and a
+    DEC line-drawing charset shift - was fed to ten Debian terminal emulators and to
+    secure-terminal, each on its own isolated headless display, screenshotted before and after
+    a <code>reset</code>.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Terminal</th><th>What the hostile stream did</th><th>Cleared by <code>reset</code>?</th></tr></thead>
+    <tbody>
+      <tr><td>xterm, urxvt, st</td><td>Screen garbled, colours stuck, <b>title hijacked</b> to attacker text.</td><td>Screen yes; the title only on st.</td></tr>
+      <tr><td>xfce4-terminal, mate-terminal, lxterminal (VTE)</td><td>Garbled, colours stuck, <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
+      <tr><td>konsole (KDE)</td><td>Garbled, colours stuck, line-drawing <b>charset stuck</b>. (Its default profile ignored the title-set.)</td><td>Screen yes.</td></tr>
+      <tr><td>qterminal (LXQt)</td><td>Garbled, colours stuck, charset stuck, <b>title hijacked</b> (shown in the tab).</td><td>Screen yes; title no.</td></tr>
+      <tr><td>alacritty, kitty (modern, GPU)</td><td>Garbled, colours stuck, <b>title hijacked</b> - no more resilient than xterm.</td><td>Screen yes; title no.</td></tr>
+      <tr><td><b>secure-terminal</b></td><td><span class="yes">Nothing.</span> 20,000 random bytes shown as inert ASCII (non-printable to <code>_</code>); no colour, no charset shift; the title, clipboard and charset escapes stripped.</td><td>Nothing to clear.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px">Every traditional emulator was corrupted - all ten
+    garbled with stuck colours, a stuck charset on two, and an attacker-controlled title on
+    nine of ten. The visible garble clears with <code>reset</code>, but the <em>silent</em>
+    title change usually does not, and only if you notice and type <code>reset</code> at a
+    screen that may be unusable. Modern GPU terminals are not exempt. secure-terminal was
+    unaffected in every run. (Nothing crashed or hung; the danger is the silent title hijack
+    and the clipboard write, not instability.)</p>
 </div></section>
 
 <section class="cat" id="cli"><div class="wrap">
@@ -121,7 +159,7 @@
       <tr><td>vim</td><td>1189</td><td><span class="yes">Renders.</span> Full editor; zero dropped frames.</td></tr>
       <tr><td>screen</td><td>1918</td><td><span class="yes">Renders.</span> Multiplexer; pane content and status.</td></tr>
       <tr><td>mc (Midnight Commander)</td><td>2017</td><td><span class="yes">Renders.</span> Both panels, menu and function-key bars; borders per the unicode mode.</td></tr>
-      <tr><td>tmux</td><td>2158</td><td><span class="yes">Renders.</span> Panes and status line; zero dropped frames.</td></tr>
+      <tr><td>tmux</td><td>2158</td><td><span class="yes">Pane renders</span>, zero dropped frames; the engine also draws the status bar, though a viewport bug currently clips it in the live GUI window (being fixed).</td></tr>
       <tr><td>w3m</td><td>2547</td><td><span class="yes">Renders.</span> Text-mode web page layout.</td></tr>
       <tr><td>ncdu (bonus)</td><td>3600</td><td><span class="yes">Renders.</span> Disk-usage browser.</td></tr>
       <tr><td>btop (bonus)</td><td>4017</td><td><span class="yes">Renders.</span> Full resource dashboard, colour and meters.</td></tr>
