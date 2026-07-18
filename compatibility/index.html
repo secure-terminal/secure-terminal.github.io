@@ -308,6 +308,20 @@
     that needed the reply. An automated test in the corpus feeds every one of these queries and
     asserts that zero bytes are ever written back to the pseudo-terminal, so the guarantee is
     checked, not merely asserted.</p>
+  <h3 style="margin-top:22px">DEC private modes (mouse, bracketed paste, focus, alternate screen)</h3>
+  <p class="catdesc">The <code>ESC [ ? Ps h/l</code> modes a program uses to change how the terminal
+    behaves are handled by mode, same as everything else:</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Mode</th><th>What a program uses it for</th><th>CLI mode (default)</th><th>TUI mode (opt-in)</th></tr></thead>
+    <tbody>
+      <tr><td>Bracketed paste (2004)</td><td>Ask the terminal to wrap pasted text so it is treated as data, not typed keystrokes.</td><td>Stripped; paste is sanitised to ASCII and warned on regardless.</td><td><span class="yes">Honoured</span> - a paste is wrapped as data for the program, on top of the same sanitising.</td></tr>
+      <tr><td>Mouse reporting (1000 / 1002 / 1003 / 1006)</td><td>Have clicks and motion sent to the program as escape sequences.</td><td>Stripped; the terminal never writes mouse events back.</td><td><span class="yes">Not forwarded</span> - a TUI app cannot track your mouse (selection stays a terminal function).</td></tr>
+      <tr><td>Focus reporting (1004)</td><td>Tell the program when the window gains or loses focus.</td><td>Stripped.</td><td><span class="yes">Not forwarded</span> - focus is not reported, so it cannot be used to fingerprint or time you.</td></tr>
+      <tr><td>Alternate screen (1049 / 47)</td><td>Switch to a full-screen buffer (vim, less, htop) and restore the scrollback on exit.</td><td>Not entered; detected only to hint that TUI mode is needed.</td><td><span class="yes">Honoured</span> inside the confined pyte screen; still character-filtered, still answers no query.</td></tr>
+    </tbody>
+  </table>
+  </div>
 </div></section>
 
 <section class="cat" id="control"><div class="wrap">
@@ -405,6 +419,23 @@
     <code>set-clipboard</code> and editor yank plugins copy to the system clipboard. Clipboard
     read (52 query): remote paste-over-ssh (tmux, neovim OSC 52 yank/paste). iTerm2 (1337):
     <code>imgcat</code> and file transfer - which secure-terminal does not implement.</p>
+  <p class="catdesc" style="margin-top:12px"><b>What the iTerm2 (OSC 1337) extensions actually are.</b>
+    They are proprietary to <a href="https://iterm2.com/documentation-escape-codes.html" rel="noopener">iTerm2</a>
+    (a macOS terminal), not a standard, and they bundle several features behind one escape:
+    <em>inline files</em> - <code>imgcat photo.png</code> or <code>cat chart.png | imgcat</code> draws
+    the image in the scrollback; <em>file transfer</em> - <code>it2dl file</code> pulls a file from a
+    remote host down to your Mac and <code>it2ul</code> pushes one up, entirely over the terminal
+    connection; <em>shell/user variables and reporting</em> - shell-integration scripts set values
+    (the current directory, git branch, a "badge", command-success marks) that the terminal reads
+    back to draw status marks and let you jump between prompts. In practice you meet them through
+    iTerm2's <code>imgcat</code>/<code>it2dl</code>/<code>it2ul</code> utilities and its
+    shell-integration profile; almost nothing outside the iTerm2 ecosystem emits them.
+    <b>Why secure-terminal implements none of it:</b> each one is the terminal acting on program
+    output - rendering arbitrary image bytes, writing files to your disk, or reporting state back
+    onto the input channel - which is exactly the surface the default mode removes by construction.
+    The escape is recognised only so it can be stripped; the toggle is a deliberate no-op stub, so
+    even turning it on grants a program no file-transfer, no image, and no variable channel. If you
+    need those, that is a reason to open iTerm2 (or a dedicated graphical terminal) for that task.</p>
   <div class="cta">
     <a class="btn primary" href="/#install">Install secure-terminal</a>
     <a class="btn ghost" href="https://github.com/secure-terminal/terminal-poc-corpus">See the attack corpus</a>
