@@ -1,0 +1,369 @@
+<!--
+  secure-terminal: compatibility matrix. AI-Assisted.
+  Source: https://github.com/secure-terminal/secure-terminal.github.io
+-->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ai-disclosure" content="ai-assisted">
+<title>secure-terminal compatibility: what runs in it</title>
+<meta name="description" content="What runs in secure-terminal: the most popular Debian CLI and TUI programs tested in both modes, the conformance suites we track, and exactly how environment variables, capability-query protocols, control characters and OSC sequences are handled.">
+<link rel="canonical" href="https://secure-terminal.github.io/compatibility/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="secure-terminal">
+<meta property="og:title" content="secure-terminal compatibility: what runs in it">
+<meta property="og:description" content="The top Debian CLI and TUI programs tested in both modes, plus the exact handling of environment variables, capability queries, control characters and OSC sequences.">
+<meta property="og:url" content="https://secure-terminal.github.io/compatibility/">
+<meta property="og:image" content="https://secure-terminal.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="secure-terminal compatibility matrix">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="secure-terminal compatibility: what runs in it">
+<meta name="twitter:image" content="https://secure-terminal.github.io/og.png">
+<meta name="theme-color" content="#f3f2ee">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.png" width="729" height="70" alt="secure-terminal"></a>
+    <span class="status" title="Working: usable and memory-safe">working</span>
+    <nav>
+      <a href="/#compare">Compare</a>
+      <a href="/#features">Features</a>
+      <a href="/#install">Install</a>
+      <a href="/plugins/">Plugins</a>
+      <a href="/compatibility/" class="active">Compatibility</a>
+      <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">COMPATIBILITY: WHAT RUNS IN IT</p>
+  <h1>Everything you read runs.<br>Nothing you read can act.</h1>
+  <p class="lede">secure-terminal has two modes. <b>Line mode</b> (the default) interprets
+    no escape sequences at all: any program's output is reduced to printable ASCII, so
+    line-oriented tools work and a hostile log cannot redraw your screen. <b>TUI mode</b>
+    (opt-in, per tab) interprets escapes inside an isolated in-memory screen so full-screen
+    programs render, while every cell is still character-filtered and the terminal still
+    answers no query and touches no clipboard. The tables below are backed by real tests,
+    not claims: the top Debian programs run in both modes, and every protocol, control byte
+    and OSC code is accounted for.</p>
+  <p class="catdesc" style="margin-top:14px"><b>How this was tested.</b> Line mode was
+    exercised through the shipped <code>secure-terminal-cli</code> wrapper; TUI mode through
+    the exact <code>pyte</code> screen engine secure-terminal drives. Program popularity is
+    the Debian <a href="https://popcon.debian.org/by_inst" rel="noopener">popularity-contest</a>
+    install rank. Every "works" below means the program was run and its output or interface
+    was captured and checked, on Debian trixie.</p>
+</div></section>
+
+<section class="cat" id="cli"><div class="wrap">
+  <h2 class="catname">The 10 most popular command-line programs</h2>
+  <p class="catdesc">Line-oriented tools run unchanged in the default line mode. Their output
+    is shown as plain ASCII; the escapes they emit only on a real TTY (colour from
+    <code>ls</code>/<code>grep</code>, the carriage-return progress bars of
+    <code>git</code>/<code>curl</code>/<code>wget</code>/<code>rsync</code>) are neutralised
+    to readable plain text. All 16 below were run and their content confirmed intact.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Program (package)</th><th>Popcon rank</th><th>Line mode (default)</th></tr></thead>
+    <tbody>
+      <tr><td>ls, cat, cp (coreutils)</td><td>7</td><td><span class="yes">Works.</span> Output shown as plain ASCII; <code>--color</code> SGR stripped.</td></tr>
+      <tr><td>find (findutils)</td><td>13</td><td><span class="yes">Works.</span> Pure line output.</td></tr>
+      <tr><td>tar</td><td>16</td><td><span class="yes">Works.</span> Listings and messages intact.</td></tr>
+      <tr><td>grep</td><td>20</td><td><span class="yes">Works.</span> Matches shown; <code>--color</code> highlight stripped.</td></tr>
+      <tr><td>gzip, zcat</td><td>22</td><td><span class="yes">Works.</span> Round-trips cleanly.</td></tr>
+      <tr><td>sed</td><td>25</td><td><span class="yes">Works.</span> Stream output intact.</td></tr>
+      <tr><td>bash</td><td>35</td><td><span class="yes">Works.</span> Interactive prompt is basic in line mode; richer readline editing needs TUI mode.</td></tr>
+      <tr><td>diff, cmp (diffutils)</td><td>51</td><td><span class="yes">Works.</span> Diff output intact; colour stripped.</td></tr>
+      <tr><td>awk (mawk)</td><td>61</td><td><span class="yes">Works.</span> Pure line output.</td></tr>
+      <tr><td>ps, free, uptime (procps)</td><td>62</td><td><span class="yes">Works.</span> Columns intact.</td></tr>
+      <tr><td>ssh (openssh-client)</td><td>80</td><td><span class="yes">Works</span> for line-oriented use; a remote full-screen program needs TUI mode.</td></tr>
+      <tr><td>wget</td><td>130</td><td><span class="yes">Works.</span> Carriage-return progress bar flattened to plain text.</td></tr>
+      <tr><td>gpg (gnupg)</td><td>239</td><td><span class="yes">Works.</span> Output intact.</td></tr>
+      <tr><td>curl</td><td>304</td><td><span class="yes">Works.</span> Progress meter flattened to plain text.</td></tr>
+      <tr><td>git</td><td>398</td><td><span class="yes">Works.</span> Colour and carriage-return progress flattened; pager runs (<code>PAGER=cat</code>).</td></tr>
+      <tr><td>rsync</td><td>557</td><td><span class="yes">Works.</span> Progress flattened to plain text.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px">The TTY-aware tools (colour, carriage-return
+    progress) are the interesting cases: they detect a real terminal and emit escapes, which
+    line mode strips, so you get the same text without the motion. Nothing is lost that you
+    would read.</p>
+</div></section>
+
+<section class="cat" id="tui"><div class="wrap">
+  <h2 class="catname">The 10 most popular full-screen (TUI) programs</h2>
+  <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
+    so they need the opt-in TUI mode. There they render through the confined screen model;
+    every one below was run and its interface captured. Box-drawing and other non-ASCII glyphs
+    degrade to <code>_</code> (the cell filter never lets a non-ASCII, bidi or homoglyph
+    character through), but layout and text are faithful, and the terminal still answers no
+    query and cannot set the title or touch the clipboard.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Program (package)</th><th>Popcon rank</th><th>TUI mode (opt-in)</th></tr></thead>
+    <tbody>
+      <tr><td>top (procps)</td><td>62</td><td><span class="yes">Renders.</span> Live process grid, header, load average.</td></tr>
+      <tr><td>less</td><td>68</td><td><span class="yes">Renders.</span> Pager and key navigation.</td></tr>
+      <tr><td>nano</td><td>129</td><td><span class="yes">Renders.</span> Editor, title and shortcut bars.</td></tr>
+      <tr><td>vi (vim-tiny)</td><td>134</td><td><span class="yes">Renders.</span> Full editor; zero dropped frames.</td></tr>
+      <tr><td>htop</td><td>1115</td><td><span class="yes">Renders.</span> Meters, colour, process list.</td></tr>
+      <tr><td>vim</td><td>1189</td><td><span class="yes">Renders.</span> Full editor; zero dropped frames.</td></tr>
+      <tr><td>screen</td><td>1918</td><td><span class="yes">Renders.</span> Multiplexer; pane content and status.</td></tr>
+      <tr><td>mc (Midnight Commander)</td><td>2017</td><td><span class="yes">Renders.</span> Both panels, menu and function-key bars; borders shown as ASCII.</td></tr>
+      <tr><td>tmux</td><td>2158</td><td><span class="yes">Renders.</span> Panes and status line; zero dropped frames.</td></tr>
+      <tr><td>w3m</td><td>2547</td><td><span class="yes">Renders.</span> Text-mode web page layout.</td></tr>
+      <tr><td>ncdu (bonus)</td><td>3600</td><td><span class="yes">Renders.</span> Disk-usage browser.</td></tr>
+      <tr><td>btop (bonus)</td><td>4017</td><td><span class="yes">Renders.</span> Full resource dashboard, colour and meters.</td></tr>
+      <tr><td>Claude Code (claude)</td><td>npm, not in Debian</td><td><span class="yes">Renders</span> in TUI mode (Ink renderer); <code>claude --print</code> / <code>--version</code> work in line mode.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px"><b>The trade-off, stated plainly.</b> Because TUI
+    mode lets a program position the cursor, a program you run can draw a misleading interface
+    or overwrite a line you already read - so only run programs you trust in it. What it still
+    cannot do is set the window title, read or write the clipboard, open a hyperlink escape, or
+    smuggle an invisible character onto the screen: those stay closed in both modes.</p>
+</div></section>
+
+<section class="cat" id="conformance"><div class="wrap">
+  <h2 class="catname">Conformance suites</h2>
+  <p class="catdesc">The public terminal conformance suites test how faithfully an emulator
+    implements the VT/xterm escape repertoire. secure-terminal is deliberately <em>not</em> a
+    faithful emulator in line mode - it interprets nothing on purpose - so it "fails" most
+    conformance checks by design; that is the security property, not a bug. We track these
+    suites for a different reason: as a corpus of every sequence a real program might emit, to
+    confirm our stripping and our TUI subset behave. Each was reviewed for malicious content
+    before use.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Suite</th><th>What it checks</th><th>secure-terminal relationship</th></tr></thead>
+    <tbody>
+      <tr><td>esctest2</td><td>xterm/VT escape behaviour, exhaustively, by driving a terminal and reading its replies.</td><td>Reviewed safe. Automatable. Used as a sequence corpus; line mode intentionally answers none of its query probes.</td></tr>
+      <tr><td>pyte tests</td><td>The screen-model semantics of the engine secure-terminal uses for TUI mode.</td><td>Reviewed safe. Automatable. Directly relevant: these are the semantics our TUI grid inherits.</td></tr>
+      <tr><td>libvterm tests</td><td>A reference state machine for VT parsing and rendering.</td><td>Reviewed safe. Automatable. Used to cross-check what a sequence "should" do against what we strip.</td></tr>
+      <tr><td>vttest</td><td>The classic interactive VT100/VT220 test; requires a human at the keyboard.</td><td>Reviewed safe. Interactive, hard to automate. Used manually as a reference, not in CI.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px">The reviewed, automatable suites are being wired
+    into the project's continuous-integration test run so their sequences exercise the
+    sanitizer on every change. The security corpus of actual attacks lives separately in the
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>.</p>
+</div></section>
+
+<section class="cat" id="env"><div class="wrap">
+  <h2 class="catname">Environment variables</h2>
+  <p class="catdesc">The program you run inherits your environment, with deliberate exceptions:
+    the size is taken from the kernel, colour is advertised as a fixed value, and every
+    host-emulator fingerprint variable is scrubbed so a child (or a host it SSHes into) cannot
+    learn which terminal you use or correlate your session.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Variable</th><th>secure-terminal behaviour</th></tr></thead>
+    <tbody>
+      <tr><td>TERM</td><td>Set to <code>xterm-256color</code>, or the opt-in custom <code>secure-terminal</code> terminfo that advertises exactly the supported subset. The line-mode CLI wrapper uses <code>dumb</code>.</td></tr>
+      <tr><td>COLORTERM</td><td>Forced to <code>truecolor</code> - a fixed value, never inherited, so it cannot be a fingerprint. Programs then emit 24-bit colour, which the contrast guard renders safely.</td></tr>
+      <tr><td>PAGER</td><td>Defaulted to <code>cat</code> so an invoked pager adds no escapes of its own.</td></tr>
+      <tr><td>NO_COLOR</td><td>Honoured (per no-color.org): if set to any value, colour is disabled.</td></tr>
+      <tr><td>LINES, COLUMNS</td><td>Removed. The true size comes from the kernel (<code>TIOCSWINSZ</code>); a stale value would mislead programs.</td></tr>
+      <tr><td>TERM_PROGRAM, TERM_PROGRAM_VERSION</td><td>Scrubbed (anti-fingerprint).</td></tr>
+      <tr><td>VTE_VERSION, KONSOLE_VERSION, KONSOLE_DBUS_*</td><td>Scrubbed (anti-fingerprint).</td></tr>
+      <tr><td>WT_SESSION, WT_PROFILE_ID</td><td>Scrubbed (anti-fingerprint).</td></tr>
+      <tr><td>ITERM_SESSION_ID, ITERM_PROFILE</td><td>Scrubbed (anti-fingerprint).</td></tr>
+      <tr><td>KITTY_WINDOW_ID, KITTY_PID, ALACRITTY_WINDOW_ID</td><td>Scrubbed (anti-fingerprint).</td></tr>
+      <tr><td>TERMINFO_DIRS</td><td>Prepended with the shipped terminfo directory when the custom TERM is in use; otherwise untouched.</td></tr>
+      <tr><td>Everything else (PATH, HOME, LANG, SHELL, ...)</td><td>Inherited unchanged.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div></section>
+
+<section class="cat" id="protocols"><div class="wrap">
+  <h2 class="catname">Capability and reporting protocols</h2>
+  <p class="catdesc">This is the heart of the guarantee. A terminal and the program it runs
+    share one channel, so any reply a terminal writes back to a query lands on the program's
+    <em>input</em>, exactly as if typed. secure-terminal therefore answers <b>no</b> query:
+    nothing on the output path ever writes to the pseudo-terminal. That closes the whole
+    "output becomes input" reflection / echoback / answerback CVE class by construction. The
+    single, strictly opt-in and human-gated exception is clipboard read.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Protocol</th><th>Query sequence</th><th>secure-terminal</th></tr></thead>
+    <tbody>
+      <tr><td>Primary Device Attributes (DA1)</td><td><code>ESC [ c</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Secondary DA (DA2)</td><td><code>ESC [ &gt; c</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Tertiary DA (DA3)</td><td><code>ESC [ = c</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Cursor position report (DSR/CPR)</td><td><code>ESC [ 6 n</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Device status report</td><td><code>ESC [ 5 n</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Request setting (DECRQSS)</td><td><code>ESC P $ q ... ESC \</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Terminal name/version (XTVERSION)</td><td><code>ESC [ &gt; 0 q</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Request termcap/terminfo (XTGETTCAP)</td><td><code>ESC P + q ... ESC \</code></td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Answerback (ENQ)</td><td><code>0x05</code></td><td><span class="yes">Never answered.</span> No answerback string exists to set.</td></tr>
+      <tr><td>Window title report</td><td><code>ESC [ 21 t</code>, OSC title query</td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Window size/position report</td><td><code>ESC [ 14 t</code>, <code>ESC [ 18 t</code>, ...</td><td><span class="yes">Never answered.</span></td></tr>
+      <tr><td>Palette colour query</td><td><code>OSC 4/10/11/12 ; ?</code></td><td><span class="yes">Not answered</span> by default.</td></tr>
+      <tr><td>Clipboard read (OSC 52)</td><td><code>ESC ] 52 ; c ; ?</code></td><td>The one exception: <b>refused by default.</b> If the read feature is opted in, answered only after a <b>per-tab</b> human approval, with a delayed Allow button and a rate-limited reply.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px">An automated test in the corpus feeds every one
+    of these query sequences and asserts that zero bytes are ever written back to the
+    pseudo-terminal, so the guarantee is checked, not merely asserted.</p>
+</div></section>
+
+<section class="cat" id="control"><div class="wrap">
+  <h2 class="catname">Control characters</h2>
+  <p class="catdesc">In line mode the terminal honours only the few control bytes needed to
+    edit the current line, drops the rest, and removes every escape sequence outright - there
+    is no parser to attack. In TUI mode the confined screen model interprets cursor and colour
+    escapes, but every resulting cell is still ASCII/unicode-filtered.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Byte</th><th>Name</th><th>Line mode</th></tr></thead>
+    <tbody>
+      <tr><td><code>0x09</code></td><td>Tab (HT)</td><td><span class="yes">Passed through.</span></td></tr>
+      <tr><td><code>0x0A</code></td><td>Newline (LF)</td><td><span class="yes">Passed through</span> (ends the line).</td></tr>
+      <tr><td><code>0x0D</code></td><td>Carriage return (CR)</td><td><span class="yes">Honoured</span> - moves to column 0 (line-local).</td></tr>
+      <tr><td><code>0x08</code></td><td>Backspace (BS)</td><td><span class="yes">Honoured</span> - one cell left; never crosses a line, so it cannot rewrite earlier output.</td></tr>
+      <tr><td><code>0x07</code></td><td>Bell (BEL)</td><td>Consumed - drives the bell policy; not displayed.</td></tr>
+      <tr><td><code>0x1B</code></td><td>Escape (ESC) + any sequence</td><td><span class="yes">Removed entirely.</span> No ANSI/OSC/APC/DCS parser exists.</td></tr>
+      <tr><td><code>0x20</code>-<code>0x7E</code></td><td>Printable ASCII</td><td><span class="yes">Shown verbatim.</span></td></tr>
+      <tr><td><code>0x00</code>-<code>0x06</code>, <code>0x0B</code>, <code>0x0C</code>, <code>0x0E</code>-<code>0x1F</code></td><td>Other C0 controls</td><td>Dropped / shown as an inert <code>_</code>.</td></tr>
+      <tr><td><code>0x7F</code></td><td>Delete (DEL)</td><td>Dropped.</td></tr>
+      <tr><td><code>0x80</code>-<code>0x9F</code></td><td>C1 controls</td><td>Dropped / shown as <code>_</code> (non-ASCII).</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px"><b>The keys you type</b> are a tiny allowlist:
+    printable ASCII plus <code>Ctrl+C</code> (SIGINT), <code>Ctrl+Z</code> (SIGTSTP),
+    <code>Ctrl+\</code> (SIGQUIT), <code>Ctrl+D</code> (EOF) and Backspace. Only the control
+    byte is written; the kernel line discipline turns it into a signal.</p>
+</div></section>
+
+<section class="cat" id="osc"><div class="wrap">
+  <h2 class="catname">OSC sequences</h2>
+  <p class="catdesc">Operating System Command escapes are the ones that reach out of the
+    display - the title, the clipboard, notifications, hyperlinks. Every one is a registered
+    feature that is <b>off by default</b> (neutralised), individually toggleable at your own
+    risk, and even when enabled is validated and sanitised to plain ASCII first. This closes
+    clipboard exfiltration, hyperlink phishing, notification spoofing and title spoofing by
+    default.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>OSC code</th><th>Feature</th><th>Default</th><th>Risk</th><th>When you opt in</th></tr></thead>
+    <tbody>
+      <tr><td>0, 2</td><td>Window / tab title</td><td><span class="yes">Off</span></td><td>medium</td><td>Sanitised to plain ASCII; the title is still never reported back.</td></tr>
+      <tr><td>7</td><td>Working-directory report</td><td><span class="yes">Off</span></td><td>low</td><td>Path validated and sanitised.</td></tr>
+      <tr><td>8</td><td>Hyperlinks</td><td><span class="yes">Off</span></td><td>medium</td><td>The true target is surfaced next to the visible text, so a phishing mismatch is visible.</td></tr>
+      <tr><td>9</td><td>Desktop notifications</td><td><span class="yes">Off</span></td><td>medium</td><td>Text sanitised to plain ASCII.</td></tr>
+      <tr><td>4, 10, 11, 12</td><td>Palette / colours</td><td><span class="yes">Off</span></td><td>medium</td><td>Applied under the contrast guard, so nothing can be painted invisibly.</td></tr>
+      <tr><td>52 (write)</td><td>System clipboard write</td><td><span class="yes">Off</span></td><td>high</td><td>Opt-in, write only.</td></tr>
+      <tr><td>52 (read)</td><td>System clipboard read</td><td><span class="yes">Off</span></td><td>high</td><td>Opt-in and gated: asked once per tab, with a delayed Allow and rate-limited reply.</td></tr>
+      <tr><td>1337</td><td>iTerm2 extensions (file transfer, variables)</td><td><span class="yes">Off</span></td><td>high</td><td>Remains blocked - a very large surface kept closed.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="cta">
+    <a class="btn primary" href="/#install">Install secure-terminal</a>
+    <a class="btn ghost" href="https://github.com/secure-terminal/terminal-poc-corpus">See the attack corpus</a>
+  </div>
+</div></section>
+</main>
+
+<footer>
+  <div class="ftop">
+    <div class="fbrand">
+      <span class="ftag"><img src="/logo-wide.png" width="729" height="70" alt="secure-terminal" style="height:26px;width:auto"></span>
+      <p>Paste in, read out. Nothing hides.</p>
+    </div>
+    <nav class="fcols">
+      <div class="fcol">
+        <h4>Project</h4>
+        <a href="https://github.com/secure-terminal">Organisation</a>
+        <a href="https://github.com/secure-terminal/secure-terminal.github.io">This page</a>
+      </div>
+      <div class="fcol">
+        <h4>Family</h4>
+        <a href="https://output-lies.github.io">output lies</a>
+        <a class="self" href="https://secure-terminal.github.io" aria-current="page">secure-terminal</a>
+        <a href="https://org-ai-assisted.github.io">org-ai-assisted</a>
+      </div>
+      <div class="fcol">
+        <h4>Safe text</h4>
+        <a href="https://github.com/Kicksecure/helper-scripts">helper-scripts</a>
+        <a href="https://www.kicksecure.com/wiki/Unicode-show">unicode-show</a>
+      </div>
+    </nav>
+  </div>
+  <div class="fshare">
+    <span class="fshare-l">Share:</span>
+    <a class="sh" data-net="x" rel="nofollow noopener">X</a>
+    <a class="sh" data-net="facebook" rel="nofollow noopener">Facebook</a>
+    <a class="sh" data-net="telegram" rel="nofollow noopener">Telegram</a>
+    <a class="sh" data-net="reddit" rel="nofollow noopener">Reddit</a>
+    <a class="sh" data-net="whatsapp" rel="nofollow noopener">WhatsApp</a>
+    <a class="sh" data-net="linkedin" rel="nofollow noopener">LinkedIn</a>
+    <a class="sh" data-net="hn" rel="nofollow noopener">Hacker News</a>
+    <a class="sh" data-net="mastodon" href="#" rel="nofollow noopener">Mastodon</a>
+    <a class="sh" data-net="email">Email</a>
+    <button class="sh" data-net="copy" type="button">Copy link</button>
+    <button class="sh" data-net="md" type="button">Copy as Markdown</button>
+    <span class="sh-msg" aria-live="polite"></span>
+  </div>
+  <script>
+    /* Local-only share links. No third-party script or resource is loaded; a
+       target opens only when the user clicks it. */
+    (function () {
+      var u = encodeURIComponent(location.href), t = encodeURIComponent(document.title);
+      var L = {
+        x: 'https://twitter.com/intent/tweet?url=' + u + '&text=' + t,
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + u,
+        telegram: 'https://t.me/share/url?url=' + u + '&text=' + t,
+        reddit: 'https://www.reddit.com/submit?url=' + u + '&title=' + t,
+        whatsapp: 'https://api.whatsapp.com/send?text=' + t + '%20' + u,
+        linkedin: 'https://www.linkedin.com/sharing/share-offsite/?url=' + u,
+        hn: 'https://news.ycombinator.com/submitlink?u=' + u + '&t=' + t,
+        email: 'mailto:?subject=' + t + '&body=' + u
+      };
+      document.querySelectorAll('.fshare a.sh').forEach(function (a) {
+        var n = a.getAttribute('data-net');
+        if (L[n]) { a.href = L[n]; if (n !== 'email') { a.target = '_blank'; } }
+      });
+      var m = document.querySelector('.fshare [data-net=mastodon]');
+      if (m) m.addEventListener('click', function (e) {
+        e.preventDefault();
+        var i = prompt('Your Mastodon instance (e.g. mastodon.social):');
+        if (i) { i = i.replace('https://', '').replace('http://', '').replace(/\/+$/, '');
+          window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); }
+      });
+      var msg = document.querySelector('.fshare .sh-msg');
+      function flash(x) { if (msg) { msg.textContent = x; setTimeout(function () { msg.textContent = ''; }, 2000); } }
+      var c = document.querySelector('.fshare [data-net=copy]');
+      if (c) c.addEventListener('click', function () {
+        if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { flash('link copied'); });
+      });
+      var md = document.querySelector('.fshare [data-net=md]');
+      if (md) md.addEventListener('click', function () {
+        var text = '[' + document.title + '](' + location.href + ')';
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { flash('markdown copied'); });
+      });
+    })();
+  </script>
+  <div class="ffree">
+    <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.png" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
+    <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.png" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
+    <a class="freebadge" href="https://github.com/secure-terminal/secure-terminal.github.io/blob/master/LICENSE" rel="license">Licensed AGPL-3+</a>
+  </div>
+  <div class="fbot">
+    <span class="fcopy">&copy; 2026 <a href="https://www.encrypted-support.com">ENCRYPTED SUPPORT LLC</a></span>
+    <span class="fcopy">Operated by <a href="https://github.com/adrelanos">@adrelanos</a></span>
+    <span class="fcopy sp"><a href="https://org-ai-assisted.github.io">Built with AI assistance</a></span>
+  </div>
+</footer>
