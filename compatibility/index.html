@@ -69,9 +69,10 @@
   <p class="catdesc">Pipe a burst of untrusted bytes into a normal terminal - random data, a
     program's output, a hostile log - and it garbles the screen, sticks it in the wrong colours
     or character set, and can silently rewrite your window or tab title to attacker-chosen text.
-    secure-terminal shows the identical bytes as inert plain ASCII: no colours, no charset
-    tricks, no title change, no clipboard write. We measured this against ten Debian terminal
-    emulators, with screenshots - every one was corrupted, secure-terminal was not.</p>
+    secure-terminal reduces the identical bytes to inert printable ASCII: no title change, no
+    charset tricks, no clipboard write, and only its own bounded, contrast-guarded colour - never
+    the attacker's. We measured this against ten Debian terminal emulators, with screenshots -
+    every one was corrupted, secure-terminal was not.</p>
   <div class="cta"><a class="btn primary" href="/comparison/">See the full comparison + screenshots</a></div>
 </div></section>
 
