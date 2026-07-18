@@ -227,20 +227,20 @@
     learn which terminal you use or correlate your session.</p>
   <div class="cmp-wrap">
   <table class="cmp">
-    <thead><tr><th>Variable</th><th>secure-terminal behaviour</th></tr></thead>
+    <thead><tr><th>Variable</th><th>secure-terminal behaviour</th><th>What it is for / effect</th></tr></thead>
     <tbody>
-      <tr><td>TERM</td><td>Set to <code>xterm-256color</code>, or the opt-in custom <code>secure-terminal</code> terminfo that advertises exactly the supported subset. The <code>secure-terminal-cli</code> wrapper uses <code>dumb</code>.</td></tr>
-      <tr><td>COLORTERM</td><td>Forced to <code>truecolor</code> - a fixed value, never inherited, so it cannot be a fingerprint. Programs then emit 24-bit colour, which the contrast guard renders safely.</td></tr>
-      <tr><td>PAGER</td><td>Defaulted to <code>cat</code> so an invoked pager adds no escapes of its own.</td></tr>
-      <tr><td>NO_COLOR</td><td>Honoured (per no-color.org): if set to any value, colour is disabled.</td></tr>
-      <tr><td>LINES, COLUMNS</td><td>Removed. The true size comes from the kernel (<code>TIOCSWINSZ</code>); a stale value would mislead programs.</td></tr>
-      <tr><td>TERM_PROGRAM, TERM_PROGRAM_VERSION</td><td>Scrubbed (anti-fingerprint).</td></tr>
-      <tr><td>VTE_VERSION, KONSOLE_VERSION, KONSOLE_DBUS_*</td><td>Scrubbed (anti-fingerprint).</td></tr>
-      <tr><td>WT_SESSION, WT_PROFILE_ID</td><td>Scrubbed (anti-fingerprint).</td></tr>
-      <tr><td>ITERM_SESSION_ID, ITERM_PROFILE</td><td>Scrubbed (anti-fingerprint).</td></tr>
-      <tr><td>KITTY_WINDOW_ID, KITTY_PID, ALACRITTY_WINDOW_ID</td><td>Scrubbed (anti-fingerprint).</td></tr>
-      <tr><td>TERMINFO_DIRS</td><td>Prepended with the shipped terminfo directory when the custom TERM is in use; otherwise untouched.</td></tr>
-      <tr><td>Everything else (PATH, HOME, LANG, SHELL, ...)</td><td>Inherited unchanged.</td></tr>
+      <tr><td>TERM</td><td>Set to <code>xterm-256color</code>, or the opt-in custom <code>secure-terminal</code> terminfo that advertises exactly the supported subset. The <code>secure-terminal-cli</code> wrapper uses <code>dumb</code>.</td><td>Programs look up their terminfo (what escapes the terminal understands) by TERM. A program then only emits what we render; anything else is stripped anyway.</td></tr>
+      <tr><td>COLORTERM</td><td>Forced to <code>truecolor</code> - a fixed value, never inherited, so it cannot be a fingerprint.</td><td>Programs check it to decide whether to emit 24-bit colour; with it set they do, and the contrast guard renders it safely. Nothing breaks if a program ignores it.</td></tr>
+      <tr><td>PAGER</td><td>Defaulted to <code>cat</code>.</td><td>Programs pipe long output through <code>$PAGER</code>; <code>cat</code> means the pager adds no escapes of its own. Set your own to use <code>less</code>, etc.</td></tr>
+      <tr><td>NO_COLOR</td><td>Honoured (per no-color.org): if set to any value, colour is disabled.</td><td>The standard opt-out; a program that honours it emits no colour.</td></tr>
+      <tr><td>LINES, COLUMNS</td><td>Removed.</td><td>Programs read the terminal size; the true size comes from the kernel (<code>TIOCSWINSZ</code>), so a stale env value cannot make an app mis-wrap.</td></tr>
+      <tr><td>TERM_PROGRAM, TERM_PROGRAM_VERSION</td><td>Scrubbed (anti-fingerprint).</td><td>Apps/scripts sniff these to detect the host emulator; scrubbed so a child (or an SSH host) cannot learn which terminal you use. A rare app that keys behaviour off the emulator falls back to defaults.</td></tr>
+      <tr><td>VTE_VERSION, KONSOLE_VERSION, KONSOLE_DBUS_*</td><td>Scrubbed (anti-fingerprint).</td><td>Same: emulator-identity / session-correlation signals, removed.</td></tr>
+      <tr><td>WT_SESSION, WT_PROFILE_ID</td><td>Scrubbed (anti-fingerprint).</td><td>Windows Terminal session identifiers, removed.</td></tr>
+      <tr><td>ITERM_SESSION_ID, ITERM_PROFILE</td><td>Scrubbed (anti-fingerprint).</td><td>iTerm2 session identifiers, removed.</td></tr>
+      <tr><td>KITTY_WINDOW_ID, KITTY_PID, ALACRITTY_WINDOW_ID</td><td>Scrubbed (anti-fingerprint).</td><td>kitty / alacritty window identifiers, removed.</td></tr>
+      <tr><td>TERMINFO_DIRS</td><td>Prepended with the shipped terminfo directory when the custom TERM is in use; otherwise untouched.</td><td>Where terminfo entries are found; prepended so the custom <code>secure-terminal</code> entry resolves.</td></tr>
+      <tr><td>Everything else (PATH, HOME, LANG, SHELL, ...)</td><td>Inherited unchanged.</td><td>Your normal environment; untouched.</td></tr>
     </tbody>
   </table>
   </div>
@@ -261,7 +261,7 @@
       <tr><td>Primary Device Attributes (DA1)</td><td><code>ESC [ c</code></td><td><span class="yes">Never answered.</span></td><td>vim, tmux, less probe it to detect features; with no reply they fall back to the TERM baseline after a short timeout. At most a brief startup pause.</td></tr>
       <tr><td>Secondary DA (DA2)</td><td><code>ESC [ &gt; c</code></td><td><span class="yes">Never answered.</span></td><td>Apps that gate features on the terminal version fall back to defaults.</td></tr>
       <tr><td>Tertiary DA (DA3)</td><td><code>ESC [ = c</code></td><td><span class="yes">Never answered.</span></td><td>Rarely used; no visible effect.</td></tr>
-      <tr><td>Cursor position report (DSR/CPR)</td><td><code>ESC [ 6 n</code></td><td><span class="yes">Never answered.</span></td><td>Prompt frameworks (powerline, starship) and <code>resize</code> read the cursor position; they use a timeout fallback, so a prompt may briefly mis-measure width.</td></tr>
+      <tr><td>Cursor position report (DSR/CPR)</td><td><code>ESC [ 6 n</code></td><td><span class="yes">Never answered.</span></td><td>Prompt frameworks (<a href="https://github.com/powerline/powerline" rel="noopener">powerline</a>, <a href="https://starship.rs" rel="noopener">starship</a>) and <a href="https://manpages.debian.org/resize" rel="noopener"><code>resize</code></a> read the cursor position; they use a timeout fallback, so a prompt may briefly mis-measure width.</td></tr>
       <tr><td>Device status report</td><td><code>ESC [ 5 n</code></td><td><span class="yes">Never answered.</span></td><td>A health probe; apps assume OK.</td></tr>
       <tr><td>Request setting (DECRQSS)</td><td><code>ESC P $ q ... ESC \</code></td><td><span class="yes">Never answered.</span></td><td>Apps reading back a setting they just set proceed with the value they wrote.</td></tr>
       <tr><td>Terminal name/version (XTVERSION)</td><td><code>ESC [ &gt; 0 q</code></td><td><span class="yes">Never answered.</span></td><td>kitty and newer apps sniff the terminal name; they fall back to TERM.</td></tr>
@@ -366,6 +366,17 @@
     </tbody>
   </table>
   </div>
+  <p class="catdesc" style="margin-top:12px"><b>Who uses these.</b> Title (0/2): shells and
+    <a href="https://packages.debian.org/tmux" rel="noopener">tmux</a> set the window/tab title
+    to the running command or directory. Working directory (7): terminals track the shell's cwd
+    to open a new tab there. Hyperlinks (8): <code>ls --hyperlink</code>,
+    <a href="https://packages.debian.org/git-delta" rel="noopener">delta</a> and some compilers
+    make paths clickable. Notifications (9): long-build and IRC tools (weechat, irssi) raise a
+    desktop popup. Palette (4/10/11/12): themes and background-detection (vim). Clipboard write
+    (52): <a href="https://packages.debian.org/tmux" rel="noopener">tmux</a>
+    <code>set-clipboard</code> and editor yank plugins copy to the system clipboard. Clipboard
+    read (52 query): remote paste-over-ssh (tmux, neovim OSC 52 yank/paste). iTerm2 (1337):
+    <code>imgcat</code> and file transfer - which secure-terminal does not implement.</p>
   <div class="cta">
     <a class="btn primary" href="/#install">Install secure-terminal</a>
     <a class="btn ghost" href="https://github.com/secure-terminal/terminal-poc-corpus">See the attack corpus</a>
