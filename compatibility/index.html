@@ -145,10 +145,10 @@
   <table class="cmp">
     <thead><tr><th>Suite</th><th>What it checks</th><th>secure-terminal relationship</th></tr></thead>
     <tbody>
-      <tr><td>esctest2</td><td>xterm/VT escape behaviour, exhaustively, by driving a terminal and reading its replies.</td><td>Reviewed safe. Automatable. Used as a sequence corpus; line mode intentionally answers none of its query probes.</td></tr>
-      <tr><td>pyte tests</td><td>The screen-model semantics of the engine secure-terminal uses for TUI mode.</td><td>Reviewed safe. Automatable. Directly relevant: these are the semantics our TUI grid inherits.</td></tr>
-      <tr><td>libvterm tests</td><td>A reference state machine for VT parsing and rendering.</td><td>Reviewed safe. Automatable. Used to cross-check what a sequence "should" do against what we strip.</td></tr>
-      <tr><td>vttest</td><td>The classic interactive VT100/VT220 test; requires a human at the keyboard.</td><td>Reviewed safe. Interactive, hard to automate. Used manually as a reference, not in CI.</td></tr>
+      <tr><td><a href="https://github.com/ThomasDickey/esctest2" rel="noopener">esctest2</a></td><td>xterm/VT escape behaviour, exhaustively, by driving a terminal and reading its replies.</td><td>Reviewed safe. Automatable. Used as a sequence corpus; line mode intentionally answers none of its query probes.</td></tr>
+      <tr><td><a href="https://github.com/selectel/pyte" rel="noopener">pyte tests</a></td><td>The screen-model semantics of the engine secure-terminal uses for TUI mode.</td><td>Reviewed safe. Automatable. Directly relevant: these are the semantics our TUI grid inherits.</td></tr>
+      <tr><td><a href="https://github.com/neovim/libvterm" rel="noopener">libvterm tests</a></td><td>A reference state machine for VT parsing and rendering.</td><td>Reviewed safe. Automatable. Used to cross-check what a sequence "should" do against what we strip.</td></tr>
+      <tr><td><a href="https://invisible-island.net/vttest/" rel="noopener">vttest</a></td><td>The classic interactive VT100/VT220 test; requires a human at the keyboard.</td><td>Reviewed safe. Interactive, hard to automate. Used manually as a reference, not in CI.</td></tr>
     </tbody>
   </table>
   </div>
