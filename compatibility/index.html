@@ -36,6 +36,7 @@
       <a href="/#install">Install</a>
       <a href="/plugins/">Plugins</a>
       <a href="/compatibility/" class="active">Compatibility</a>
+      <a href="/comparison/">Comparison</a>
       <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>
     </nav>
   </div>
@@ -65,38 +66,13 @@
 
 <section class="cat" id="hostile"><div class="wrap">
   <h2 class="catname">Hostile byte streams: the difference, shown</h2>
-  <p class="catdesc">Pipe a burst of untrusted bytes into a normal terminal - random data
-    (<code>cat /dev/urandom</code>), a program's output, a hostile log - and, because those
-    bytes are interpreted as escape sequences, it garbles the screen, sticks it in the wrong
-    colours or character set, and can silently rewrite your window or tab title to
-    attacker-chosen text. A <code>reset</code> clears the visible mess, but usually not the
-    hijacked title. secure-terminal displays the identical bytes as inert plain ASCII: no
-    colours, no charset tricks, no title change, no clipboard write - nothing to clean up.</p>
-  <p class="catdesc" style="margin-top:12px">We measured this. One payload - two ASCII lines,
-    then 20,000 random bytes, then a title-set, an OSC 52 clipboard write, a stuck colour and a
-    DEC line-drawing charset shift - was fed to ten Debian terminal emulators and to
-    secure-terminal, each on its own isolated headless display, screenshotted before and after
-    a <code>reset</code>.</p>
-  <div class="cmp-wrap">
-  <table class="cmp">
-    <thead><tr><th>Terminal</th><th>What the hostile stream did</th><th>Cleared by <code>reset</code>?</th></tr></thead>
-    <tbody>
-      <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, colours stuck, <b>title hijacked</b> to attacker text.</td><td>Screen yes; the title only on st.</td></tr>
-      <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a>, <a href="https://packages.debian.org/lxterminal" rel="noopener">lxterminal</a> (VTE)</td><td>Garbled, colours stuck, <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
-      <tr><td><a href="https://packages.debian.org/konsole" rel="noopener">konsole</a> (KDE)</td><td>Garbled, colours stuck, line-drawing <b>charset stuck</b>. (Its default profile ignored the title-set.)</td><td>Screen yes.</td></tr>
-      <tr><td><a href="https://packages.debian.org/qterminal" rel="noopener">qterminal</a> (LXQt)</td><td>Garbled, colours stuck, charset stuck, <b>title hijacked</b> (shown in the tab).</td><td>Screen yes; title no.</td></tr>
-      <tr><td><a href="https://packages.debian.org/alacritty" rel="noopener">alacritty</a>, <a href="https://packages.debian.org/kitty" rel="noopener">kitty</a> (modern, GPU)</td><td>Garbled, colours stuck, <b>title hijacked</b> - no more resilient than xterm.</td><td>Screen yes; title no.</td></tr>
-      <tr><td><b>secure-terminal</b></td><td><span class="yes">Nothing.</span> 20,000 random bytes shown as inert ASCII (non-printable to <code>_</code>); no colour, no charset shift; the title, clipboard and charset escapes stripped.</td><td>Nothing to clear.</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="catdesc" style="margin-top:12px">Every traditional emulator was corrupted - all ten
-    garbled with stuck colours, a stuck charset on two, and an attacker-controlled title on
-    nine of ten. The visible garble clears with <code>reset</code>, but the <em>silent</em>
-    title change usually does not, and only if you notice and type <code>reset</code> at a
-    screen that may be unusable. Modern GPU terminals are not exempt. secure-terminal was
-    unaffected in every run. (Nothing crashed or hung; the danger is the silent title hijack
-    and the clipboard write, not instability.)</p>
+  <p class="catdesc">Pipe a burst of untrusted bytes into a normal terminal - random data, a
+    program's output, a hostile log - and it garbles the screen, sticks it in the wrong colours
+    or character set, and can silently rewrite your window or tab title to attacker-chosen text.
+    secure-terminal shows the identical bytes as inert plain ASCII: no colours, no charset
+    tricks, no title change, no clipboard write. We measured this against ten Debian terminal
+    emulators, with screenshots - every one was corrupted, secure-terminal was not.</p>
+  <div class="cta"><a class="btn primary" href="/comparison/">See the full comparison + screenshots</a></div>
 </div></section>
 
 <section class="cat" id="cli"><div class="wrap">

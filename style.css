@@ -90,6 +90,10 @@
   .cmp td:first-child{font-weight:600;color:var(--ink)}
   .cmp .trad{color:#5a5c61}
   @media(max-width:640px){ .cmp{font-size:.86rem} .cmp th,.cmp td{padding:9px 8px} }
+  .shotgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:8px 0 0}
+  .shot{margin:0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card)}
+  .shot img{display:block;width:100%;height:auto;background:#000}
+  .shot figcaption{padding:10px 12px;font-size:.9rem;color:var(--muted)}
   .pre .c{color:#727a8a}
 
   footer{border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;margin-top:40px}

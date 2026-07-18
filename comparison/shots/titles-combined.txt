@@ -1,0 +1,24 @@
+Window-title behaviour (xdotool getwindowname), before payload -> after payload.
+Test date (UTC): 2026-07-18 (captures 19:50-19:56 UTC), sandbox qube temp-claude.
+Payloads: CASE A = head -c 20000 /dev/urandom ; CASE B = crafted OSC-0 title-hijack log.
+
+emulator         case A random                 case A recovered   case B crafted (OSC 0 title)
+xterm            bash -> bash                  bash -> bash       bash -> root@prod-db:~#
+urxvt            bash -> bash                  bash -> bash       bash -> root@prod-db:~#
+stterm           bash -> <garbled random>      bash -> bash       bash -> root@prod-db:~#
+konsole          .. : bash -> .. : sleep       (unchanged)        .. : bash -> .. : bash  (NOT hijacked)
+xfce4-terminal   Terminal -> Terminal          Terminal           Terminal -> Terminal - root@prod-db:~#
+qterminal        Shell No. 1 -> Shell No. 1    Shell No. 1        Shell No. 1 -> root@prod-db:~#
+mate-terminal    Terminal -> Terminal          Terminal           Terminal -> root@prod-db:~#
+lxterminal       <cmdline> -> <cmdline>        <cmdline>          <cmdline> -> root@prod-db:~#
+alacritty        Alacritty -> Alacritty        Alacritty          Alacritty -> root@prod-db:~#
+kitty            kitty -> <garbled random>     bash -> bash       bash -> root@prod-db:~#
+secure-terminal  bash -> bash                  n/a                bash -> bash  (hijack neutralized)
+
+Notes:
+- CASE A "random garble" of the title happened for stterm and kitty this run because the
+  20000 random bytes happened to contain OSC-ish bytes. It is RANDOM, not a chosen string.
+- konsole: the crafted OSC-0 title is accepted into konsole's %w component but konsole's
+  DEFAULT title format ("%d : %n --- Konsole") does not surface it, so the VISIBLE window
+  title was not hijacked. konsole still applied the stuck colour + charset corruption.
+- secure-terminal strips the OSC entirely: outer host title stayed "bash" for both cases.
