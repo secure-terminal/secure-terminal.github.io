@@ -205,7 +205,7 @@
       reach: by default it <b>cannot set the window title or touch the clipboard</b>. Each such OSC side-effect is
       a separate opt-in toggle (off by default) that dims a security indicator when enabled, so those spoofing
       vectors stay closed unless you deliberately open one. Every character it places is <b>still
-      ASCII/unicode-filtered</b>, and colours use a contrast guard so nothing can be painted invisibly.</p>
+      ASCII/unicode-filtered</b>, and colours use a <a href="/compatibility/#contrast-guard">contrast guard</a> so nothing can be painted invisibly.</p>
     <p>What you give up: a program can draw a <em>misleading interface</em> within its own screen, so only run
       programs you trust. This is "restricted-emulator safe," not "safe by construction." The default CLI mode,
       and everything the guarantee rests on, is unchanged.</p>
@@ -222,7 +222,7 @@ with every cell still filtered and the title/clipboard still off-limits.</div>
     <article class="issue"><h3>Tabs</h3><p>Named, colour-coded, each its own shell. Per-tab theme, zoom,
       unicode mode and colours. Rename by double-click; a user name and a program title are kept separately.</p></article>
     <article class="issue"><h3>Safe optional colours</h3><p>A 16-colour subset of ANSI, off by default, with a
-      contrast guard so text is never invisible. Honours <code>NO_COLOR</code> and <code>TERM=dumb</code>.</p></article>
+      <a href="/compatibility/#contrast-guard">contrast guard</a> so text is never invisible. Honours <code>NO_COLOR</code> and <code>TERM=dumb</code>.</p></article>
     <article class="issue"><h3>Session restore</h3><p>Tabs and their scrollback survive a restart or reboot, under a
       fresh shell. Stored under <code>~/.local/state</code>; on by default, and you can turn it off or clear it.</p></article>
     <article class="issue"><h3>Drop-in settings</h3><p>systemd-style <code>.conf</code> directories: a distro or

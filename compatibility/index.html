@@ -114,6 +114,29 @@
     command output looks the way you expect.</p>
 </div></section>
 
+<section class="cat" id="contrast-guard"><div class="wrap">
+  <h2 class="catname">The contrast guard: colour that can never hide text</h2>
+  <p class="catdesc">Honouring a program's colours reopens an old trick: paint text the same
+    colour as the background and it becomes invisible - a fake <code>[ OK ]</code> that hides a
+    failure, a prompt that conceals what you are really about to run. secure-terminal keeps colour
+    <em>and</em> closes that trick with a contrast guard, on in both modes whenever colour is on.</p>
+  <div class="issue">
+    <p>Before drawing any cell, the terminal compares the foreground and the <b>actual</b>
+      background luminance. If they are too close to read, it discards the program's foreground and
+      substitutes a fixed high-contrast one - black on a light background, near-white on a dark one
+      - so the text is always legible. The substitute is a <b>built-in</b> colour, never one the
+      program chose, so the guard cannot be defeated by moving the default colours together (for
+      example via an <code>OSC 10</code>/<code>11</code> palette change). The threshold is
+      deliberately low, so ordinary combinations like red on a near-black background still render
+      exactly as intended; only genuinely unreadable, deceptive pairings are corrected.</p>
+    <p>The net effect: every colour a program can produce stays readable, and no colour can conceal
+      what is on screen. You saw this on the <a href="/comparison/">comparison page</a> - the
+      crafted log's stuck red-on-red, meant to hide text, was forced to a plainly readable form.
+      Turn colour off entirely with the Colors toggle, <code>NO_COLOR</code>, or
+      <code>TERM=dumb</code>.</p>
+  </div>
+</div></section>
+
 <section class="cat" id="tui"><div class="wrap">
   <h2 class="catname">The 10 most popular full-screen (TUI) programs</h2>
   <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
