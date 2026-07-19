@@ -78,10 +78,13 @@
 <section class="cat" id="shots"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#shots">See it: the crafted attack</a></h2>
   <p class="catdesc">The same crafted log (Case B) displayed by each terminal, captured headless
-    on 2026-07-18 with the window-manager titlebar visible. Where a terminal draws a titlebar you
-    can read the hijacked title (<code>root@prod-db:~#</code>) directly; the full title behaviour
-    for every terminal is in the raw log
-    <a href="shots/titles-combined.txt" rel="noopener">titles-combined.txt</a>. Click any shot for
+    on 2026-07-18. Where a terminal accepts a window-manager titlebar (xterm) you can read the
+    hijacked title (<code>root@prod-db:~#</code>) in it directly, and where a terminal draws its own
+    menu or tool bar (konsole, the VTE terminals, secure-terminal) that identifies it. A few
+    minimalist terminals (st, kitty, alacritty, urxvt) ask the window manager <em>not</em> to
+    decorate them, so headless they show only the bare terminal - we show that honestly rather than
+    paint on a title bar they did not have; their title-hijack is recorded in the raw log
+    <a href="shots/titles-combined.txt" rel="noopener">titles-combined.txt</a> instead. Click any shot for
     full size.</p>
   <div class="shotgrid">
     <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - neutralised: title untouched (a banner flags the blocked OSC), the charset shift shows as literal text, only the contrast-guarded palette.</figcaption><a href="shots/secure-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.crafted.png" width="1000" height="620" loading="lazy" alt="secure-terminal displaying the crafted hostile log: the tab title is unchanged, a yellow banner notes the blocked OSC title escape, the line-drawing shift shows as literal text, and colour is contrast-guarded and readable."></a></figure>
