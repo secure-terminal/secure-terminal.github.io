@@ -87,6 +87,7 @@
 <section class="cat" id="examples"><div class="wrap">
   <h2 class="catname">Two example handlers</h2>
   <p class="catdesc">secure-terminal ships two samples under <code>/usr/share/secure-terminal/hooks/</code>. Point the terminal at one, or write your own.</p>
+  <div class="fg">
   <div class="issue">
     <h3>example-hook - local rules, no network</h3>
     <p>A fast, dependency-free handler using only local pattern rules: it blocks a downloaded
@@ -102,6 +103,7 @@
       model as <em>untrusted data to be judged</em>, never as instructions, so a hostile log
       line cannot talk the judge into approving itself. It fails open with a visible note if
       the model is unavailable, and has a fast path so trivial commands never hit the network.</p>
+  </div>
   </div>
 </div></section>
 
