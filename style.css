@@ -67,7 +67,11 @@
   .risk{border-left:4px solid #e5a50a;background:#fbf6ec}
   .flag{color:#b9770a;font-weight:700}
   .pre{background:var(--tbg);color:var(--tfg);font:.9rem/1.65 var(--mono);padding:16px;border-radius:11px;border:1px solid #23262e;overflow-x:auto;white-space:pre;unicode-bidi:isolate}
-  .cmp-wrap{overflow-x:auto;margin:16px 0;
+  /* Cap the table to the same reading measure as the prose above it (.issue p
+     is max-width:74ch) so the intro text and the table share one column edge
+     rather than the table running wider. min-width on .cmp keeps it scrollable
+     on narrow screens. */
+  .cmp-wrap{overflow-x:auto;margin:16px 0;max-width:74ch;
     /* self-hiding scroll shadows: a soft shadow appears on whichever edge still
        has table to scroll to, so the hidden third column (secure-terminal) is
        discoverable on narrow screens. Pure CSS, no script. */
@@ -161,6 +165,10 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   /* jump-to-anchor highlight: a red ring around the element you navigated to
      (the sticky header needs the scroll-margin so the target is not hidden). */
   :target{scroll-margin-top:76px}
-  section:target, .issue:target, .shot:target, figure:target, article:target, .level:target{
+  /* Contained targets ring themselves; a full-bleed section rings its inner
+     .wrap instead, so the vertical ring edges stay on-screen (a ring on the
+     edge-to-edge section would sit at the viewport edges). */
+  .issue:target, .shot:target, figure:target, article:target, .level:target,
+  section:target > .wrap{
     box-shadow:0 0 0 2px #e5484d; border-radius:8px;
   }
