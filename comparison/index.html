@@ -7,13 +7,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal vs a normal terminal: hostile byte streams</title>
-<meta name="description" content="Feed the same hostile byte stream to ten terminal emulators and to secure-terminal. Every normal terminal is corrupted - garbled, stuck colours, a hijacked title; secure-terminal is not. Measured, with screenshots.">
+<meta name="description" content="Feed the same hostile byte stream to nine terminal emulators and to secure-terminal. Every normal terminal is corrupted - garbled, stuck colours, a hijacked title; secure-terminal is not. Measured, with screenshots.">
 <link rel="canonical" href="https://secure-terminal.github.io/comparison/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="secure-terminal">
 <meta property="og:title" content="secure-terminal vs a normal terminal: hostile byte streams">
-<meta property="og:description" content="The same hostile stream fed to ten emulators and to secure-terminal, with screenshots. Every normal terminal is corrupted; secure-terminal is not.">
+<meta property="og:description" content="The same hostile stream fed to nine emulators and to secure-terminal, with screenshots. Every normal terminal is corrupted; secure-terminal is not.">
 <meta property="og:url" content="https://secure-terminal.github.io/comparison/">
 <meta property="og:image" content="https://secure-terminal.github.io/og.png">
 <meta property="og:image:width" content="1200">
@@ -58,8 +58,8 @@
 
 <section class="cat" id="method"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#method">What we fed them</a></h2>
-  <p class="catdesc">One payload, two cases, fed to ten terminal emulators and to
-    secure-terminal, each on its own isolated headless display. Tested <b>2026-07-18</b>. Both
+  <p class="catdesc">One payload, two cases, fed to nine terminal emulators and to
+    secure-terminal, each on its own isolated headless display. Tested <b>2026-07-19</b>. Both
     payloads and the capture harness are published so you can
     <a href="#reproduce">reproduce it</a>.</p>
   <div class="issue">
@@ -76,44 +76,42 @@
 
 <section class="cat" id="shots"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#shots">See it: the crafted attack</a></h2>
-  <p class="catdesc">The same crafted log (Case B) displayed by each terminal, captured headless
-    on 2026-07-18. Where a terminal accepts a window-manager titlebar (xterm) you can read the
-    hijacked title (<code>root@prod-db:~#</code>) in it directly, and where a terminal draws its own
-    menu or tool bar (konsole, the VTE terminals, secure-terminal) that identifies it. A few
-    minimalist terminals (st, kitty, alacritty, urxvt) ask the window manager <em>not</em> to
-    decorate them, so headless they show only the bare terminal - we show that honestly rather than
-    paint on a title bar they did not have; their title-hijack is recorded in the raw log
-    <a href="shots/titles-combined.txt" rel="noopener">titles-combined.txt</a> instead. Click any shot for
-    full size.</p>
+  <p class="catdesc">The same crafted log (Case B) displayed by each terminal, captured under a real
+    Wayland compositor (weston) on 2026-07-19. Every terminal runs as a client of the compositor,
+    which draws a server-side title bar on each window, so the hijacked title
+    (<code>root@prod-db:~#</code>) is legible in the bar directly - for the minimalist terminals (st,
+    urxvt, alacritty, kitty) as much as for the ones that also draw their own menu or tool bar
+    (konsole, the VTE terminals, secure-terminal). Nothing is painted on: the title bar is the
+    compositor's own decoration, captured as rendered. secure-terminal's own title stays untouched
+    and a banner flags the blocked escape. Click any shot for full size.</p>
   <div class="shotgrid">
-    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - neutralised: title untouched (a banner flags the blocked OSC), the charset shift shows as literal text, only the contrast-guarded palette.</figcaption><a href="shots/secure-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.crafted.png" width="1000" height="620" loading="lazy" alt="secure-terminal displaying the crafted hostile log: the tab title is unchanged, a yellow banner notes the blocked OSC title escape, the line-drawing shift shows as literal text, and colour is contrast-guarded and readable."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red; charset shifted.</figcaption><a href="shots/xterm.crafted.png" target="_blank" rel="noopener"><img src="shots/xterm.crafted.png" width="1000" height="620" loading="lazy" alt="xterm displaying the crafted log: the window-manager titlebar reads root@prod-db, the screen is stuck red with line-drawing corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>urxvt</b> - stuck red; urxvt draws no window decoration here, so its hijacked title is recorded in the log rather than shown.</figcaption><a href="shots/urxvt.crafted.png" target="_blank" rel="noopener"><img src="shots/urxvt.crafted.png" width="1000" height="620" loading="lazy" alt="urxvt displaying the crafted log: undecorated window, screen stuck red."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>qterminal</b> (LXQt) - its menu bar and tab; the window title was hijacked to <code>root@prod-db:~#</code> (see the log), though the tab shows the shell name.</figcaption><a href="shots/qterminal.crafted.png" target="_blank" rel="noopener"><img src="shots/qterminal.crafted.png" width="1000" height="620" loading="lazy" alt="qterminal displaying the crafted log: LXQt menu bar and a Shell No. 1 tab; the window title was hijacked (recorded in the log)."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>konsole</b> (KDE) - stuck red + charset. Its default profile stored the hijacked title but does not surface it; the screen is corrupted all the same.</figcaption><a href="shots/konsole.crafted.png" target="_blank" rel="noopener"><img src="shots/konsole.crafted.png" width="1000" height="620" loading="lazy" alt="konsole displaying the crafted log: KDE tab bar visible, screen stuck red with charset corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>xfce4-terminal</b> (VTE) - stuck red + charset; title hijacked (see the log).</figcaption><a href="shots/xfce4-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/xfce4-terminal.crafted.png" width="1000" height="620" loading="lazy" alt="xfce4-terminal displaying the crafted log: GTK menu bar visible, screen stuck red."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>mate-terminal</b> (VTE) - stuck red on its light theme; title hijacked.</figcaption><a href="shots/mate-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/mate-terminal.crafted.png" width="1000" height="620" loading="lazy" alt="mate-terminal displaying the crafted log: menu bar visible, stuck red on a light background."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>lxterminal</b> - stuck red + charset; title hijacked.</figcaption><a href="shots/lxterminal.crafted.png" target="_blank" rel="noopener"><img src="shots/lxterminal.crafted.png" width="1000" height="620" loading="lazy" alt="lxterminal displaying the crafted log: menu bar visible, screen stuck red."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>st</b> - stuck red + line-drawing; title hijacked (see the log).</figcaption><a href="shots/st.crafted.png" target="_blank" rel="noopener"><img src="shots/st.crafted.png" width="1000" height="620" loading="lazy" alt="st displaying the crafted log: screen stuck red with line-drawing corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (modern, GPU) - stuck red; title hijacked. No more resilient.</figcaption><a href="shots/alacritty.crafted.png" target="_blank" rel="noopener"><img src="shots/alacritty.crafted.png" width="1000" height="620" loading="lazy" alt="alacritty, a modern GPU terminal, displaying the crafted log: stuck red corruption."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>kitty</b> (modern, GPU) - stuck red; title hijacked. No more resilient.</figcaption><a href="shots/kitty.crafted.png" target="_blank" rel="noopener"><img src="shots/kitty.crafted.png" width="1000" height="620" loading="lazy" alt="kitty, a modern GPU terminal, displaying the crafted log: stuck red corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - neutralised: title untouched (a banner flags the blocked OSC), the charset shift shows as literal text, only the contrast-guarded palette.</figcaption><a href="shots/secure-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.crafted.png" width="839" height="560" loading="lazy" alt="secure-terminal displaying the crafted hostile log: the tab title is unchanged, a yellow banner notes the blocked OSC title escape, the line-drawing shift shows as literal text, and colour is contrast-guarded and readable."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red; charset shifted.</figcaption><a href="shots/xterm.crafted.png" target="_blank" rel="noopener"><img src="shots/xterm.crafted.png" width="833" height="548" loading="lazy" alt="xterm displaying the crafted log: the window-manager titlebar reads root@prod-db, the screen is stuck red with line-drawing corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>urxvt</b> - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red.</figcaption><a href="shots/urxvt.crafted.png" target="_blank" rel="noopener"><img src="shots/urxvt.crafted.png" width="845" height="548" loading="lazy" alt="urxvt displaying the crafted log: undecorated window, screen stuck red."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>qterminal</b> (LXQt) - titlebar hijacked to <code>root@prod-db:~#</code>; its LXQt menu bar and tab visible; stuck red.</figcaption><a href="shots/qterminal.crafted.png" target="_blank" rel="noopener"><img src="shots/qterminal.crafted.png" width="1700" height="1000" loading="lazy" alt="qterminal displaying the crafted log: LXQt menu bar and a Shell No. 1 tab; the window title is hijacked to root@prod-db, shown in its title bar."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>konsole</b> (KDE) - stuck red + charset; KDE toolbar visible. konsole keeps its own session name in the bar rather than surfacing the hijacked title.</figcaption><a href="shots/konsole.crafted.png" target="_blank" rel="noopener"><img src="shots/konsole.crafted.png" width="1589" height="611" loading="lazy" alt="konsole displaying the crafted log: KDE tab bar visible, screen stuck red with charset corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>xfce4-terminal</b> (VTE) - titlebar hijacked to <code>root@prod-db:~#</code>; VTE menu bar; stuck red + charset.</figcaption><a href="shots/xfce4-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/xfce4-terminal.crafted.png" width="936" height="599" loading="lazy" alt="xfce4-terminal displaying the crafted log: GTK menu bar visible, screen stuck red."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>mate-terminal</b> (VTE) - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red on its light theme.</figcaption><a href="shots/mate-terminal.crafted.png" target="_blank" rel="noopener"><img src="shots/mate-terminal.crafted.png" width="755" height="543" loading="lazy" alt="mate-terminal displaying the crafted log: menu bar visible, stuck red on a light background."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>st</b> - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red + line-drawing.</figcaption><a href="shots/st.crafted.png" target="_blank" rel="noopener"><img src="shots/st.crafted.png" width="833" height="548" loading="lazy" alt="st displaying the crafted log: screen stuck red with line-drawing corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (modern, GPU) - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red. No more resilient.</figcaption><a href="shots/alacritty.crafted.png" target="_blank" rel="noopener"><img src="shots/alacritty.crafted.png" width="829" height="544" loading="lazy" alt="alacritty, a modern GPU terminal, displaying the crafted log: stuck red corruption."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>kitty</b> (modern, GPU) - titlebar hijacked to <code>root@prod-db:~#</code>; stuck red. No more resilient.</figcaption><a href="shots/kitty.crafted.png" target="_blank" rel="noopener"><img src="shots/kitty.crafted.png" width="779" height="500" loading="lazy" alt="kitty, a modern GPU terminal, displaying the crafted log: stuck red corruption."></a></figure>
   </div>
   <h3 id="random" style="margin-top:26px"><a class="h-anchor" href="#random">And the random stream (Case A)</a></h3>
   <p class="catdesc">20,000 bytes of <code>/dev/urandom</code>. No chosen string is possible, so any
     title change here is random noise, not an attack - the point is that a normal terminal still
-    lets raw bytes corrupt its screen, while secure-terminal shows inert ASCII.</p>
+    lets raw bytes corrupt its screen, while secure-terminal shows inert ASCII. Four emulators
+    (urxvt, konsole, qterminal, alacritty) are shown only in the crafted set above: the random
+    stream tripped a window-manipulation escape that shrank or killed their window outright - a
+    louder failure than corruption, but not a legible screenshot.</p>
   <div class="shotgrid">
-    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - 20,000 random bytes as inert ASCII; title unchanged; only contrast-guarded colour.</figcaption><a href="shots/secure-terminal.random.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.random.png" width="1000" height="620" loading="lazy" alt="secure-terminal displaying 20000 random bytes as inert printable ASCII, title unchanged."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - garbled, stuck reverse-video.</figcaption><a href="shots/xterm.random.png" target="_blank" rel="noopener"><img src="shots/xterm.random.png" width="1000" height="620" loading="lazy" alt="xterm displaying random bytes: garbled with stuck reverse-video."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>urxvt</b> - garbled.</figcaption><a href="shots/urxvt.random.png" target="_blank" rel="noopener"><img src="shots/urxvt.random.png" width="1000" height="620" loading="lazy" alt="urxvt displaying random bytes: garbled."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>qterminal</b> - garbled; tab still reads its default (random carried no chosen title).</figcaption><a href="shots/qterminal.random.png" target="_blank" rel="noopener"><img src="shots/qterminal.random.png" width="1000" height="620" loading="lazy" alt="qterminal displaying random bytes: garbled, default tab title."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>konsole</b> - garbled, selection artifacts.</figcaption><a href="shots/konsole.random.png" target="_blank" rel="noopener"><img src="shots/konsole.random.png" width="1000" height="620" loading="lazy" alt="konsole displaying random bytes: garbled."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>xfce4-terminal</b> - garbled.</figcaption><a href="shots/xfce4-terminal.random.png" target="_blank" rel="noopener"><img src="shots/xfce4-terminal.random.png" width="1000" height="620" loading="lazy" alt="xfce4-terminal displaying random bytes: garbled."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>mate-terminal</b> - garbled.</figcaption><a href="shots/mate-terminal.random.png" target="_blank" rel="noopener"><img src="shots/mate-terminal.random.png" width="1000" height="620" loading="lazy" alt="mate-terminal displaying random bytes: garbled."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>lxterminal</b> - garbled.</figcaption><a href="shots/lxterminal.random.png" target="_blank" rel="noopener"><img src="shots/lxterminal.random.png" width="1000" height="620" loading="lazy" alt="lxterminal displaying random bytes: garbled."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>st</b> - garbled.</figcaption><a href="shots/st.random.png" target="_blank" rel="noopener"><img src="shots/st.random.png" width="1000" height="620" loading="lazy" alt="st displaying random bytes: garbled."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>alacritty</b> (GPU) - garbled.</figcaption><a href="shots/alacritty.random.png" target="_blank" rel="noopener"><img src="shots/alacritty.random.png" width="1000" height="620" loading="lazy" alt="alacritty displaying random bytes: garbled."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>kitty</b> (GPU) - garbled, replacement glyphs.</figcaption><a href="shots/kitty.random.png" target="_blank" rel="noopener"><img src="shots/kitty.random.png" width="1000" height="620" loading="lazy" alt="kitty displaying random bytes: garbled with replacement glyphs."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal</b> - 20,000 random bytes as inert ASCII; title unchanged; only contrast-guarded colour.</figcaption><a href="shots/secure-terminal.random.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.random.png" width="839" height="560" loading="lazy" alt="secure-terminal displaying 20000 random bytes as inert printable ASCII, title unchanged."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>xterm</b> - garbled, stuck reverse-video.</figcaption><a href="shots/xterm.random.png" target="_blank" rel="noopener"><img src="shots/xterm.random.png" width="833" height="548" loading="lazy" alt="xterm displaying random bytes: garbled with stuck reverse-video."></a></figure>
+
+
+    <figure class="shot"><figcaption class="shotname"><b>xfce4-terminal</b> - garbled.</figcaption><a href="shots/xfce4-terminal.random.png" target="_blank" rel="noopener"><img src="shots/xfce4-terminal.random.png" width="936" height="599" loading="lazy" alt="xfce4-terminal displaying random bytes: garbled."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>mate-terminal</b> - garbled.</figcaption><a href="shots/mate-terminal.random.png" target="_blank" rel="noopener"><img src="shots/mate-terminal.random.png" width="755" height="543" loading="lazy" alt="mate-terminal displaying random bytes: garbled."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>st</b> - garbled.</figcaption><a href="shots/st.random.png" target="_blank" rel="noopener"><img src="shots/st.random.png" width="833" height="548" loading="lazy" alt="st displaying random bytes: garbled."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>kitty</b> (GPU) - garbled, replacement glyphs.</figcaption><a href="shots/kitty.random.png" target="_blank" rel="noopener"><img src="shots/kitty.random.png" width="779" height="500" loading="lazy" alt="kitty displaying random bytes: garbled with replacement glyphs."></a></figure>
   </div>
 </div></section>
 
@@ -124,7 +122,7 @@
     <thead><tr><th>Terminal</th><th>Case A (<code>/dev/random</code>)</th><th>Case B (crafted log)</th><th>Cleared by <code>reset</code>?</th></tr></thead>
     <tbody>
       <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, stuck reverse-video.</td><td>Stuck red + line-drawing; <b>title hijacked</b> to <code>root@prod-db:~#</code>.</td><td>Screen yes; the title not always.</td></tr>
-      <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a>, <a href="https://packages.debian.org/lxterminal" rel="noopener">lxterminal</a> (VTE)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
+      <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a> (VTE)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
       <tr><td><a href="https://packages.debian.org/konsole" rel="noopener">konsole</a> (KDE)</td><td>Garbled, selection artifacts.</td><td>Stuck colour + <b>charset stuck</b>. (Default profile does not surface the program-set title - it still stored it.)</td><td>Screen yes.</td></tr>
       <tr><td><a href="https://packages.debian.org/qterminal" rel="noopener">qterminal</a> (LXQt)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>, shown in the tab.</td><td>Screen yes; title no.</td></tr>
       <tr><td><a href="https://packages.debian.org/alacritty" rel="noopener">alacritty</a>, <a href="https://packages.debian.org/kitty" rel="noopener">kitty</a> (modern, GPU)</td><td>Garbled (kitty: replacement glyphs).</td><td>Stuck colour + charset; <b>title hijacked</b> - no more resilient than xterm.</td><td>Screen yes; title no.</td></tr>
@@ -132,10 +130,11 @@
     </tbody>
   </table>
   </div>
-  <p class="catdesc" style="margin-top:12px">Every traditional emulator was corrupted - all ten
-    garbled with stuck colours in Case B, a stuck charset on most, an attacker-controlled title on
-    nine of ten (only konsole's default profile did not surface it, and it still stored the value
-    and still corrupted the screen). <b>Modern GPU terminals are not exempt.</b> The visible
+  <p class="catdesc" style="margin-top:12px">Every traditional emulator was corrupted - all nine
+    garbled with stuck colours in Case B, a stuck charset on most, and the attacker-controlled title
+    reads back in the compositor's title bar on eight of the nine (konsole applied the escape to its
+    session but keeps its own name in the bar; it stored the value and corrupted the screen all the
+    same). <b>Modern GPU terminals are not exempt.</b> The visible
     garble clears with <code>reset</code>, but the silent title change usually does not, and only
     if you notice and type <code>reset</code> at a screen that may be unusable. Nothing crashed
     or hung; the danger is the silent title hijack and the clipboard write, not instability.</p>
