@@ -157,3 +157,10 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .inst .ibody{padding:2px 16px 16px}
 .inst .ibody > p{margin:0 0 10px;color:#3a3c41;max-width:74ch}
 .inst .ibody > p:last-child{margin-bottom:0}
+
+  /* jump-to-anchor highlight: a red ring around the element you navigated to
+     (the sticky header needs the scroll-margin so the target is not hidden). */
+  :target{scroll-margin-top:76px}
+  section:target, .issue:target, .shot:target, figure:target, article:target, .level:target{
+    box-shadow:0 0 0 2px #e5484d; border-radius:8px;
+  }
