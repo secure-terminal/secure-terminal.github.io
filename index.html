@@ -311,11 +311,24 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       <a href="/comparison/">comparison</a> for the specifics.</p>
   </div>
   <div class="issue">
-    <h3>Was this built with AI?</h3>
-    <p>Yes: secure-terminal is an AI-assisted project, written and reviewed with
-      the process documented at
-      <a href="https://github.com/org-ai-assisted">org-ai-assisted</a>. The code is
-      open for you to audit regardless of how it was produced.</p>
+    <h3>Was this AI vibe coded?</h3>
+    <p>It is an AI-assisted project - written and reviewed with the process
+      documented at <a href="https://github.com/org-ai-assisted">org-ai-assisted</a>,
+      with <a href="/human-review/">human review</a> and
+      <a href="/ai-review/">AI review</a>. The
+      <a href="https://github.com/secure-terminal/secure-terminal">code is open for you
+      to audit</a> regardless of how it was produced - and the security claims are
+      testable, not taken on trust.</p>
+    <p>Traditional terminal emulators carry a real, 20-year vulnerability class:
+      merely <code>cat</code>-ing a crafted log can silently hijack the window title,
+      and in the worst cases
+      <a href="https://dgl.cx/2023/09/ansi-terminal-security" rel="noopener">inject
+      keystrokes or run commands</a> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2003-0063" rel="noopener">CVE-2003-0063</a>
+      onward). secure-terminal closes that class <em>by construction</em> - its default
+      mode runs no escape parser at all - and the
+      <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>
+      feeds every known query and injection sequence and proves not one is acted on. See
+      the <a href="/comparison/">comparison</a>, measured with screenshots.</p>
   </div>
   </div>
 </div></section>
