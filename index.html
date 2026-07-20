@@ -319,16 +319,20 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       <a href="https://github.com/secure-terminal/secure-terminal">code is open for you
       to audit</a> regardless of how it was produced - and the security claims are
       testable, not taken on trust.</p>
-    <p>Traditional terminal emulators carry a real, 20-year vulnerability class:
-      merely <code>cat</code>-ing a crafted log can silently hijack the window title,
-      and in the worst cases
-      <a href="https://dgl.cx/2023/09/ansi-terminal-security" rel="noopener">inject
-      keystrokes or run commands</a> (<a href="https://nvd.nist.gov/vuln/detail/CVE-2003-0063" rel="noopener">CVE-2003-0063</a>
-      onward). secure-terminal closes that class <em>by construction</em> - its default
-      mode runs no escape parser at all - and the
+    <p>Traditional terminal emulators have a live vulnerability class: merely
+      <em>viewing</em> a file - <code>cat</code> a log, <code>tail</code> a server's
+      output - can make the terminal
+      <a href="/comparison/#behaviour">type an attacker's text into your shell and run
+      it</a>, no keypress needed. It is not a historical footnote: the same class keeps
+      recurring, most recently as
+      <a href="https://vin01.github.io/piptagole/escape-sequences/iterm2/rce/2024/06/16/iterm2-rce-window-title-tmux-integration.html" rel="noopener">remote
+      code execution in iTerm2 in 2024</a> (CVE-2024-38395) - one of the twenty-odd
+      real cases the
       <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>
-      feeds every known query and injection sequence and proves not one is acted on. See
-      the <a href="/comparison/">comparison</a>, measured with screenshots.</p>
+      collects, most from the last few years. secure-terminal closes the whole class
+      <em>by construction</em> - its default mode runs no escape parser and answers no
+      query sequence, so output can never become input. See the
+      <a href="/comparison/">comparison</a>, measured with screenshots.</p>
   </div>
   </div>
 </div></section>
