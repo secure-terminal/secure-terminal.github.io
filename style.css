@@ -97,6 +97,8 @@
   .shotgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:20px;margin:8px 0 0}
   @media(max-width:520px){ .shotgrid{grid-template-columns:1fr} }
   .shotsrc{font-size:.82rem;color:var(--muted);margin:14px 0 0;text-align:center}
+  .boxlegend{font-size:.9rem;color:var(--ink);margin:16px 0 0;line-height:1.7}
+  .boxlegend .sw{display:inline-block;width:.85em;height:.85em;border-radius:3px;vertical-align:-1px;border:1px solid rgba(0,0,0,.2)}
   .shot{margin:0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card);display:flex;flex-direction:column}
   .shot a{display:block;line-height:0}
   .shot img{display:block;width:100%;height:auto;background:#000}
