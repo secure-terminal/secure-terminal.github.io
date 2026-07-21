@@ -81,28 +81,31 @@
     single line on purpose. Paste <em>multiple</em> lines and several terminals warn you: we tested it, and
     xfce4-terminal pops a "Potentially Unsafe Paste" dialog while qterminal asks "Paste multiline text?".
     One line joined by <code>&amp;&amp;</code> trips neither - it slips in silently and runs the moment you
-    press Enter on a line you thought said only <code>ls -la</code>. The extra command was hidden on this page
-    with CSS, so your eye only ever saw <code>ls -la</code>; the clipboard also carries zero-width characters
-    that draw nothing, so bytes can ride along unseen (a normal terminal renders them as blank). Real classes,
-    not hypotheticals: this is <b>pastejacking</b>, and the same paste channel carries
+    press Enter on a line you thought said only <code>ls -la</code>. The page only ever shows <code>ls -la</code> -
+    the Copy button's JavaScript quietly writes the longer command to your clipboard instead; it also slips in
+    zero-width characters that draw nothing, so extra bytes ride along unseen (a normal terminal renders them as
+    blank). Real classes, not hypotheticals: this is <b>pastejacking</b>, and the same paste channel carries
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">bracketed-paste bypass</a>
     and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a> tricks.</p>
-  <p class="catdesc"><b>secure-terminal removes it.</b> Every paste is reduced to printable ASCII; any
-    hidden control or unicode is stripped and <span class="yes">warned on</span> before a byte reaches
-    your shell - so the command you see is the command you run. The corpus's
+  <p class="catdesc"><b>secure-terminal strips the smuggling.</b> A paste carrying any invisible, control or bidi
+    character is caught before it reaches your shell: secure-terminal names exactly what is hidden in it
+    (<span class="yes">"1 invisible character"</span>) and lets you drop it to plain ASCII or cancel - so nothing
+    rides along unseen and the text you are about to run is fully visible to read first. It cannot judge a visible
+    command for you - no terminal can, and a plain ASCII paste still submits; that is the opt-in
+    <a href="/plugins/">hook</a>'s job - but it guarantees there is nothing hidden inside the paste. The corpus's
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>
-    feeds every one of these payloads to secure-terminal and asserts it neutralises them all.</p>
+    feeds every one of these payloads to secure-terminal and asserts it neutralises each one.</p>
   <h3 id="still" style="margin-top:26px"><a class="h-anchor" href="#still">And what still bites your terminal today</a></h3>
   <p class="catdesc">The paste above is one vector. These deception and clipboard classes still work on a
     stock, up-to-date terminal today - each links a proof in the corpus:</p>
   <div class="cmp-wrap"><table class="cmp">
     <thead><tr><th>Still-applicable issue</th><th>What it does</th><th>Reach</th></tr></thead>
     <tbody>
-      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs.</td><td>Universal - any terminal that renders Unicode.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs.</td><td>Any bidi-aware renderer - code hosts, editors, and terminals that implement bidi.</td></tr>
       <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener"><b>Homoglyph</b> look-alikes</a></td><td>Non-ASCII characters identical in shape to ASCII (Cyrillic a, Greek o) make a fake command or URL read as legitimate.</td><td>Universal.</td></tr>
       <tr><td><a href="#paste-demo"><b>Invisible / zero-width</b> characters</a></td><td>Zero-width and other invisibles draw nothing, so a command or a paste can carry hidden bytes you never see (the demo above).</td><td>Universal.</td></tr>
       <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><b>Clipboard hijack</b> (OSC 52)</a></td><td>A viewed file or a program's output silently overwrites your clipboard, so your next paste inserts attacker text.</td><td>Terminal-dependent - on by default or one flag away in several (kitty, xterm, some VTE).</td></tr>
-      <tr><td><a href="#shots"><b>Title / tab hijack</b> (OSC 0/2)</a></td><td>Any output renames your window or tab to anything - a fake "production" label, a spoofed context.</td><td>Universal - shown live in the shots below.</td></tr>
+      <tr><td><a href="#shots"><b>Title / tab hijack</b> (OSC 0/2)</a></td><td>Any output renames your window or tab to anything - a fake "production" label, a spoofed context.</td><td>Most terminals - shown live below (konsole and kitty are partial exceptions).</td></tr>
     </tbody>
   </table></div>
   <p class="catdesc">secure-terminal closes all five by construction: non-ASCII becomes an inert,
@@ -123,7 +126,10 @@
       out.textContent = PAYLOAD.split(Z).join('<U+200B>');
       out.hidden = false;
     }
-    reveal.addEventListener('click', showPayload);
+    reveal.addEventListener('click', function () {
+      showPayload();
+      status.textContent = 'Revealed below - this is exactly what Copy puts on your clipboard.';
+    });
     copy.addEventListener('click', function () {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(PAYLOAD).then(
