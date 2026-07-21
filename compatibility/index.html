@@ -171,7 +171,7 @@
   <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
     so they need the opt-in TUI mode. There they render through the confined screen model;
     every one below was run and its interface captured. How box-drawing and other non-ASCII
-    glyphs appear depends on the unicode display mode: the default <b>Strip mode</b> shows each
+    glyphs appear depends on the unicode display mode: the default <b>Box mode</b> shows each
     as a red box (which you copy or save as an ASCII <code>_</code>), while <b>Show mode</b> or
     <b>Detail mode</b> renders the real glyphs (line-drawing borders and the like) - and the
     invisible, bidi and homoglyph classes stay neutralised in every mode. Either way, layout and
@@ -334,7 +334,7 @@
     is no parser to attack. In TUI mode the confined screen model interprets cursor and colour
     escapes, but every resulting cell is still ASCII/unicode-filtered. For the neutralised
     bytes below, <em>how</em> they are shown follows the unicode display mode: a red box in
-    <b>Strip mode</b> (the default) that you copy or save as an ASCII <code>_</code>, or a
+    <b>Box mode</b> (the default) that you copy or save as an ASCII <code>_</code>, or a
     <code>&lt;U+XXXX&gt;</code> badge in <b>Reveal mode</b>. Whatever the display, everything you
     copy or save is pure ASCII.</p>
   <div class="cmp-wrap">
@@ -378,7 +378,7 @@
       <tr><td>Paste gate (Reveal dialog, delayed Allow)</td><td><span class="yes">Yes</span></td><td>No - a raw stdin stream cannot tell typing from a paste</td></tr>
       <tr><td>TUI mode (run full-screen programs)</td><td><span class="yes">Yes</span> (opt-in, per tab)</td><td>No - CLI mode only</td></tr>
       <tr><td>Colour</td><td><span class="yes">Yes</span> - contrast-guarded, on by default</td><td>Stripped (shows plain text)</td></tr>
-      <tr><td>Unicode display modes (Strip / Show / Reveal / Detail)</td><td><span class="yes">Yes</span> (per tab)</td><td><span class="yes">Yes</span> (<code>--mode</code>)</td></tr>
+      <tr><td>Unicode display modes (Box / Show / Reveal / Detail)</td><td><span class="yes">Yes</span> (per tab)</td><td><span class="yes">Yes</span> (<code>--mode</code>)</td></tr>
       <tr><td>Tabs, each its own shell + pty</td><td><span class="yes">Yes</span></td><td>No - one command or shell</td></tr>
       <tr><td>Themes, zoom, session restore</td><td><span class="yes">Yes</span></td><td>No - inherits the outer terminal</td></tr>
       <tr><td>OSC feature toggles (title, notifications, clipboard)</td><td><span class="yes">Yes</span></td><td>No - all neutralised</td></tr>
