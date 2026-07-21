@@ -177,7 +177,18 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
   /* Contained targets ring themselves; a full-bleed section rings its inner
      .wrap instead, so the vertical ring edges stay on-screen (a ring on the
      edge-to-edge section would sit at the viewport edges). */
-  .issue:target, .shot:target, figure:target, article:target, .level:target,
-  section:target > .wrap{
+  .issue:target, .shot:target, figure:target, article:target, .level:target{
     box-shadow:0 0 0 2px #e5484d; border-radius:8px;
+  }
+  /* A bare section column has no padding of its own, so a box-shadow hugging its
+     border box rings the text too tightly. Use an offset outline instead: it
+     keeps an even gap around the content and adds no layout shift. The generous
+     offset only applies once the column is narrower than the viewport (there is
+     room beside it); on a full-width narrow viewport it stays tight so the ring
+     does not run off-screen. */
+  section:target > .wrap{
+    outline:2px solid #e5484d; outline-offset:2px; border-radius:10px;
+  }
+  @media(min-width:1100px){
+    section:target > .wrap{ outline-offset:14px; }
   }
