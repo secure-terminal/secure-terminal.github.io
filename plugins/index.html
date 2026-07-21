@@ -121,6 +121,38 @@ command_hook_transcript=none         <span class="c"># 'ask' lets the handler re
     handler, where you can read and change it - not baked into the terminal.</p>
 </div></section>
 
+<section class="cat" id="why-terminal"><div class="wrap">
+  <h2 class="catname">Why in the terminal, not the shell?</h2>
+  <p class="catdesc">A fair question. <a href="https://zsh.sourceforge.io/Doc/Release/Functions.html#Hook-Functions" rel="noopener">zsh's <code>preexec</code></a>
+    or <a href="https://github.com/rcaloras/bash-preexec" rel="noopener">bash-preexec</a> can call a
+    handler before each command too, and for most people that is simpler and sees <em>more</em>: it
+    runs inside your real shell, after alias and variable expansion. If that fits you, use it -
+    secure-terminal does not need to own this, and most of what the hook does, a shell
+    <code>preexec</code> does as well.</p>
+  <p class="catdesc">The terminal hook earns its place in exactly two cases a shell hook cannot cover:</p>
+  <div class="fg">
+    <div class="issue">
+      <h3>A guard the command can't switch off</h3>
+      <p>A shell <code>preexec</code> is shell state: a command can <code>unset -f</code> it,
+        redefine it, <code>exec</code> a different shell, or run in a subshell that never loaded it.
+        The terminal hook runs <em>outside</em> the shell, so the command it is about to judge cannot
+        disable the judge first.</p>
+    </div>
+    <div class="issue">
+      <h3>Programs with no hook of their own</h3>
+      <p>In CLI mode the terminal does the line editing, so it can gate input to any line-oriented
+        program - <code>dash</code>, a Python or <code>psql</code> REPL - none of which have a
+        <code>preexec</code> to hang a guard on.</p>
+    </div>
+  </div>
+  <p class="catdesc" style="margin-top:14px">Both come with costs, stated plainly: the hook is
+    <b>fail-open by default</b> (a convenience speed bump, not a hard boundary - set
+    <code>command_hook_on_error=block</code> to fail closed), it runs in <b>CLI mode only</b>, and it
+    sees the line you typed, not what the shell expands it to. If none of those two edges matter to
+    you, a shell <code>preexec</code> is the lighter choice - and either way, the terminal's real,
+    by-construction guarantees are <a href="/comparison/">safe display and safe paste</a>, not this.</p>
+</div></section>
+
 <section class="cat" id="limits"><div class="wrap">
   <h2 class="catname">Limits</h2>
   <div class="issue">
