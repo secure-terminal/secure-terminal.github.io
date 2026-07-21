@@ -172,9 +172,11 @@
     so they need the opt-in TUI mode. There they render through the confined screen model;
     every one below was run and its interface captured. How box-drawing and other non-ASCII
     glyphs appear depends on the unicode display mode: the default <b>Box mode</b> shows each
-    as a red box (which you copy or save as an ASCII <code>_</code>), while <b>Show mode</b> or
-    <b>Detail mode</b> renders the real glyphs (line-drawing borders and the like) - and the
-    invisible, bidi and homoglyph classes stay neutralised in every mode. Either way, layout and
+    as a box coloured by risk class (which you copy or save as an ASCII <code>_</code>), while
+    <b>Show mode</b> or <b>Detail mode</b> renders the real glyphs (line-drawing borders and the
+    like), each tinted by risk class so a homoglyph confusable with ASCII stands out - while the
+    invisible, bidi and control classes, which have no visible glyph, stay neutralised in every
+    mode. Either way, layout and
     text are faithful, and the terminal still answers no query and cannot set the title or touch
     the clipboard.</p>
   <div class="cmp-wrap">
@@ -333,8 +335,8 @@
     edit the current line, drops the rest, and removes every escape sequence outright - there
     is no parser to attack. In TUI mode the confined screen model interprets cursor and colour
     escapes, but every resulting cell is still ASCII/unicode-filtered. For the neutralised
-    bytes below, <em>how</em> they are shown follows the unicode display mode: a red box in
-    <b>Box mode</b> (the default) that you copy or save as an ASCII <code>_</code>, or a
+    bytes below, <em>how</em> they are shown follows the unicode display mode: a box coloured by
+    risk class in <b>Box mode</b> (the default) that you copy or save as an ASCII <code>_</code>, or a
     <code>&lt;U+XXXX&gt;</code> badge in <b>Reveal mode</b>. Whatever the display, everything you
     copy or save is pure ASCII.</p>
   <div class="cmp-wrap">
