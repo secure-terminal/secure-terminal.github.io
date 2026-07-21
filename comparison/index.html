@@ -69,30 +69,32 @@
       <span class="pd-status" id="pd-status" aria-live="polite"></span>
     </div>
     <pre class="pd-out" id="pd-out" hidden></pre>
-    <noscript><p class="pd-status">Turn JavaScript on for the live copy. The point holds either way:
-      page text can carry invisible characters and a hidden second command that your clipboard keeps but
-      your eye never sees.</p></noscript>
+    <noscript>
+      <p class="pd-status">JavaScript is off, so the live Copy and Reveal buttons are inactive - but here is
+        exactly what the innocent-looking "<code>ls -la</code>" button would place on your clipboard
+        (<code>&lt;U+200B&gt;</code> marks a zero-width character that normally draws nothing):</p>
+      <pre class="pd-out">ls -la &amp;&amp; echo "&lt;U+200B&gt;you did not expect this unexpected code execution&lt;U+200B&gt;"</pre>
+    </noscript>
   </div>
-  <p class="catdesc">You saw <code>ls -la</code>. Your clipboard held a hidden second line -
-    <code>echo "you did not expect this unexpected code execution"</code> - joined by an invisible
-    newline and a zero-width character with no glyph. Paste that into a normal terminal: unless
-    bracketed paste happens to catch it, the hidden line runs the instant you paste; and even when it
-    does not auto-run, the invisible characters mean you may never spot the extra line before you press
-    Enter. It was hidden on this page with CSS and hidden in the terminal because control and zero-width
-    characters draw nothing. Real classes, not hypotheticals:
+  <p class="catdesc">You saw <code>ls -la</code>. Your clipboard held a whole second command chained on with
+    <code>&amp;&amp;</code> - <code>echo "you did not expect this unexpected code execution"</code> - kept to a
+    single line on purpose. Paste <em>multiple</em> lines and several terminals warn you: we tested it, and
+    xfce4-terminal pops a "Potentially Unsafe Paste" dialog while qterminal asks "Paste multiline text?".
+    One line joined by <code>&amp;&amp;</code> trips neither - it slips in silently and runs the moment you
+    press Enter on a line you thought said only <code>ls -la</code>. The extra command was hidden on this page
+    with CSS, so your eye only ever saw <code>ls -la</code>; the clipboard also carries zero-width characters
+    that draw nothing, so bytes can ride along unseen (a normal terminal renders them as blank). Real classes,
+    not hypotheticals: this is <b>pastejacking</b>, and the same paste channel carries
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">bracketed-paste bypass</a>
-    and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a>.</p>
+    and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a> tricks.</p>
   <p class="catdesc"><b>secure-terminal removes it.</b> Every paste is reduced to printable ASCII; any
     hidden control or unicode is stripped and <span class="yes">warned on</span> before a byte reaches
     your shell - so the command you see is the command you run. The corpus's
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>
     feeds every one of these payloads to secure-terminal and asserts it neutralises them all.</p>
   <h3 id="still" style="margin-top:26px"><a class="h-anchor" href="#still">And what still bites your terminal today</a></h3>
-  <p class="catdesc">The classic "<code>cat</code> a file, run a command" bug is largely closed: modern
-    terminals (xterm, VTE, kitty, ...) sanitise the reflected title, so that exact trick no longer fires
-    by default - we <a href="https://github.com/secure-terminal/terminal-poc-corpus">tested it</a> and it
-    did not. But the <em>deception</em> and <em>clipboard</em> classes were never mitigated. These still
-    work on a stock, up-to-date terminal:</p>
+  <p class="catdesc">The paste above is one vector. These deception and clipboard classes still work on a
+    stock, up-to-date terminal today - each links a proof in the corpus:</p>
   <div class="cmp-wrap"><table class="cmp">
     <thead><tr><th>Still-applicable issue</th><th>What it does</th><th>Reach</th></tr></thead>
     <tbody>
@@ -110,22 +112,27 @@
   <script>
   (function () {
     var Z = "\u200b";                          /* zero-width space: no glyph */
-    var PAYLOAD = 'ls -la' + Z + '\n'
-                + 'echo "you did not expect this unexpected code execution"' + Z;
+    var PAYLOAD = 'ls -la && echo "' + Z
+                + 'you did not expect this unexpected code execution' + Z + '"';
     var copy = document.getElementById('pd-copy'),
         reveal = document.getElementById('pd-reveal'),
         status = document.getElementById('pd-status'),
         out = document.getElementById('pd-out');
+    if (!copy || !reveal || !status || !out) { return; }   /* nothing to enhance */
+    function showPayload() {
+      out.textContent = PAYLOAD.split(Z).join('<U+200B>');
+      out.hidden = false;
+    }
+    reveal.addEventListener('click', showPayload);
     copy.addEventListener('click', function () {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(PAYLOAD).then(
-          function () { status.textContent = 'copied - now Reveal it, or paste it somewhere SAFE (it only echoes text)'; },
-          function () { status.textContent = 'clipboard blocked by the browser - use Reveal instead'; });
-      } else { status.textContent = 'clipboard unavailable - use Reveal instead'; }
-    });
-    reveal.addEventListener('click', function () {
-      out.textContent = PAYLOAD.split(Z).join('<U+200B>').split('\n').join('<LF>\n');
-      out.hidden = false;
+          function () { status.textContent = 'Copied. Now click Reveal, or paste it somewhere SAFE - it only echoes text.'; },
+          function () { status.textContent = 'Your browser blocked clipboard access. Here is exactly what it would have copied:'; showPayload(); });
+      } else {
+        status.textContent = 'This browser gives pages no clipboard access. Here is exactly what the button would have copied:';
+        showPayload();
+      }
     });
   })();
   </script>
