@@ -155,7 +155,8 @@
   <p class="catdesc">The <b>Trojan-Source</b> class (<a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a> /
     <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42694" rel="noopener">-42694</a>) in its most terminal-native
     form: a copy-paste install one-liner whose domain hides a look-alike character. The corpus ships it as a
-    plain file - clone it and <code>cat</code> it yourself:</p>
+    plain file - clone it and <code>cat</code> it yourself (the line is wrapped in <code>echo</code>, so it is
+    safe to run: it prints the command instead of fetching anything):</p>
   <div class="pre"><span class="c"># the 'a' in "example" is a Cyrillic homoglyph (U+0430), not Latin a:</span>
 git clone https://github.com/secure-terminal/terminal-poc-corpus
 cd terminal-poc-corpus/comparison
