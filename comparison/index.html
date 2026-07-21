@@ -62,11 +62,13 @@
 <section class="cat" id="paste-demo"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#paste-demo">The command you copy is not the command you run</a></h2>
   <p class="catdesc">The worst terminal attack needs no hostile file - only your habit of copying a
-    command from a web page. Here is a command a site might offer you. It reads <code>ls -la</code>.
-    Copy it, then reveal what actually landed on your clipboard.</p>
+    command from a web page. Here is a command a site might offer you. It reads <code>echo "test"</code>.
+    Copy it, then reveal what actually landed on your clipboard - here, or by pasting it into output-lies'
+    <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a>. It is perfectly safe to
+    run: every part is just <code>echo</code>.</p>
   <div class="pastedemo">
     <div class="cmdrow">
-      <code class="cmd" id="pd-cmd">ls -la</code>
+      <code class="cmd" id="pd-cmd">echo "test"</code>
       <button type="button" class="btn ghost pd-btn" id="pd-copy">Copy</button>
       <button type="button" class="btn ghost pd-btn" id="pd-reveal">Reveal what you copied</button>
       <span class="pd-status" id="pd-status" aria-live="polite"></span>
@@ -74,20 +76,21 @@
     <pre class="pd-out" id="pd-out" hidden></pre>
     <noscript>
       <p class="pd-status">JavaScript is off, so the live Copy and Reveal buttons are inactive - but here is
-        exactly what the innocent-looking "<code>ls -la</code>" button would place on your clipboard
+        exactly what the innocent-looking "<code>echo "test"</code>" button would place on your clipboard
         (<code>&lt;U+200B&gt;</code> marks a zero-width character that normally draws nothing):</p>
-      <pre class="pd-out">ls -la &amp;&amp; echo "&lt;U+200B&gt;you did not expect this unexpected code execution&lt;U+200B&gt;"</pre>
+      <pre class="pd-out">echo "test"&lt;U+200B&gt;&amp;&amp; echo "you did not expect this additional echo: unexpected code execution"&lt;U+200B&gt;</pre>
     </noscript>
   </div>
-  <p class="catdesc">You saw <code>ls -la</code>. Your clipboard held a whole second command chained on with
-    <code>&amp;&amp;</code> - <code>echo "you did not expect this unexpected code execution"</code> - kept to a
-    single line on purpose. Paste <em>multiple</em> lines and several terminals warn you: we tested it, and
+  <p class="catdesc">You saw <code>echo "test"</code>. Your clipboard held a whole second command chained on with
+    <code>&amp;&amp;</code> - <code>echo "you did not expect this additional echo: unexpected code execution"</code> -
+    kept to a single line on purpose. Paste <em>multiple</em> lines and several terminals warn you: we tested it, and
     xfce4-terminal pops a "Potentially Unsafe Paste" dialog while qterminal asks "Paste multiline text?".
-    One line joined by <code>&amp;&amp;</code> trips neither - it slips in silently and runs the moment you
-    press Enter on a line you thought said only <code>ls -la</code>. The page only ever shows <code>ls -la</code> -
-    the Copy button's JavaScript quietly writes the longer command to your clipboard instead; it also slips in
-    zero-width characters that draw nothing, so extra bytes ride along unseen (a normal terminal renders them as
-    blank). Real classes, not hypotheticals: this is <b>pastejacking</b>, and the same paste channel carries
+    One line joined by <code>&amp;&amp;</code> trips neither - it slips in silently and runs the moment you press
+    Enter on a line you thought said only <code>echo "test"</code> (go ahead and run it - both halves are just
+    <code>echo</code>). The page only ever shows <code>echo "test"</code>; the Copy button's JavaScript quietly
+    writes the longer command to your clipboard instead, and slips a zero-width character in right at the
+    <code>&amp;&amp;</code> seam - it draws nothing, so a normal terminal shows no sign it is there. Real classes,
+    not hypotheticals: this is <b>pastejacking</b>, and the same paste channel carries
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">bracketed-paste bypass</a>
     and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a> tricks.</p>
   <p class="catdesc"><b>secure-terminal strips the smuggling.</b> A paste carrying any invisible, control or bidi
@@ -118,8 +121,8 @@
   <script>
   (function () {
     var Z = "\u200b";                          /* zero-width space: no glyph */
-    var PAYLOAD = 'ls -la && echo "' + Z
-                + 'you did not expect this unexpected code execution' + Z + '"';
+    var PAYLOAD = 'echo "test"' + Z
+                + '&& echo "you did not expect this additional echo: unexpected code execution"' + Z;
     var copy = document.getElementById('pd-copy'),
         reveal = document.getElementById('pd-reveal'),
         status = document.getElementById('pd-status'),
@@ -136,7 +139,7 @@
     copy.addEventListener('click', function () {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(PAYLOAD).then(
-          function () { status.textContent = 'Copied. Now click Reveal, or paste it somewhere SAFE - it only echoes text.'; },
+          function () { status.textContent = 'Copied. Now click Reveal, or paste it into any terminal - both halves are just echo, so it is safe to run.'; },
           function () { status.textContent = 'Your browser blocked clipboard access. Here is exactly what it would have copied:'; showPayload(); });
       } else {
         status.textContent = 'This browser gives pages no clipboard access. Here is exactly what the button would have copied:';

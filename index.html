@@ -139,8 +139,8 @@
         legitimate unicode so you can read a log, while the invisible, bidi and homoglyph classes are still
         neutralized).</p>
       <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first
-        (there is no escape parser at all), so the escape-sequence RCE class (the "<code>cat</code> a crafted
-        file and it opens a calculator" bug) cannot happen in <b>any</b> mode, Show included. A bare escape or
+        (there is no escape parser at all), so nothing a program prints - a title change, a clipboard write,
+        a cursor move - is ever interpreted, in <b>any</b> mode, Show included. A bare escape or
         control byte is still neutralized to <code>_</code> in Show; the mode only changes how the remaining,
         already-safe characters are drawn, never whether escapes are interpreted.</p>
     </article>
