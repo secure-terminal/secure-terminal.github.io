@@ -153,7 +153,7 @@
     payloads and the capture harness are published so you can
     <a href="#reproduce">reproduce it</a>.</p>
   <div class="issue">
-    <p><b>Case A - <code>cat /dev/random</code>:</b> 1,200 raw random bytes
+    <p><b>Case A - a raw random stream:</b> 1,200 raw random bytes
       (<code>head -c 1200 /dev/urandom</code>), with no crafted escapes. Whatever happens is
       genuinely what random data does - no chosen title string is possible.</p>
     <p><b>Case B - a crafted hostile log:</b> an <code>OSC 0</code> title-set to an
@@ -222,7 +222,7 @@
   <h2 class="catname"><a class="h-anchor" href="#results">What happened, in a table</a></h2>
   <div class="cmp-wrap">
   <table class="cmp">
-    <thead><tr><th>Terminal</th><th>Case A (<code>/dev/random</code>)</th><th>Case B (crafted log)</th><th>Cleared by <code>reset</code>?</th></tr></thead>
+    <thead><tr><th>Terminal</th><th>Case A (<code>/dev/urandom</code>)</th><th>Case B (crafted log)</th><th>Cleared by <code>reset</code>?</th></tr></thead>
     <tbody>
       <tr><td><a href="https://packages.debian.org/xterm" rel="noopener">xterm</a>, <a href="https://packages.debian.org/rxvt-unicode" rel="noopener">urxvt</a>, <a href="https://packages.debian.org/stterm" rel="noopener">st</a></td><td>Screen garbled, stuck reverse-video.</td><td>Stuck red + line-drawing; <b>title hijacked</b> to <code>root@prod-db:~#</code>.</td><td>Screen yes; the title not always.</td></tr>
       <tr><td><a href="https://packages.debian.org/xfce4-terminal" rel="noopener">xfce4-terminal</a>, <a href="https://packages.debian.org/mate-terminal" rel="noopener">mate-terminal</a> (VTE)</td><td>Garbled.</td><td>Stuck colour + charset; <b>title hijacked</b>.</td><td>Screen yes; title no.</td></tr>
