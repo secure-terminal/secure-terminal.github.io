@@ -56,6 +56,81 @@
     and the only colour is its own bounded, contrast-guarded palette - never the attacker's.</p>
 </div></section>
 
+<section class="cat" id="paste-demo"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#paste-demo">The command you copy is not the command you run</a></h2>
+  <p class="catdesc">The worst terminal attack needs no hostile file - only your habit of copying a
+    command from a web page. Here is a command a site might offer you. It reads <code>ls -la</code>.
+    Copy it, then reveal what actually landed on your clipboard.</p>
+  <div class="pastedemo">
+    <div class="cmdrow">
+      <code class="cmd" id="pd-cmd">ls -la</code>
+      <button type="button" class="btn ghost pd-btn" id="pd-copy">Copy</button>
+      <button type="button" class="btn ghost pd-btn" id="pd-reveal">Reveal what you copied</button>
+      <span class="pd-status" id="pd-status" aria-live="polite"></span>
+    </div>
+    <pre class="pd-out" id="pd-out" hidden></pre>
+    <noscript><p class="pd-status">Turn JavaScript on for the live copy. The point holds either way:
+      page text can carry invisible characters and a hidden second command that your clipboard keeps but
+      your eye never sees.</p></noscript>
+  </div>
+  <p class="catdesc">You saw <code>ls -la</code>. Your clipboard held a hidden second line -
+    <code>echo "you did not expect this unexpected code execution"</code> - joined by an invisible
+    newline and a zero-width character with no glyph. Paste that into a normal terminal: unless
+    bracketed paste happens to catch it, the hidden line runs the instant you paste; and even when it
+    does not auto-run, the invisible characters mean you may never spot the extra line before you press
+    Enter. It was hidden on this page with CSS and hidden in the terminal because control and zero-width
+    characters draw nothing. Real classes, not hypotheticals:
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">bracketed-paste bypass</a>
+    and <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">Trojan Source</a>.</p>
+  <p class="catdesc"><b>secure-terminal removes it.</b> Every paste is reduced to printable ASCII; any
+    hidden control or unicode is stripped and <span class="yes">warned on</span> before a byte reaches
+    your shell - so the command you see is the command you run. The corpus's
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>
+    feeds every one of these payloads to secure-terminal and asserts it neutralises them all.</p>
+  <h3 id="still" style="margin-top:26px"><a class="h-anchor" href="#still">And what still bites your terminal today</a></h3>
+  <p class="catdesc">The classic "<code>cat</code> a file, run a command" bug is largely closed: modern
+    terminals (xterm, VTE, kitty, ...) sanitise the reflected title, so that exact trick no longer fires
+    by default - we <a href="https://github.com/secure-terminal/terminal-poc-corpus">tested it</a> and it
+    did not. But the <em>deception</em> and <em>clipboard</em> classes were never mitigated. These still
+    work on a stock, up-to-date terminal:</p>
+  <div class="cmp-wrap"><table class="cmp">
+    <thead><tr><th>Still-applicable issue</th><th>What it does</th><th>Reach</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs.</td><td>Universal - any terminal that renders Unicode.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener"><b>Homoglyph</b> look-alikes</a></td><td>Non-ASCII characters identical in shape to ASCII (Cyrillic a, Greek o) make a fake command or URL read as legitimate.</td><td>Universal.</td></tr>
+      <tr><td><a href="#paste-demo"><b>Invisible / zero-width</b> characters</a></td><td>Zero-width and other invisibles draw nothing, so a command or a paste can carry hidden bytes you never see (the demo above).</td><td>Universal.</td></tr>
+      <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><b>Clipboard hijack</b> (OSC 52)</a></td><td>A viewed file or a program's output silently overwrites your clipboard, so your next paste inserts attacker text.</td><td>Terminal-dependent - on by default or one flag away in several (kitty, xterm, some VTE).</td></tr>
+      <tr><td><a href="#shots"><b>Title / tab hijack</b> (OSC 0/2)</a></td><td>Any output renames your window or tab to anything - a fake "production" label, a spoofed context.</td><td>Universal - shown live in the shots below.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="catdesc">secure-terminal closes all five by construction: non-ASCII becomes an inert,
+    risk-coloured box (or a revealed <code>&lt;U+XXXX&gt;</code>), the clipboard is never written from
+    output, and the title is never touched - proven against each payload by the corpus's
+    <a href="https://github.com/secure-terminal/terminal-poc-corpus/blob/master/harness/adversarial.py" rel="noopener">adversarial harness</a>.</p>
+  <script>
+  (function () {
+    var Z = "\u200b";                          /* zero-width space: no glyph */
+    var PAYLOAD = 'ls -la' + Z + '\n'
+                + 'echo "you did not expect this unexpected code execution"' + Z;
+    var copy = document.getElementById('pd-copy'),
+        reveal = document.getElementById('pd-reveal'),
+        status = document.getElementById('pd-status'),
+        out = document.getElementById('pd-out');
+    copy.addEventListener('click', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(PAYLOAD).then(
+          function () { status.textContent = 'copied - now Reveal it, or paste it somewhere SAFE (it only echoes text)'; },
+          function () { status.textContent = 'clipboard blocked by the browser - use Reveal instead'; });
+      } else { status.textContent = 'clipboard unavailable - use Reveal instead'; }
+    });
+    reveal.addEventListener('click', function () {
+      out.textContent = PAYLOAD.split(Z).join('<U+200B>').split('\n').join('<LF>\n');
+      out.hidden = false;
+    });
+  })();
+  </script>
+</div></section>
+
 <section class="cat" id="method"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#method">What we fed them</a></h2>
   <p class="catdesc">One payload, two cases, run in nine terminal emulators and in
