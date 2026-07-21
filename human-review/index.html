@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!--
   secure-terminal: human review status + the case for using it. AI-Assisted.
   Source: https://github.com/secure-terminal/secure-terminal.github.io
@@ -269,8 +270,8 @@
       if (m) m.addEventListener('click', function (e) {
         e.preventDefault();
         var i = prompt('Your Mastodon instance (e.g. mastodon.social):');
-        if (i) { i = i.replace('https://', '').replace('http://', '').replace(/\/+$/, '');
-          window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); }
+        if (i) { i = i.replace(/^https?:\/\//i, '').replace(/\/.*$/, '').trim();
+          if (/^[a-z0-9.-]+$/i.test(i)) { window.open('https://' + i + '/share?text=' + t + '%20' + u, '_blank', 'noopener'); } else { alert('That does not look like a Mastodon instance host name.'); } }
       });
       var msg = document.querySelector('.fshare .sh-msg');
       function flash(x) { if (msg) { msg.textContent = x; setTimeout(function () { msg.textContent = ''; }, 2000); } }
