@@ -135,6 +135,11 @@
         configurable: <b>always</b>, <b>only when a paste carries unicode or control</b> (the default), or
         <b>never</b> (still silently stripped to ASCII). A plain-ASCII paste is not interrupted in the default
         mode.</p>
+      <p><b>Copy is reviewed the same way, in the other direction.</b> The same bar guards text <em>leaving</em> via
+        copy: after <code>cat evil-log</code>, selecting and copying in Show mode (where the real glyphs are kept)
+        would otherwise put a look-alike straight on the system clipboard - so you choose to copy it stripped to
+        ASCII, with printable unicode kept, or not at all. It is configured <b>separately</b> from the paste
+        warning, because copy and paste are opposite trust directions.</p>
     </article>
     <article class="issue">
       <h3>Four unicode display modes</h3>
