@@ -58,8 +58,9 @@
   <h1>Safe to paste. Safe to <span class="u">read</span>.</h1>
   <p class="sub">Pasted commands are sanitized and program output is neutralized, so neither what you copy in
     nor what a program prints out can hide invisible characters, bidi overrides or escape sequences. secure-terminal
-    accepts and shows plain printable ASCII by default and nothing else, so a lie has nothing to hide in whether it
-    arrives by paste or by <code>cat</code>.</p>
+    accepts and shows plain printable ASCII by default and nothing else, so a disguised byte - an invisible
+    character, a bidi override, a look-alike letter - has nowhere to hide, whether it arrives by paste or by
+    <code>cat</code>.</p>
   <div class="cta">
     <a class="btn primary" href="#install">Get it</a>
     <a class="btn ghost" href="#features">What makes it different</a>
@@ -69,7 +70,7 @@
 
 <div class="whatis"><div class="wrap">
   <p><b>What is this?</b> A terminal whose display shows only printable ASCII by default (everything else is
-    neutralized, the way <code>stcat</code> does for logs) and which interprets no escape sequences from program
+    neutralized to a visible, inert placeholder) and which interprets no escape sequences from program
     output. Paste a command you copied from the web, or read text a program printed, and trust that what you see
     is what is there. When you need more, an <b>opt-in TUI mode</b> runs full-screen programs, ssh, vim, htop,
     through a restricted screen model that still filters every character.</p>
@@ -81,15 +82,17 @@
 
   <div class="fg">
   <article class="issue">
-    <h3>Output is ASCII by default</h3>
+    <h3 id="ascii-output"><a class="h-anchor" href="#ascii-output">Output is ASCII by default</a></h3>
     <p>Program output is rendered as printable ASCII plus newline and tab. Bidi overrides, zero-width characters,
       homoglyphs, ANSI escapes and control bytes never reach the screen as anything but their neutralized form.
-      A hostile filename in <code>ls</code>, a forged <code>[ OK ]</code> in a log, a Trojan-Source comment:
+      A <a href="https://output-lies.github.io/terminal/" rel="noopener">hostile filename in <code>ls</code></a>, a
+      <a href="https://output-lies.github.io/terminal/#log-injection" rel="noopener">forged <code>[ OK ]</code> in a log</a>, a
+      <a href="https://output-lies.github.io/analyze/" rel="noopener">Trojan-Source comment</a>:
       none of them can redraw or reorder what you read.</p>
   </article>
 
   <article class="issue">
-    <h3>No escape parser in the default mode</h3>
+    <h3 id="no-escape-parser"><a class="h-anchor" href="#no-escape-parser">No escape parser in the default mode</a></h3>
     <p>By default there is no ANSI parser to attack. The terminal honors no cursor moves, alternate screens or OSC
       hyperlinks from the child process. Parsing attacker-influenced escapes is the entire vulnerability class; a
       terminal that will not parse them cannot fall for them. Out of the box it has no terminal side-effects at
@@ -99,10 +102,10 @@
   </article>
 
   <article class="issue">
-    <h3>Line-oriented input, with a real escape hatch</h3>
+    <h3 id="line-input"><a class="h-anchor" href="#line-input">Line-oriented input, and you can never get stuck</a></h3>
     <p>You type printable ASCII and the usual control keys (<code>Ctrl+C</code>, <code>Ctrl+A</code>,
-      <code>Ctrl+R</code> and the rest). They send the control byte exactly as a real terminal does, so a cooked
-      shell interrupts on <code>Ctrl+C</code> while a raw-mode program - an editor, or a CLI that shows
+      <code>Ctrl+R</code> and the rest). They send the control byte exactly as a real terminal does, so a shell in
+      its normal line mode interrupts on <code>Ctrl+C</code> while a raw-mode program - an editor, or a CLI that shows
       "press Ctrl+C again to exit" - reads the byte itself. A signal key is echoed in caret notation
       (<code>^C</code>, <code>^\</code>) so you always see the interrupt you sent, even when the shell would
       print nothing. A <b>Terminate</b> button (SIGTERM then SIGKILL) is the guaranteed escape hatch for a
@@ -110,9 +113,11 @@
   </article>
 
   <article class="issue">
-    <h3>Memory-safe</h3>
+    <h3 id="memory-safe"><a class="h-anchor" href="#memory-safe">Memory-safe</a></h3>
     <p>The code that reads hostile bytes is written in a memory-safe language (Python). The traditional terminal
-      emulators, written in C, have a long history of memory-corruption bugs in exactly this parsing path; here
+      emulators, written in C, have a
+      <a href="https://output-lies.github.io/terminal/#classes" rel="noopener">long history of memory-corruption bugs</a>
+      in exactly this parsing path (escape and image-decoder overruns); here
       that entire class, buffer overflows and use-after-free driven by attacker-controlled output, cannot happen
       by construction.</p>
   </article>
@@ -124,7 +129,7 @@
   <p class="catdesc">Safety you can live with day to day, not a museum piece.</p>
   <div class="fg">
     <article class="issue">
-      <h3>Paste warning</h3>
+      <h3 id="paste-warning"><a class="h-anchor" href="#paste-warning">Paste warning</a></h3>
       <p>Paste something with unicode or control characters and a review bar opens <b>inside the window</b>,
         holding the paste before a byte reaches the shell. Its Detail panes show it <b>four
         ways</b> - the original as it looks, each hidden character named inline as a <code>&lt;U+XXXX&gt;</code>
@@ -142,7 +147,7 @@
         warning, because copy and paste are opposite trust directions.</p>
     </article>
     <article class="issue">
-      <h3>Four unicode display modes</h3>
+      <h3 id="display-modes"><a class="h-anchor" href="#display-modes">Four unicode display modes</a></h3>
       <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class;
         a saved transcript maps it back to a plain <code>_</code>), <b>Reveal</b> (every
         non-ASCII character as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there),
@@ -158,18 +163,18 @@
         remaining, already-safe characters are drawn, never whether escapes are interpreted.</p>
     </article>
     <article class="issue">
-      <h3>Transcripts safe to open anywhere</h3>
+      <h3 id="transcripts"><a class="h-anchor" href="#transcripts">Transcripts safe to open anywhere</a></h3>
       <p>Save a tab's scrollback to a file. Because the buffer is already sanitized plain ASCII, the saved file is
         safe to open in any editor, unlike a normal terminal's raw log, which can carry the very escapes this
         terminal refuses.</p>
     </article>
     <article class="issue">
-      <h3>Guaranteed exit</h3>
+      <h3 id="guaranteed-exit"><a class="h-anchor" href="#guaranteed-exit">Guaranteed exit</a></h3>
       <p>Signal keys reach the foreground program even in raw mode, and the Terminate action force-kills a program
         that ignores everything. You are never stuck inside something you cannot get out of.</p>
     </article>
     <article class="issue">
-      <h3>Granular escape-feature controls</h3>
+      <h3 id="escape-controls"><a class="h-anchor" href="#escape-controls">Granular escape-feature controls</a></h3>
       <p>The OSC escapes that reach out of the grid - window title, desktop notification, clickable hyperlink,
         clipboard write, clipboard read, palette change, working-directory report - are each a <b>separate,
         off-by-default toggle</b> with a one-line plain-language note on what it exposes. (The iTerm2 OSC 1337
@@ -184,14 +189,11 @@
     <figcaption class="shotname"><b>The paste review</b> - a <code>curl | bash</code> line hiding two Cyrillic
       homoglyphs (in <code>example</code> and <code>bash</code>), a zero-width space and a right-to-left override.</figcaption>
     <a href="/shots/paste-warning.png" target="_blank" rel="noopener"><img src="/shots/paste-warning.png" width="940" height="258" loading="lazy" alt="secure-terminal's in-window paste-review bar showing the hostile paste four ways: the Original pane, where the bidi override reorders the trailing comment; the Detail pane, naming each hidden character inline in its risk-class colour as U+0430 CYRILLIC SMALL LETTER A, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE; the Paste-stripped pane, where the homoglyph domain collapses to exmple.com and 'bash' to 'bsh'; and the Paste-with-unicode pane, which keeps the look-alike example.com (its Cyrillic a tinted) but drops the invisibles. Both send buttons are countdown-disabled; only Reject is available immediately."></a>
-    <figcaption>The review is a bar <b>inside the terminal window</b>, and its preview panes are
-      read-only views rendered by the terminal's own pipeline - so each hidden character wears its
-      <b>risk-class colour</b> and stays click-to-inspect, exactly as in the terminal. The Detail pane names every
-      one inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>). Stripped drops the look-alikes, so the domain
-      silently changes to <code>exmple.com</code>; keeping unicode preserves the deceptive <code>example.com</code>
-      but removes the bidi and zero-width. While the paste is held, terminal input is suspended and both send
-      buttons are countdown-gated - Enter or Esc rejects - so nothing can reach the shell until you choose. Rendered
-      headless from the real bar.</figcaption>
+    <figcaption>The four panes read left to right: the <b>Original</b> as it arrives, <b>Detail</b> naming every
+      hidden character inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>), and the two send previews -
+      <b>Stripped</b> drops the look-alikes so the domain changes to <code>exmple.com</code>, while
+      <b>keeping unicode</b> preserves the deceptive <code>example.com</code> but still removes the bidi and
+      zero-width. Rendered headless from the real bar.</figcaption>
   </figure>
   <figure class="shot" style="max-width:940px;margin:28px auto 0">
     <figcaption class="shotname"><b>The same bar, for copy going the other way</b> - selecting and copying that
@@ -208,7 +210,7 @@
   <h2 class="catname"><a class="h-anchor" href="#tui">TUI mode: run full-screen programs</a></h2>
   <p class="catdesc">When you need to run ssh, an editor like vim, or htop, opt in with your eyes open.</p>
   <article class="issue risk">
-    <h3><span class="flag">Opt-in, clearly flagged</span> / ssh, vim, htop, tmux</h3>
+    <h3 id="tui-mode"><a class="h-anchor" href="#tui-mode"><span class="flag">Opt-in, clearly flagged</span> / ssh, vim, htop, tmux</a></h3>
     <p>The strict default cannot run curses apps. TUI mode (per tab, off by default, marked with a yellow risk
       indicator) interprets escapes inside an isolated in-memory screen model (<code>pyte</code>) that has no OS
       reach: by default it <b>cannot set the window title or touch the clipboard</b>. Each such OSC side-effect is
@@ -228,13 +230,13 @@ with every cell still filtered and the title/clipboard still off-limits.</div>
   <h2 class="catname"><a class="h-anchor" href="#comforts">Everyday comforts</a></h2>
   <p class="catdesc">The conveniences a terminal is expected to have, without loosening the model.</p>
   <div class="fg">
-    <article class="issue"><h3>Tabs</h3><p>Named, colour-coded, each its own shell. Per-tab theme, zoom,
+    <article class="issue"><h3 id="tabs"><a class="h-anchor" href="#tabs">Tabs</a></h3><p>Named, colour-coded, each its own shell. Per-tab theme, zoom,
       unicode mode and colours. Rename by double-click; a user name and a program title are kept separately.</p></article>
-    <article class="issue"><h3>Safe optional colours</h3><p>A 16-colour subset of ANSI, off by default, with a
+    <article class="issue"><h3 id="colours"><a class="h-anchor" href="#colours">Safe optional colours</a></h3><p>A 16-colour subset of ANSI, off by default, with a
       <a href="/compatibility/#contrast-guard">contrast guard</a> so text is never invisible. Honours <code>NO_COLOR</code> and <code>TERM=dumb</code>.</p></article>
-    <article class="issue"><h3>Session restore</h3><p>Tabs and their scrollback survive a restart or reboot, under a
+    <article class="issue"><h3 id="session-restore"><a class="h-anchor" href="#session-restore">Session restore</a></h3><p>Tabs and their scrollback survive a restart or reboot, under a
       fresh shell. Stored under <code>~/.local/state</code>; on by default, and you can turn it off or clear it.</p></article>
-    <article class="issue"><h3>Drop-in settings</h3><p>systemd-style <code>.conf</code> directories: a distro or
+    <article class="issue"><h3 id="settings"><a class="h-anchor" href="#settings">Drop-in settings</a></h3><p>systemd-style <code>.conf</code> directories: a distro or
       admin seeds defaults in <code>/etc/secure-terminal.d</code>, the user overrides them. Plain KEY=value.</p></article>
   </div>
 </div></section>
@@ -309,13 +311,13 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
   <p class="catdesc">The questions worth answering before you trust a terminal.</p>
   <div class="fg">
   <div class="issue">
-    <h3>Is it Open Source? What licence?</h3>
+    <h3 id="faq-license"><a class="h-anchor" href="#faq-license">Is it Open Source? What licence?</a></h3>
     <p>Yes. secure-terminal is Free Software under the <b>AGPL-3+</b>, developed in
       the open on <a href="https://github.com/secure-terminal/secure-terminal">GitHub</a>.
       Read the source, build it yourself, audit exactly what it does.</p>
   </div>
   <div class="issue">
-    <h3>Does it send my data anywhere?</h3>
+    <h3 id="faq-privacy"><a class="h-anchor" href="#faq-privacy">Does it send my data anywhere?</a></h3>
     <p><b>No.</b> It runs entirely on your machine: no telemetry, no network calls,
       nothing about what you type or what your programs print leaves the terminal.
       The single exception is opt-in and explicit: if you enable the AI command
@@ -325,20 +327,20 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       default, you choose the handler, and nothing else is ever transmitted.</p>
   </div>
   <div class="issue">
-    <h3>What platforms does it run on?</h3>
+    <h3 id="faq-platforms"><a class="h-anchor" href="#faq-platforms">What platforms does it run on?</a></h3>
     <p>Linux. It ships as a standard Debian source package (Debian trixie and
       derivatives such as Kicksecure and Whonix); it is a PyQt6 application, so it
       runs anywhere PyQt6 and a pseudo-terminal are available. The
       <code>secure-terminal-cli</code> wrapper needs only Python and a POSIX pty.</p>
   </div>
   <div class="issue">
-    <h3>Is it memory-safe?</h3>
+    <h3 id="faq-memory-safe"><a class="h-anchor" href="#faq-memory-safe">Is it memory-safe?</a></h3>
     <p>Yes. It is written in Python (PyQt6); there is no C parser of
       untrusted output to overflow. The whole point is that untrusted bytes meet a
       small, auditable sanitiser, not a sprawling escape-sequence interpreter.</p>
   </div>
   <div class="issue">
-    <h3>How is this different from my normal terminal?</h3>
+    <h3 id="faq-different"><a class="h-anchor" href="#faq-different">How is this different from my normal terminal?</a></h3>
     <p>A normal terminal <em>interprets</em> whatever a program prints, including
       attacker-controlled escape sequences, invisible characters and homoglyphs.
       secure-terminal does not: by default it parses no escapes, shows every
@@ -347,7 +349,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       <a href="/comparison/">comparison</a> for the specifics.</p>
   </div>
   <div class="issue">
-    <h3>Was this AI vibe coded?</h3>
+    <h3 id="faq-ai"><a class="h-anchor" href="#faq-ai">Was this AI vibe coded?</a></h3>
     <p>It is an AI-assisted project - written and reviewed with the process
       documented at <a href="https://github.com/org-ai-assisted">org-ai-assisted</a>,
       with <a href="/human-review/">human review</a> and

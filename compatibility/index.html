@@ -69,7 +69,7 @@
 </div></section>
 
 <section class="cat" id="hostile"><div class="wrap">
-  <h2 class="catname">Hostile byte streams: the difference, shown</h2>
+  <h2 class="catname"><a class="h-anchor" href="#hostile">Hostile byte streams: the difference, shown</a></h2>
   <p class="catdesc">Pipe a burst of untrusted bytes into a normal terminal - random data, a
     program's output, a hostile log - and it garbles the screen, sticks it in the wrong colours
     or character set, and can silently rewrite your window or tab title to attacker-chosen text.
@@ -81,7 +81,7 @@
 </div></section>
 
 <section class="cat" id="cli"><div class="wrap">
-  <h2 class="catname">The 10 most popular command-line programs</h2>
+  <h2 class="catname"><a class="h-anchor" href="#cli">The 10 most popular command-line programs</a></h2>
   <p class="catdesc">Line-oriented tools run unchanged in CLI mode (the default). Their output
     is intact, colour and all: 24-bit colour (from <code>ls</code>, <code>grep</code>,
     <code>git</code>, ...) renders under a contrast guard, so nothing can be painted the same
@@ -119,7 +119,7 @@
 </div></section>
 
 <section class="cat" id="contrast-guard"><div class="wrap">
-  <h2 class="catname">The contrast guard: colour that can never hide text</h2>
+  <h2 class="catname"><a class="h-anchor" href="#contrast-guard">The contrast guard: colour that can never hide text</a></h2>
   <p class="catdesc">Honouring a program's colours reopens an old trick: paint text the same
     colour as the background and it becomes invisible - a fake <code>[ OK ]</code> that hides a
     failure, a prompt that conceals what you are really about to run. secure-terminal keeps colour
@@ -142,7 +142,7 @@
 </div></section>
 
 <section class="cat" id="terminfo"><div class="wrap">
-  <h2 class="catname">Optional: a restricted terminfo that tells programs the truth</h2>
+  <h2 class="catname"><a class="h-anchor" href="#terminfo">Optional: a restricted terminfo that tells programs the truth</a></h2>
   <p class="catdesc">By default a CLI-mode tab reports <code>TERM=xterm-256color</code> and the
     renderer simply strips whatever a program emits that it does not draw. That always works, but
     a program still <em>tries</em> to move the cursor or probe the terminal, and you see nothing
@@ -167,7 +167,7 @@
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
-  <h2 class="catname">The 10 most popular full-screen (TUI) programs</h2>
+  <h2 class="catname"><a class="h-anchor" href="#tui">The 10 most popular full-screen (TUI) programs</a></h2>
   <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
     so they need the opt-in TUI mode. There they render through the confined screen model;
     every one below was run and its interface captured. How box-drawing and other non-ASCII
@@ -216,7 +216,7 @@
 </div></section>
 
 <section class="cat" id="conformance"><div class="wrap">
-  <h2 class="catname">Conformance suites, by mode</h2>
+  <h2 class="catname"><a class="h-anchor" href="#conformance">Conformance suites, by mode</a></h2>
   <p class="catdesc">The public terminal conformance suites test how faithfully an emulator
     implements the VT/xterm escape repertoire. secure-terminal's two modes relate to them
     differently: <b>CLI mode</b> interprets nothing on purpose, so it "fails" conformance by
@@ -242,7 +242,7 @@
 </div></section>
 
 <section class="cat" id="corpus"><div class="wrap">
-  <h2 class="catname">The attack corpus (separate from conformance)</h2>
+  <h2 class="catname"><a class="h-anchor" href="#corpus">The attack corpus (separate from conformance)</a></h2>
   <p class="catdesc">Conformance suites are not attacks - they check ordinary rendering. The
     security corpus of actual, publicly-disclosed terminal attacks lives separately in the
     <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>:
@@ -254,7 +254,7 @@
 </div></section>
 
 <section class="cat" id="env"><div class="wrap">
-  <h2 class="catname">Environment variables</h2>
+  <h2 class="catname"><a class="h-anchor" href="#env">Environment variables</a></h2>
   <p class="catdesc">The program you run inherits your environment, with deliberate exceptions:
     the size is taken from the kernel, colour is advertised as a fixed value, and every
     host-emulator fingerprint variable is scrubbed so a child (or a host it SSHes into) cannot
@@ -281,7 +281,7 @@
 </div></section>
 
 <section class="cat" id="protocols"><div class="wrap">
-  <h2 class="catname">Capability and reporting protocols</h2>
+  <h2 class="catname"><a class="h-anchor" href="#protocols">Capability and reporting protocols</a></h2>
   <p class="catdesc">This is the heart of the guarantee. A terminal and the program it runs
     share one channel, so any reply a terminal writes back to a query lands on the program's
     <em>input</em>, exactly as if typed. secure-terminal therefore answers <b>no</b> query:
@@ -314,7 +314,7 @@
     that needed the reply. An automated test in the corpus feeds every one of these queries and
     asserts that zero bytes are ever written back to the pseudo-terminal, so the guarantee is
     checked, not merely asserted.</p>
-  <h3 style="margin-top:22px">DEC private modes (mouse, bracketed paste, focus, alternate screen)</h3>
+  <h3 style="margin-top:22px" id="dec-modes"><a class="h-anchor" href="#dec-modes">DEC private modes (mouse, bracketed paste, focus, alternate screen)</a></h3>
   <p class="catdesc">The <code>ESC [ ? Ps h/l</code> modes a program uses to change how the terminal
     behaves are handled by mode, same as everything else:</p>
   <div class="cmp-wrap">
@@ -331,7 +331,7 @@
 </div></section>
 
 <section class="cat" id="control"><div class="wrap">
-  <h2 class="catname">Control characters</h2>
+  <h2 class="catname"><a class="h-anchor" href="#control">Control characters</a></h2>
   <p class="catdesc">In CLI mode the terminal honours only the few control bytes needed to
     edit the current line, drops the rest, and removes every escape sequence outright - there
     is no parser to attack. In TUI mode the confined screen model interprets cursor and colour
@@ -368,7 +368,7 @@
 </div></section>
 
 <section class="cat" id="gui-vs-cli"><div class="wrap">
-  <h2 class="catname">Two forms: the GUI app and the CLI wrapper</h2>
+  <h2 class="catname"><a class="h-anchor" href="#gui-vs-cli">Two forms: the GUI app and the CLI wrapper</a></h2>
   <p class="catdesc">"secure-terminal" ships in two forms that share one sanitization core. The
     <b>GUI app</b> (<code>secure-terminal</code>, Qt) is the full terminal with tabs, TUI mode
     and the paste gate. The <b>CLI wrapper</b> (<code>secure-terminal-cli</code>) is a tiny,
@@ -396,7 +396,7 @@
 </div></section>
 
 <section class="cat" id="osc"><div class="wrap">
-  <h2 class="catname">OSC sequences</h2>
+  <h2 class="catname"><a class="h-anchor" href="#osc">OSC sequences</a></h2>
   <p class="catdesc"><a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Operating_System_Command_sequences" rel="noopener">Operating System Command</a> (OSC) escapes are the ones that act beyond the
     text on screen - setting the window title, the system clipboard, a desktop notification, or
     a hyperlink. Every one is a registered feature, <b>off by default</b> (neutralised); each
@@ -453,7 +453,7 @@
 </div></section>
 
 <section class="cat" id="unsupported"><div class="wrap">
-  <h2 class="catname">Deliberately not supported: in-terminal graphics</h2>
+  <h2 class="catname"><a class="h-anchor" href="#unsupported">Deliberately not supported: in-terminal graphics</a></h2>
   <p class="catdesc">Some modern terminals can draw pictures in the grid - a chart from a CLI tool,
     a thumbnail, a plot. secure-terminal does not, and that is a design choice, not a gap: every
     one of these protocols works by having the terminal parse an escape sequence and render
