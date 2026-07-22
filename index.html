@@ -192,6 +192,14 @@
       buttons are countdown-gated - Enter or Esc rejects - so nothing can reach the shell until you choose. Rendered
       headless from the real bar.</figcaption>
   </figure>
+  <figure class="shot" style="max-width:940px;margin:28px auto 0">
+    <figcaption class="shotname"><b>The same bar, for copy going the other way</b> - selecting and copying that
+      same line in Show mode, before it reaches the system clipboard.</figcaption>
+    <a href="/shots/copy-warning.png" target="_blank" rel="noopener"><img src="/shots/copy-warning.png" width="940" height="258" loading="lazy" alt="secure-terminal's review bar for a copy: the summary reads 'This copy would carry 1 bidirectional control, 1 invisible character, 2 non-ASCII characters onto the clipboard'; the four panes are Original, Detail (naming each hidden character in its risk-class colour), 'Copy stripped puts' (the homoglyph domain collapsed to exmple.com), and 'Copy with unicode puts' (the look-alike example.com kept, its Cyrillic a tinted). The buttons read Don't copy, Copy stripped, Copy with unicode, with no countdown since a copy is not executed."></a>
+    <figcaption>Copy is reviewed with the <b>same bar</b>, just relabelled for the other direction (<b>Don't copy</b> /
+      <b>Copy stripped</b> / <b>Copy with unicode</b>) and configured by its own setting. There is no countdown - a
+      copy is not executed, so the anti-fat-finger gate the paste needs does not apply.</figcaption>
+  </figure>
 </div></section>
 
 
