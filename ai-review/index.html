@@ -61,7 +61,7 @@
   <h2 class="catname"><a class="h-anchor" href="#corpus">1. The adversarial corpus: real, disclosed attacks</a></h2>
   <p class="catdesc">The core of the audit is the
     <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>:
-    <b>21</b> proofs-of-concept drawn from actual, publicly-disclosed terminal vulnerabilities -
+    <b>22</b> proofs-of-concept drawn from actual, publicly-disclosed terminal vulnerabilities -
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/answerback-injection" rel="noopener">answerback injection</a>,
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/decrqss-reflection-2023" rel="noopener">DECRQSS</a> and
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/device-status-reflection-rxvt-2021" rel="noopener">device-status reflection</a>,
@@ -156,7 +156,7 @@
     <tbody>
       <tr><td>Core sanitizer (<code>test_secure_terminal</code>)</td><td>~336 assertions over the Qt-free sanitizer: escape stripping, the four unicode display modes, paste sanitisation, bell detection, the render invariants.</td></tr>
       <tr><td>Widget / GUI (<code>test_widget</code>)</td><td>~626 assertions driving the real Qt widget headless: line editing, scrollback, the paste warning, caret handling - and the character-inspect copy guard that asserts the popup copies the <code>\uXXXX</code> escape and <b>never</b> the raw glyph.</td></tr>
-      <tr><td>Corpus runner (<code>test_corpus</code>)</td><td>Runs the 21 PoCs against the shipped code, so the corpus gates the package, not just the standalone harness.</td></tr>
+      <tr><td>Corpus runner (<code>test_corpus</code>)</td><td>Runs the dangerous corpus, an every-codepoint sweep over all of Unicode, the Trojan-Source techniques and the git-diffs-lie fixtures against the shipped code, so these attacks gate the package, not just a standalone harness.</td></tr>
       <tr><td>Property + fuzz (<code>test_fuzz</code>, <code>fuzz_secure_terminal</code>)</td><td><a href="https://hypothesis.readthedocs.io/" rel="noopener">Hypothesis</a> property tests (idempotency, ASCII-only output, box-to-underscore export) plus a randomized fuzzer that throws adversarial input at the parse/render path and asserts no crash and every invariant, printing the seed on failure.</td></tr>
       <tr><td>Coverage-guided fuzzing (<a href="https://google.github.io/clusterfuzzlite/" rel="noopener">ClusterFuzzLite</a> + <a href="https://github.com/google/atheris" rel="noopener">Atheris</a>)</td><td>Seven in-tree <a href="https://github.com/secure-terminal/secure-terminal/tree/master/fuzz" rel="noopener">fuzz harnesses</a> (the line-mode editor, the strip renderer, the paste sanitiser and classifier, the safe-colour SGR parser, the single-instance IPC frame reassembler, and the settings/session parsers) run under the OSS-Fuzz engine on every PR that touches the parse path, via <a href="https://github.com/secure-terminal/secure-terminal/blob/master/.github/workflows/local-python-fuzz.yml" rel="noopener">local-python-fuzz.yml</a>.</td></tr>
       <tr><td>AppArmor (<code>secure-terminal-tests-apparmor</code>)</td><td>Confirms the shipped AppArmor profile loads and confines the application (defence in depth around the memory-safe core).</td></tr>
