@@ -1,6 +1,6 @@
 Window-title behaviour (xdotool getwindowname), before payload -> after payload.
 Test date (UTC): 2026-07-18 (captures 19:50-19:56 UTC), sandbox qube temp-claude.
-Payloads: CASE A = head -c 20000 /dev/urandom ; CASE B = crafted OSC-0 title-hijack log.
+Payloads: CASE A = head -c 20000 /dev/random ; CASE B = crafted OSC-0 title-hijack log.
 
 emulator         case A random                 case A recovered   case B crafted (OSC 0 title)
 xterm            bash -> bash                  bash -> bash       bash -> root@prod-db:~#
