@@ -240,9 +240,12 @@
     </tbody>
   </table>
   </div>
-  <p class="catdesc" style="margin-top:12px">The reviewed, automatable suites are wired into the
-    project's continuous-integration run so their sequences exercise the sanitizer on every
-    change (557 spec-surface sequences fed to secure-terminal, zero written back to the pty).</p>
+  <p class="catdesc" style="margin-top:12px">These suites are references for the spec surface, not
+    attacks. An automated conformance invariant distilled from them runs in the project's
+    continuous-integration on every change: a reflection-oracle test feeds a 387-sequence
+    spec-surface query corpus (the DA/DSR/DECRQM, OSC dynamic-colour and OSC 52-read, XTGETTCAP,
+    DECRQSS and XTWINOPS query and report sequences) through the sanitizer and asserts zero bytes
+    are ever written back to the pty - in both CLI and TUI mode.</p>
 </div></section>
 
 <section class="cat" id="corpus"><div class="wrap">
