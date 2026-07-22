@@ -146,7 +146,11 @@
   <p class="catdesc">By default a CLI-mode tab reports <code>TERM=xterm-256color</code> and the
     renderer simply strips whatever a program emits that it does not draw. That always works, but
     a program still <em>tries</em> to move the cursor or probe the terminal, and you see nothing
-    back. An opt-in setting closes that gap at the source.</p>
+    back. An opt-in setting closes that gap at the source. <b>Use it</b> when you live in CLI mode
+    and want well-behaved programs to adapt: a pager or a progress bar that would otherwise address
+    the cursor or clear the screen instead prints plain line-by-line output it knows this terminal
+    can show - cleaner to read, with less stripped-escape noise, and the terminal is never even
+    asked to do something it refuses.</p>
   <div class="issue">
     <p>Turn on <code>cli_terminfo</code> and new CLI-mode tabs advertise a custom
       <b><code>secure-terminal</code></b> terminfo entry instead. It inherits the correct colour
