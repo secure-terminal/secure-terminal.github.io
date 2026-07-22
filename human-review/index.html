@@ -122,7 +122,7 @@
       <a href="https://www.kicksecure.com/wiki/Shell#Protection_from_Hidden_Text_Attacks" rel="noopener">copy to a text file, scan it, then copy to the terminal</a> - is real, but so cumbersome that
       almost nobody does it every time. And crucially, these traditional-terminal weaknesses are, to
       our knowledge, <b>not even being worked on</b>: they are considered out of scope, a different
-      threat model. secure-terminal removes the whole class <em>by construction</em>. So the choice
+      threat model. secure-terminal removes the whole class <em>by design</em>. So the choice
       is between a known-vulnerable terminal and an AI-authored one that closes those attacks but has
       not yet had a human security audit.</p>
   </div>
@@ -195,7 +195,7 @@
       <a href="https://dgl.cx/2023/09/ansi-terminal-security" rel="noopener">reflection-to-command-injection</a>,
       <a href="https://trojansource.codes/" rel="noopener">hidden-character paste</a>,
       <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-27135" rel="noopener">memory-corruption in the parser</a>
-      - are <b>mitigated by construction</b> here,
+      - are <b>mitigated by design</b> here,
       and demonstrably so. And once the human non-malicious review is complete, you also get
       confidence that there is no
       <a href="https://www.kicksecure.com/wiki/Backdoor" rel="noopener">backdoor</a>. That is a

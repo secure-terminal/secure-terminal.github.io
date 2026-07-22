@@ -286,7 +286,7 @@
     share one channel, so any reply a terminal writes back to a query lands on the program's
     <em>input</em>, exactly as if typed. secure-terminal therefore answers <b>no</b> query:
     nothing on the output path ever writes to the pseudo-terminal. That closes the whole
-    "output becomes input" reflection / echoback / answerback CVE class by construction. The
+    "output becomes input" reflection / echoback / answerback CVE class by design. The
     single, strictly opt-in and human-gated exception is clipboard read.</p>
   <div class="cmp-wrap">
   <table class="cmp">
@@ -442,7 +442,7 @@
     shell-integration profile; almost nothing outside the iTerm2 ecosystem emits them.
     <b>Why secure-terminal implements none of it:</b> each one is the terminal acting on program
     output - rendering arbitrary image bytes, writing files to your disk, or reporting state back
-    onto the input channel - which is exactly the surface the default mode removes by construction.
+    onto the input channel - which is exactly the surface the default mode removes by design.
     The escape is recognised only so it can be stripped; there is deliberately no toggle for it, so it
     is always neutralized - a program gets no file-transfer, no image, and no variable channel. If you
     need those, that is a reason to open iTerm2 (or a dedicated graphical terminal) for that task.</p>
@@ -458,7 +458,7 @@
     a thumbnail, a plot. secure-terminal does not, and that is a design choice, not a gap: every
     one of these protocols works by having the terminal parse an escape sequence and render
     arbitrary attacker-supplied bytes, which is exactly the parser and the attack surface the
-    default mode removes by construction.</p>
+    default mode removes by design.</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>Feature</th><th>How it works</th><th>Used by</th><th>secure-terminal</th></tr></thead>
@@ -471,7 +471,7 @@
   </div>
   <p class="catdesc" style="margin-top:12px">If you need inline images, that is a legitimate need -
     and a legitimate reason to open a dedicated graphical terminal in a separate tab for that task.
-    secure-terminal's promise is that reading text and pasting commands is safe by construction;
+    secure-terminal's promise is that reading text and pasting commands is safe by design;
     rendering arbitrary remote image bytes is not a promise it can keep while keeping that one.</p>
 </div></section>
 </main>

@@ -50,7 +50,7 @@
 <section class="hero"><div class="wrap">
   <p class="eyebrow">PLUGINS: THE COMMAND HOOK</p>
   <h1>The terminal ships no policy.<br>You bring the judgment.</h1>
-  <p class="lede">No terminal can decide by construction that <code>curl x | sh</code> or a
+  <p class="lede">No terminal can decide by design that <code>curl x | sh</code> or a
     subtly wrong <code>rm</code> is dangerous - that is a judgment call, not a parsing
     rule. So secure-terminal keeps judgment <em>out</em> of the terminal and gives you one
     opt-in extension point: a <b>command hook</b>. Before a command runs in CLI mode, the
@@ -150,7 +150,7 @@ command_hook_transcript=none         <span class="c"># 'ask' lets the handler re
     <code>command_hook_on_error=block</code> to fail closed), it runs in <b>CLI mode only</b>, and it
     sees the line you typed, not what the shell expands it to. If none of those two edges matter to
     you, a shell <code>preexec</code> is the lighter choice - and either way, the terminal's real,
-    by-construction guarantees are <a href="/comparison/">safe display and safe paste</a>, not this.</p>
+    by-design guarantees are <a href="/comparison/">safe display and safe paste</a>, not this.</p>
 </div></section>
 
 <section class="cat" id="limits"><div class="wrap">
@@ -161,7 +161,7 @@ command_hook_transcript=none         <span class="c"># 'ask' lets the handler re
       inside a full-screen TUI program is not hooked. It is a deliberate speed bump for the
       commands you type, not a sandbox: it cannot stop a program you have already chosen to
       run from doing what it does. For what the terminal <em>can</em> guarantee by
-      construction - safe display and safe paste - see the
+      design - safe display and safe paste - see the
       <a href="/comparison/">comparison</a>.</p>
   </div>
   <div class="cta">

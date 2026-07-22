@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal: safe to paste, safe to read</title>
-<meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default with no escape parser, a paste warning, four unicode display modes, and an opt-in TUI mode that runs ssh, vim and htop while still filtering every character. Memory-safe. The problem output-lies documents, removed by construction.">
+<meta name="description" content="A terminal you can paste commands into without worrying about invisible characters. ASCII-only by default with no escape parser, a paste warning, four unicode display modes, and an opt-in TUI mode that runs ssh, vim and htop while still filtering every character. Memory-safe. The problem output-lies documents, removed by design.">
 <link rel="canonical" href="https://secure-terminal.github.io/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
@@ -77,7 +77,7 @@
 </div></div>
 
 <section class="cat" id="design"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#design">Safe by construction</a></h2>
+  <h2 class="catname"><a class="h-anchor" href="#design">Safe by design</a></h2>
   <p class="catdesc">The security property is not a filter bolted on. It is what the terminal can and cannot do by default.</p>
 
   <div class="fg">
@@ -119,7 +119,7 @@
       <a href="https://output-lies.github.io/terminal/#classes" rel="noopener">long history of memory-corruption bugs</a>
       in exactly this parsing path (escape and image-decoder overruns); here
       that entire class, buffer overflows and use-after-free driven by attacker-controlled output, cannot happen
-      by construction.</p>
+      by design.</p>
   </article>
   </div>
 </div></section>
@@ -138,8 +138,9 @@
         risk-coloured and click-to-inspect. While the paste is held, terminal input is suspended and <b>both</b>
         send buttons are countdown-gated (Enter or Esc rejects), so a stray key can reach nothing. When to warn is
         configurable: <b>always</b>, <b>only when a paste carries unicode or control</b> (the default), or
-        <b>never</b> (still silently stripped to ASCII). A plain-ASCII paste is not interrupted in the default
-        mode.</p>
+        <b>never</b>. <b>never</b> turns off the <em>prompt</em>, not the safety - the paste is still sanitized to
+        ASCII, because feeding raw control or bidi bytes to your shell is the exact thing this terminal exists to
+        prevent; there is no mode that pastes them through. A plain-ASCII paste is never interrupted.</p>
       <p><b>Copy is reviewed the same way, in the other direction.</b> The same bar guards text <em>leaving</em> via
         copy: after <code>cat evil-log</code>, selecting and copying in Show mode (where the real glyphs are kept)
         would otherwise put a look-alike straight on the system clipboard - so you choose to copy it stripped to
@@ -149,7 +150,7 @@
     <article class="issue">
       <h3 id="display-modes"><a class="h-anchor" href="#display-modes">Four unicode display modes</a></h3>
       <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class;
-        a saved transcript maps it back to a plain <code>_</code>), <b>Reveal</b> (every
+        a copied box maps to a plain <code>_</code>, while a saved transcript names it inline so nothing is lost), <b>Reveal</b> (every
         non-ASCII character as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there),
         <b>Detail</b> (the same badge with the codepoint's Unicode name inline, <code>&lt;U+041D CYRILLIC
         CAPITAL LETTER EN&gt;</code>, what <code>unicode-show</code> annotates - the safe default), and <b>Show</b> (render
@@ -164,9 +165,10 @@
     </article>
     <article class="issue">
       <h3 id="transcripts"><a class="h-anchor" href="#transcripts">Transcripts safe to open anywhere</a></h3>
-      <p>Save a tab's scrollback to a file. Because the buffer is already sanitized plain ASCII, the saved file is
-        safe to open in any editor, unlike a normal terminal's raw log, which can carry the very escapes this
-        terminal refuses.</p>
+      <p>Save a tab's scrollback to a file. The saved file is pure ASCII <em>and</em> lossless - each neutralized
+        byte is named inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>), never collapsed to a bare
+        <code>_</code> - so it is safe to open in any editor, unlike a normal terminal's raw log which can carry
+        the very escapes this terminal refuses, yet it still records exactly what was there.</p>
     </article>
     <article class="issue">
       <h3 id="guaranteed-exit"><a class="h-anchor" href="#guaranteed-exit">Guaranteed exit</a></h3>
@@ -218,7 +220,7 @@
       vectors stay closed unless you deliberately open one. Every character it places is <b>still
       ASCII/unicode-filtered</b>, and colours use a <a href="/compatibility/#contrast-guard">contrast guard</a> so nothing can be painted invisibly.</p>
     <p>What you give up: a program can draw a <em>misleading interface</em> within its own screen, so only run
-      programs you trust. This is "restricted-emulator safe," not "safe by construction." The default CLI mode,
+      programs you trust. This is "restricted-emulator safe," not "safe by design." The default CLI mode,
       and everything the guarantee rests on, is unchanged.</p>
     <div class="term" style="margin-top:10px"><span class="d"># in TUI mode, verified end to end:</span>
 <span class="y">ssh</span>, <span class="y">vim</span>, <span class="y">htop</span>, <span class="y">tmux</span> and apt's progress bar all render correctly,
@@ -368,7 +370,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       real cases the
       <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>
       collects, most from the last few years. secure-terminal closes the whole class
-      <em>by construction</em> - its default mode runs no escape parser and answers no
+      <em>by design</em> - its default mode runs no escape parser and answers no
       query sequence, so output can never become input. See the
       <a href="/comparison/">comparison</a>, measured with screenshots.</p>
   </div>
