@@ -163,12 +163,12 @@
     </tbody>
   </table>
   </div>
-  <p class="catdesc" style="margin-top:12px"><b>Coverage.</b> Measured line coverage from the core and
-    widget suites (2026-07-18): <b>98%</b> of the security-critical
+  <p class="catdesc" style="margin-top:12px"><b>Coverage.</b> A continuous-integration ratchet gate
+    enforces <b>100%</b> line coverage on every security-critical module - the
     <a href="https://github.com/secure-terminal/secure-terminal/blob/master/usr/lib/python3/dist-packages/secure_terminal/sanitize.py" rel="noopener">sanitizer</a>,
-    84% of the terminal widget, and 77% across the whole codebase including the GUI. The parts that
-    matter most for safety - the escape-stripping and rendering core - are the most thoroughly
-    exercised.</p>
+    CLI wrapper, command-hook protocol, IPC framing, session persistence, settings, and the
+    dialog/terminal/main GUI - so a line the tests stop reaching fails the build. Whole-package
+    coverage (measured 2026-07-22, including non-gated glue) is 99%.</p>
 </div></section>
 
 <section class="cat" id="scanners"><div class="wrap">
