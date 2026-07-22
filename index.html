@@ -165,10 +165,11 @@
     </article>
     <article class="issue">
       <h3 id="transcripts"><a class="h-anchor" href="#transcripts">Transcripts safe to open anywhere</a></h3>
-      <p>Save a tab's scrollback to a file. The saved file is pure ASCII <em>and</em> lossless - each neutralized
-        byte is named inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>), never collapsed to a bare
-        <code>_</code> - so it is safe to open in any editor, unlike a normal terminal's raw log which can carry
-        the very escapes this terminal refuses, yet it still records exactly what was there.</p>
+      <p>Save a tab's scrollback to a file. The saved file is <em>lossless</em> - each neutralized character is
+        named inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>), never collapsed to a bare
+        <code>_</code> - and pure ASCII unless you opted into Show mode's real glyphs. So it is safe to open in any
+        editor, unlike a normal terminal's raw log which can carry the very escapes this terminal refuses, and it
+        still records exactly what was there.</p>
     </article>
     <article class="issue">
       <h3 id="guaranteed-exit"><a class="h-anchor" href="#guaranteed-exit">Guaranteed exit</a></h3>
