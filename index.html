@@ -125,14 +125,16 @@
   <div class="fg">
     <article class="issue">
       <h3>Paste warning</h3>
-      <p>Paste something with unicode or control characters and a dialog shows it <b>four ways</b>, side by side,
-        before it reaches the shell: the original as it looks, a reveal where every hidden character becomes a
-        <code>&lt;U+XXXX&gt;</code> badge, and exactly what each of the two send buttons would deliver - stripped to
-        ASCII, or with printable unicode kept (control, bidi and zero-width dropped either way). The riskier
-        <b>Paste with unicode</b> button is disabled for a few seconds so a stray Enter cannot wave a hostile paste
-        through. When to warn is configurable: <b>always</b>, <b>only when a paste carries unicode or control</b>
-        (the default), or <b>never</b> (still silently stripped to ASCII). A plain-ASCII paste is not interrupted
-        in the default mode.</p>
+      <p>Paste something with unicode or control characters and a review bar opens <b>inside the window</b> (no
+        separate pop-up), holding the paste before a byte reaches the shell. Its Detail panes show it <b>four
+        ways</b> - the original as it looks, each hidden character named inline as a <code>&lt;U+XXXX&gt;</code>
+        badge, and exactly what each send button would deliver (stripped to ASCII, or with printable unicode kept;
+        control, bidi and zero-width dropped either way) - rendered by the terminal's own pipeline, so each is
+        risk-coloured and click-to-inspect. While the paste is held, terminal input is suspended and <b>both</b>
+        send buttons are countdown-gated (Enter or Esc rejects), so a stray key can reach nothing. When to warn is
+        configurable: <b>always</b>, <b>only when a paste carries unicode or control</b> (the default), or
+        <b>never</b> (still silently stripped to ASCII). A plain-ASCII paste is not interrupted in the default
+        mode.</p>
     </article>
     <article class="issue">
       <h3>Four unicode display modes</h3>
@@ -172,16 +174,18 @@
         but never nagging - and you can silence the notice globally or per feature.</p>
     </article>
   </div>
-  <figure class="shot" style="max-width:900px;margin:28px auto 0">
-    <figcaption class="shotname"><b>The paste warning</b> - a <code>curl | bash</code> line hiding two Cyrillic
+  <figure class="shot" style="max-width:940px;margin:28px auto 0">
+    <figcaption class="shotname"><b>The paste review</b> - a <code>curl | bash</code> line hiding two Cyrillic
       homoglyphs (in <code>example</code> and <code>bash</code>), a zero-width space and a right-to-left override.</figcaption>
-    <a href="/shots/paste-warning.png" target="_blank" rel="noopener"><img src="/shots/paste-warning.png" width="880" height="344" loading="lazy" alt="secure-terminal's paste-warning dialog showing the hostile paste four ways: the Original pane, where the bidi override has reordered the trailing comment to read 'rorrim detsurt #'; the Detail pane, naming each hidden character inline as U+0430 CYRILLIC SMALL LETTER A, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE; the Paste-stripped pane, where the homoglyph domain collapses to exmple.com and 'bash' to 'bsh'; and the Paste-with-unicode pane, which keeps the look-alike example.com but drops the invisibles. Both send buttons are countdown-disabled; only Reject is available immediately."></a>
-    <figcaption>The panes use the terminal's own theme and fixed-pitch font. The Detail pane names every hidden
-      character inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>). Stripped drops the look-alikes, so the
-      domain silently changes to <code>exmple.com</code>; keeping unicode preserves the deceptive
-      <code>example.com</code> but removes the bidi and zero-width. You choose, seeing exactly what each button
-      would send - and both send buttons are countdown-gated, so a stray Enter fires neither. The shot is rendered
-      headless from the real dialog.</figcaption>
+    <a href="/shots/paste-warning.png" target="_blank" rel="noopener"><img src="/shots/paste-warning.png" width="940" height="258" loading="lazy" alt="secure-terminal's in-window paste-review bar showing the hostile paste four ways: the Original pane, where the bidi override reorders the trailing comment; the Detail pane, naming each hidden character inline in its risk-class colour as U+0430 CYRILLIC SMALL LETTER A, U+200B ZERO WIDTH SPACE and U+202E RIGHT-TO-LEFT OVERRIDE; the Paste-stripped pane, where the homoglyph domain collapses to exmple.com and 'bash' to 'bsh'; and the Paste-with-unicode pane, which keeps the look-alike example.com (its Cyrillic a tinted) but drops the invisibles. Both send buttons are countdown-disabled; only Reject is available immediately."></a>
+    <figcaption>Not a separate pop-up: the review is a bar <b>inside the terminal window</b>, and its preview panes are
+      read-only views rendered by the terminal's own pipeline - so each hidden character wears its
+      <b>risk-class colour</b> and stays click-to-inspect, exactly as in the terminal. The Detail pane names every
+      one inline (<code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code>). Stripped drops the look-alikes, so the domain
+      silently changes to <code>exmple.com</code>; keeping unicode preserves the deceptive <code>example.com</code>
+      but removes the bidi and zero-width. While the paste is held, terminal input is suspended and both send
+      buttons are countdown-gated - Enter or Esc rejects - so nothing can reach the shell until you choose. Rendered
+      headless from the real bar.</figcaption>
   </figure>
 </div></section>
 
