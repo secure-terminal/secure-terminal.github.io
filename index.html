@@ -143,11 +143,11 @@
     </article>
     <article class="issue">
       <h3>Four unicode display modes</h3>
-      <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class, the safe
-        default; a saved transcript maps it back to a plain <code>_</code>), <b>Reveal</b> (every
+      <p>Per tab: <b>Box</b> (every non-ASCII character becomes an inert box, coloured by risk class;
+        a saved transcript maps it back to a plain <code>_</code>), <b>Reveal</b> (every
         non-ASCII character as a <code>&lt;U+XXXX&gt;</code> badge, to inspect exactly what is there),
         <b>Detail</b> (the same badge with the codepoint's Unicode name inline, <code>&lt;U+041D CYRILLIC
-        CAPITAL LETTER EN&gt;</code>, what <code>unicode-show</code> annotates), and <b>Show</b> (render
+        CAPITAL LETTER EN&gt;</code>, what <code>unicode-show</code> annotates - the safe default), and <b>Show</b> (render
         legitimate unicode so you can read a log, each glyph still tinted by risk class - a homoglyph
         confusable with ASCII wears a louder colour than honest foreign text - while the invisible, bidi and
         control classes, which have no visible glyph, still show as a coloured placeholder).</p>
@@ -171,12 +171,13 @@
     <article class="issue">
       <h3>Granular escape-feature controls</h3>
       <p>The OSC escapes that reach out of the grid - window title, desktop notification, clickable hyperlink,
-        clipboard write, palette change, working-directory report, iTerm2 extensions - are each a <b>separate,
-        off-by-default toggle</b> with a one-line plain-language note on what it exposes. A three-part
-        <b>security indicator</b> reflects your choices, dimming from green toward red as you enable riskier
-        features (clipboard write and the iTerm2 extensions weigh most). When a program tries to use a feature you
-        have left off, a dismissible banner tells you <b>once per feature per tab</b>, so the attempt is visible
-        but never nagging - and you can silence the notice globally or per feature.</p>
+        clipboard write, clipboard read, palette change, working-directory report - are each a <b>separate,
+        off-by-default toggle</b> with a one-line plain-language note on what it exposes. (The iTerm2 OSC 1337
+        extensions have <b>no toggle at all</b> - they can never be safely enabled, so they are always
+        neutralized.) A three-part <b>security indicator</b> reflects your choices, dimming from green toward red
+        as you enable riskier features (the two clipboard toggles weigh most). When a program tries to use a
+        feature you have left off, a dismissible banner tells you <b>once per feature per tab</b>, so the attempt
+        is visible but never nagging - and you can silence the notice globally or per feature.</p>
     </article>
   </div>
   <figure class="shot" style="max-width:940px;margin:28px auto 0">

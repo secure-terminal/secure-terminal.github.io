@@ -158,8 +158,9 @@
     plain file - clone it and <code>cat</code> it yourself (the line is wrapped in <code>echo</code>, so it is
     safe to run: it prints the command instead of fetching anything):</p>
   <div class="pre"><span class="c"># the 'a' in "example" is a Cyrillic homoglyph (U+0430), not Latin a:</span>
-git clone https://github.com/secure-terminal/terminal-poc-corpus
-cd terminal-poc-corpus/comparison
+git clone https://github.com/org-ai-assisted/dist-ai
+cd dist-ai/usr/share/secure-terminal-shots
+./homoglyph-script.sh &gt; homoglyph.txt
 cat homoglyph.txt</div>
   <p class="catdesc">Every traditional terminal renders it the same way - a clean, trustworthy
     <code>https://example.com</code>. Nothing on screen betrays that the domain is a different,
@@ -177,13 +178,14 @@ cat homoglyph.txt</div>
     <figure class="shot"><figcaption class="shotname"><b>kitty</b> - a clean <code>example.com</code>.</figcaption><a href="shots/kitty.homoglyph.png" target="_blank" rel="noopener"><img src="shots/kitty.homoglyph.png" width="722" height="457" loading="lazy" alt="kitty displaying the install one-liner: the domain reads as a clean https://example.com because the Cyrillic homoglyph is indistinguishable from a Latin a."></a></figure>
   </div>
   <h3 id="homoglyph-fix" style="margin-top:26px"><a class="h-anchor" href="#homoglyph-fix">secure-terminal shows you the truth</a></h3>
-  <p class="catdesc">The same file, in two of secure-terminal's display modes. <b>Box</b> (the default)
-    replaces the look-alike with an inert risk box, so the domain visibly breaks (<code>ex&#9633;mple.com</code>);
-    <b>Detail</b> names the exact codepoint inline. Either mode kills the disguise before you could copy the
+  <p class="catdesc">The same file, in two of secure-terminal's display modes. <b>Detail</b> (the default)
+    names the exact codepoint inline, so the look-alike reads as its true identity; <b>Box</b>
+    replaces it with an inert risk box, so the domain visibly breaks (<code>ex&#9633;mple.com</code>).
+    Either mode kills the disguise before you could copy the
     command - and on <em>paste</em>, the byte is dropped and flagged ("1 non-ASCII character") too.</p>
   <div class="shotgrid">
-    <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Box</b> (default): the Cyrillic byte becomes an inert, risk-coloured box, so the domain reads <code>ex&#9633;mple.com</code> - plainly tampered.</figcaption><a href="shots/secure-terminal.homoglyph-strip.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-strip.png" width="822" height="547" loading="lazy" alt="secure-terminal in Box mode: the install one-liner's domain shows a risk-coloured box where the Cyrillic homoglyph is, so it reads ex[box]mple.com instead of a clean example.com."></a></figure>
-    <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Detail</b>: the byte is named inline as <code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code> - you see exactly what it is.</figcaption><a href="shots/secure-terminal.homoglyph-detail.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-detail.png" width="822" height="547" loading="lazy" alt="secure-terminal in Detail mode: the domain shows the homoglyph named inline as U+0430 CYRILLIC SMALL LETTER A, exposing that it is not a Latin a."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Detail</b> (default): the byte is named inline as <code>&lt;U+0430 CYRILLIC SMALL LETTER A&gt;</code> - you see exactly what it is.</figcaption><a href="shots/secure-terminal.homoglyph-detail.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-detail.png" width="822" height="547" loading="lazy" alt="secure-terminal in Detail mode: the domain shows the homoglyph named inline as U+0430 CYRILLIC SMALL LETTER A, exposing that it is not a Latin a."></a></figure>
+    <figure class="shot"><figcaption class="shotname"><b>secure-terminal - Box</b>: the Cyrillic byte becomes an inert, risk-coloured box, so the domain reads <code>ex&#9633;mple.com</code> - plainly tampered.</figcaption><a href="shots/secure-terminal.homoglyph-strip.png" target="_blank" rel="noopener"><img src="shots/secure-terminal.homoglyph-strip.png" width="822" height="547" loading="lazy" alt="secure-terminal in Box mode: the install one-liner's domain shows a risk-coloured box where the Cyrillic homoglyph is, so it reads ex[box]mple.com instead of a clean example.com."></a></figure>
   </div>
   <p class="shotsrc">Same harness as the shots above (<a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>, Case C), from <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/homoglyph-script.sh" rel="noopener"><code>homoglyph-script.sh</code></a> (its deterministic generator). To spot look-alikes in any text yourself, paste it into output-lies' <a href="https://output-lies.github.io/analyze/" rel="noopener">x-ray tool</a> or take the <a href="https://output-lies.github.io/quiz/" rel="noopener">quiz</a>.</p>
 </div></section>
@@ -191,7 +193,7 @@ cat homoglyph.txt</div>
 <section class="cat" id="method"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#method">What we fed them</a></h2>
   <p class="catdesc">One payload, two cases, run in nine terminal emulators and in
-    secure-terminal, each on its own isolated headless display. Tested <b>2026-07-20</b>. Each
+    secure-terminal, each on its own isolated headless display. Tested <b>2026-07-22</b>. Each
     command is <em>typed at an interactive shell</em>, so every shot shows the prompt, the
     command, its output, and - tellingly - the state of the prompt <em>after</em> it. Both
     payloads and the capture harness are published so you can
@@ -212,14 +214,16 @@ cat homoglyph.txt</div>
   <h2 class="catname"><a class="h-anchor" href="#shots">See it: the crafted attack</a></h2>
   <p class="catdesc">The crafted log (Case B) is <code>cat</code>'d at a shell prompt in each terminal,
     captured on a real LXQt desktop (the <a href="https://github.com/labwc/labwc" rel="noopener">labwc</a>
-    compositor with the Clearlooks window theme) on 2026-07-20. The prompt is a plain
+    compositor with the Clearlooks window theme) on 2026-07-22. The prompt is a plain
     <code>user@host</code> - watch how the <code>OSC 0</code> escape rewrites the window title to the
     attacker's <code>root@prod-db:~#</code> while the real prompt still says <code>user@host</code>: the
     title bar lies. Every terminal runs as a client of the compositor, which draws the same themed,
-    server-side title bar on each window, so the hijacked title is legible in the bar directly - for the minimalist
-    terminals (st, urxvt, alacritty) as much as for the ones that also draw their own menu or
-    tool bar (konsole, the VTE terminals, secure-terminal). kitty is the one exception: it honours
-    the OSC hijack too, but its shell integration resets the title to the cwd at the next prompt. Nothing is painted on: the title bar is
+    server-side title bar on each window, so an honoured <code>OSC 0</code> hijack is legible in the bar directly -
+    for the minimalist terminals (st, urxvt, alacritty) as much as for the VTE terminals that also draw their own
+    menu or tool bar. Two of the nine are exceptions: konsole's default profile stores the title but does not
+    surface it, and kitty honours the hijack but its shell integration resets the title to the cwd at the next
+    prompt - so <b>seven of the nine</b> show it. secure-terminal is not in that contest at all: it never sets the
+    title, so the escape is inert. Nothing is painted on: the title bar is
     the compositor's own decoration, captured as rendered. In a normal terminal the stuck colour bleeds
     into the returned prompt too; secure-terminal's title stays untouched, a banner flags the blocked
     escape, and its next prompt comes back clean. Click any shot for full size.</p>
@@ -311,8 +315,8 @@ cat hostile-log.txt            <span class="c"># now check your window / tab tit
 cat hostile-script.sh</div>
   <p class="shotsrc" style="margin-top:10px">Regenerating the screenshots above is a footnote, not the point:
     <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/comparison-capture.sh" rel="noopener"><code>comparison-capture.sh</code></a>
-    drives each emulator headless and screenshots it - see the
-    <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/comparison" rel="noopener">README</a> for the emulator list.</p>
+    drives each emulator headless and screenshots it - see its
+    <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/README.md" rel="noopener">README</a> for the emulator list.</p>
   <p class="catdesc" style="margin-top:12px">An automated, always-on version ships as the opt-in
     <code>terminal-resilience-tests</code> in
     <a href="https://github.com/org-ai-assisted/dist-ai" rel="noopener">dist-ai</a>: it asserts a
@@ -329,7 +333,7 @@ cat hostile-script.sh</div>
     <tbody>
       <tr><td>Escape sequences in program output</td><td class="trad">Interpreted: output can move the cursor, erase and repaint lines, hide or fake text.</td><td><span class="yes">Never parsed.</span> Removed; any stray control byte shows as an inert box (coloured by risk class), so nothing a program prints can redraw the screen.</td></tr>
       <tr><td>Merely viewing a file (<code>cat</code>, a log, a diff)</td><td class="trad">Can trigger every escape trick above, just by being displayed.</td><td><span class="yes">Safe</span> to <code>cat</code> anything: output is reduced to printable ASCII first.</td></tr>
-      <tr><td>Invisible, bidi and homoglyph characters (Trojan Source)</td><td class="trad">Rendered as-is; text can read as something other than its bytes.</td><td><span class="yes">Neutralized</span> to an inert box (coloured by risk class) by default, or revealed as <code>&lt;U+XXXX&gt;</code> on demand.</td></tr>
+      <tr><td>Invisible, bidi and homoglyph characters (Trojan Source)</td><td class="trad">Rendered as-is; text can read as something other than its bytes.</td><td><span class="yes">Neutralized</span> and named inline as <code>&lt;U+XXXX NAME&gt;</code> by default, or shown as an inert risk-coloured box on demand.</td></tr>
       <tr><td>Pasted command with a hidden second line or control bytes</td><td class="trad">Historically auto-ran. Modern shells mitigate with bracketed paste, but it is opt-in and not universal.</td><td>Paste is sanitized to ASCII; any hidden control or unicode is stripped and <span class="yes">warned on</span> before it reaches the shell.</td></tr>
       <tr><td>Clipboard read/write from program output (OSC&nbsp;52)</td><td class="trad">Some terminals allow it, so a remote program can read or poison your clipboard.</td><td><span class="yes">Off by default.</span> Opt-in toggles exist for write and for read; clipboard read, if enabled, is asked once per tab before any reply, so untrusted output cannot exfiltrate it.</td></tr>
       <tr><td>Window title / desktop notifications from output (OSC&nbsp;0/2/9)</td><td class="trad">Set by any program output: a spoofing surface.</td><td><span class="yes">Off by default</span>, individually toggleable; sanitized to plain ASCII when you opt in.</td></tr>

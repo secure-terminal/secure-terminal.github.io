@@ -171,9 +171,10 @@
   <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
     so they need the opt-in TUI mode. There they render through the confined screen model;
     every one below was run and its interface captured. How box-drawing and other non-ASCII
-    glyphs appear depends on the unicode display mode: the default <b>Box mode</b> shows each
-    as a box coloured by risk class (which you copy or save as an ASCII <code>_</code>), while
-    <b>Show mode</b> or <b>Detail mode</b> renders the real glyphs (line-drawing borders and the
+    glyphs appear depends on the unicode display mode: the default <b>Detail mode</b> names each
+    non-ASCII character inline as <code>&lt;U+XXXX NAME&gt;</code>, <b>Box mode</b> shows each as
+    a compact box coloured by risk class (which you copy or save as an ASCII <code>_</code>), and
+    <b>Show mode</b> renders the real glyphs (line-drawing borders and the
     like), each tinted by risk class so a homoglyph confusable with ASCII stands out - while the
     invisible, bidi and control classes, which have no visible glyph, stay neutralised in every
     mode. Either way, layout and
@@ -335,10 +336,11 @@
     edit the current line, drops the rest, and removes every escape sequence outright - there
     is no parser to attack. In TUI mode the confined screen model interprets cursor and colour
     escapes, but every resulting cell is still ASCII/unicode-filtered. For the neutralised
-    bytes below, <em>how</em> they are shown follows the unicode display mode: a box coloured by
-    risk class in <b>Box mode</b> (the default) that you copy or save as an ASCII <code>_</code>, or a
-    <code>&lt;U+XXXX&gt;</code> badge in <b>Reveal mode</b>. Whatever the display, everything you
-    copy or save is pure ASCII.</p>
+    bytes below, <em>how</em> they are shown follows the unicode display mode: named inline as
+    <code>&lt;U+XXXX NAME&gt;</code> in the default <b>Detail mode</b>, a risk-coloured box in
+    <b>Box mode</b>, or a <code>&lt;U+XXXX&gt;</code> badge in <b>Reveal mode</b> - all ASCII, so
+    what you copy or save from them is pure ASCII (<b>Show mode</b>, which draws the real glyph,
+    is the one exception, and a copy from it is reviewed first).</p>
   <div class="cmp-wrap">
   <table class="cmp">
     <thead><tr><th>Byte</th><th>Name</th><th>CLI mode</th></tr></thead>
@@ -356,10 +358,13 @@
     </tbody>
   </table>
   </div>
-  <p class="catdesc" style="margin-top:12px"><b>The keys you type</b> are a tiny allowlist:
-    printable ASCII plus <code>Ctrl+C</code> (SIGINT), <code>Ctrl+Z</code> (SIGTSTP),
-    <code>Ctrl+\</code> (SIGQUIT), <code>Ctrl+D</code> (EOF) and Backspace. Only the control
-    byte is written; the kernel line discipline turns it into a signal.</p>
+  <p class="catdesc" style="margin-top:12px"><b>The keys you type</b> are forwarded as bytes, not
+    interpreted: printable ASCII, the control keys a shell's line editor uses (the whole
+    <code>Ctrl+A</code>-<code>Ctrl+Z</code> range - <code>Ctrl+C</code> SIGINT, <code>Ctrl+R</code>,
+    <code>Ctrl+U</code>, ...), and the arrow / Home / End / Delete line-edit keys. Each is written as
+    its control byte; the pseudo-terminal turns the signal keys (<code>Ctrl+C</code>/<code>Z</code>/<code>\</code>/<code>D</code>)
+    into signals. What never reaches the shell is a paste's hidden bytes - those go through the review
+    bar first.</p>
 </div></section>
 
 <section class="cat" id="gui-vs-cli"><div class="wrap">
@@ -377,7 +382,7 @@
     <tbody>
       <tr><td>Safe display (escapes stripped, ASCII-filtered)</td><td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
       <tr><td>Runs over SSH / on a plain console (no display)</td><td>No - needs Qt and a display</td><td><span class="yes">Yes</span> - pure Python, no Qt</td></tr>
-      <tr><td>Paste gate (Reveal dialog, delayed Allow)</td><td><span class="yes">Yes</span></td><td>No - a raw stdin stream cannot tell typing from a paste</td></tr>
+      <tr><td>Paste / copy review bar (in-window, delayed Allow)</td><td><span class="yes">Yes</span></td><td>No - a raw stdin stream cannot tell typing from a paste</td></tr>
       <tr><td>TUI mode (run full-screen programs)</td><td><span class="yes">Yes</span> (opt-in, per tab)</td><td>No - CLI mode only</td></tr>
       <tr><td>Colour</td><td><span class="yes">Yes</span> - contrast-guarded, on by default</td><td>Stripped (shows plain text)</td></tr>
       <tr><td>Unicode display modes (Box / Show / Reveal / Detail)</td><td><span class="yes">Yes</span> (per tab)</td><td><span class="yes">Yes</span> (<code>--mode</code>)</td></tr>
@@ -409,7 +414,7 @@
       <tr><td>4, 10, 11, 12</td><td>Palette / colours</td><td><span class="yes">Off</span></td><td>Yes</td><td>medium</td><td>Applied under the contrast guard, so nothing can be painted invisibly. (Colour rendering itself is a separate setting, on by default.)</td></tr>
       <tr><td>52 (write)</td><td>System clipboard write</td><td><span class="yes">Off</span></td><td>Yes</td><td>high</td><td>Write only, when enabled.</td></tr>
       <tr><td>52 (read)</td><td>System clipboard read</td><td><span class="yes">Off</span></td><td>Yes (gated)</td><td>high</td><td>Asked once per tab, with a delayed Allow and rate-limited reply.</td></tr>
-      <tr><td>1337</td><td>iTerm2 extensions (file transfer, variables)</td><td><span class="yes">Off</span></td><td>n/a (stub)</td><td>-</td><td>Recognized and stripped. secure-terminal has no iTerm2 implementation, so even when the toggle is on it performs no action (a deliberate stub); the file-transfer / variable surface a conformant iTerm2 would expose stays closed either way.</td></tr>
+      <tr><td>1337</td><td>iTerm2 extensions (file transfer, variables)</td><td><span class="yes">n/a</span></td><td>No toggle</td><td>-</td><td>Recognized and always stripped. There is deliberately NO toggle for it: iTerm2 OSC 1337 can never be safely enabled, so secure-terminal implements none of it; the file-transfer / variable surface a conformant iTerm2 would expose stays closed, with nothing to turn on.</td></tr>
     </tbody>
   </table>
   </div>
@@ -438,8 +443,8 @@
     <b>Why secure-terminal implements none of it:</b> each one is the terminal acting on program
     output - rendering arbitrary image bytes, writing files to your disk, or reporting state back
     onto the input channel - which is exactly the surface the default mode removes by construction.
-    The escape is recognised only so it can be stripped; the toggle is a deliberate no-op stub, so
-    even turning it on grants a program no file-transfer, no image, and no variable channel. If you
+    The escape is recognised only so it can be stripped; there is deliberately no toggle for it, so it
+    is always neutralized - a program gets no file-transfer, no image, and no variable channel. If you
     need those, that is a reason to open iTerm2 (or a dedicated graphical terminal) for that task.</p>
   <div class="cta">
     <a class="btn primary" href="/#install">Install secure-terminal</a>
