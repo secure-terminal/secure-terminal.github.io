@@ -142,30 +142,29 @@
 </div></section>
 
 <section class="cat" id="terminfo"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#terminfo">Optional: a restricted terminfo that tells programs the truth</a></h2>
-  <p class="catdesc">By default a CLI-mode tab reports <code>TERM=xterm-256color</code> and the
-    renderer simply strips whatever a program emits that it does not draw. That always works, but
-    a program still <em>tries</em> to move the cursor or probe the terminal, and you see nothing
-    back. An opt-in setting closes that gap at the source. <b>Use it</b> when you live in CLI mode
-    and want well-behaved programs to adapt: a pager or a progress bar that would otherwise address
-    the cursor or clear the screen instead prints plain line-by-line output it knows this terminal
-    can show - cleaner to read, with less stripped-escape noise, and the terminal is never even
-    asked to do something it refuses.</p>
+  <h2 class="catname"><a class="h-anchor" href="#terminfo">A restricted terminfo that tells programs the truth</a></h2>
+  <p class="catdesc">The mode itself decides what programs are told, over the ordinary terminfo
+    protocol - there is nothing to turn on. A <b>CLI-mode</b> tab reports
+    <code>TERM=secure-terminal</code>, a restricted entry, so a well-behaved program adapts at the
+    source: a pager, a completion menu or a progress bar that would otherwise address the cursor or
+    clear the screen instead prints plain line-by-line output it knows this terminal can show -
+    cleaner to read, with less stripped-escape noise, and the terminal is never even asked to do
+    something it refuses. A <b>TUI-mode</b> tab reports the fuller <code>xterm-256color</code>, so
+    full-screen programs and remote hosts (over ssh) get the entry they need.</p>
   <div class="issue">
-    <p>Turn on <code>cli_terminfo</code> and new CLI-mode tabs advertise a custom
-      <b><code>secure-terminal</code></b> terminfo entry instead. It inherits the correct colour
-      and SGR capabilities from <code>xterm-16color</code>, then <b>cancels</b> every capability
-      CLI mode does not render - cursor addressing, the alternate screen, clear/erase-display,
-      insert/delete line and character, scroll regions, save/restore cursor, tab stops, the
-      title and status line, mouse - <em>and</em> the <code>u6</code>/<code>u7</code>/<code>u8</code>/<code>u9</code>
+    <p>The <b><code>secure-terminal</code></b> entry inherits the correct colour and SGR
+      capabilities from <code>xterm-16color</code>, then <b>cancels</b> every capability CLI mode
+      does not render - cursor addressing, the alternate screen, clear/erase-display, insert/delete
+      line and character, scroll regions, save/restore cursor, tab stops, the title and status
+      line, mouse - <em>and</em> the <code>u6</code>/<code>u7</code>/<code>u8</code>/<code>u9</code>
       device-query capabilities. So a well-behaved program emits only what this terminal actually
       shows (line-local moves plus colour) and <b>never probes a terminal that will not answer</b>.
       It is defence in depth, not the guarantee: the renderer strips those sequences regardless of
       <code>TERM</code>; this just stops them being generated.</p>
-    <p>Off by default, because <code>TERM</code> is fixed when a shell starts, so it applies to new
-      tabs, and because a remote host (over ssh) or a full-screen TUI program needs the fuller
-      <code>xterm-256color</code> entry it does not have. Keep it off if you ssh or use TUI mode.
-      The entry is a short, readable source file:
+    <p>Switching a tab between CLI and TUI re-exports <code>TERM</code> to the running shell as a
+      plain, visible <code>export&nbsp;TERM=...</code> command - the shell re-reads terminfo live,
+      so no restart and no lost shell state. The switch is refused (with a message) while a program
+      is running, since it owns the terminal. The entry is a short, readable source file:
       <a href="https://github.com/secure-terminal/secure-terminal/blob/master/usr/share/secure-terminal/terminfo/secure-terminal.ti" rel="noopener"><code>secure-terminal.ti</code></a>.</p>
   </div>
 </div></section>
