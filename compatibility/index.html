@@ -215,18 +215,16 @@
     terminfo - is what keeps it safe. That is why a shell you ssh into uses TUI's portable
     <code>xterm-256color</code>, while a local CLI shell uses <code>secure-terminal</code>. Either
     way, safety rests on the renderer, never on <code>TERM</code>.</p>
-  <div class="issue">
-    <p><b>Does the richer entry widen the attack surface for hostile DATA?</b> No. Malicious output
-      - a log full of embedded escapes that you <code>cat</code> - emits raw bytes WITHOUT consulting
-      terminfo, so it can send the exact same sequences whichever entry is advertised; a richer
-      <code>TERM</code> hands it nothing. And the neutralising renderer never reads <code>TERM</code>
-      at all (its only environment read is <code>NO_COLOR</code>): it strips or contains the same
-      fixed set of sequences regardless. So <code>cat hostile.log</code> renders byte-for-byte
-      identically under <code>secure-terminal</code> and under <code>dumb</code> - the
-      <code>OSC 0</code> title hijack stripped, the stuck colour and the DEC line-drawing shift
-      neutralised to plain text. The terminfo entry only changes what <b>well-behaved</b> programs
-      choose to emit; it grants hostile data no extra reach.</p>
-  </div>
+  <p class="catdesc" style="margin-top:12px"><b>Does the richer entry widen the attack surface for
+    hostile DATA?</b> No. Malicious output - a log full of embedded escapes that you
+    <code>cat</code> - emits raw bytes WITHOUT consulting terminfo, so it can send the exact same
+    sequences whichever entry is advertised; a richer <code>TERM</code> hands it nothing. And the
+    neutralising renderer never reads <code>TERM</code> at all (its only environment read is
+    <code>NO_COLOR</code>): it strips or contains the same fixed set of sequences regardless. So
+    <code>cat hostile.log</code> renders byte-for-byte identically under <code>secure-terminal</code>
+    and under <code>dumb</code> - the <code>OSC 0</code> title hijack stripped, the stuck colour and
+    the DEC line-drawing shift neutralised to plain text. The terminfo entry only changes what
+    <b>well-behaved</b> programs choose to emit; it grants hostile data no extra reach.</p>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
