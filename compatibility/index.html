@@ -235,6 +235,59 @@
     <b>well-behaved</b> programs choose to emit; it grants hostile data no extra reach.</p>
 </div></section>
 
+<section class="cat" id="fingerprint"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#fingerprint">Fingerprintability: what a program can learn by asking</a></h2>
+  <p class="catdesc">The <code>TERM</code> name is only a weak, passive hint. Terminals are
+    identified far more reliably by <b>active probing</b>: a program - or a remote host you ssh into
+    - sends a query escape and reads the answer. Each answer is a datum that pins down your terminal
+    and its configuration. The table is produced by a reproducible probe,
+    <code>secure-terminal-fingerprint</code> (in
+    <a href="https://github.com/org-ai-assisted/dist-ai/tree/master/usr/share/secure-terminal-fingerprint" rel="noopener">dist-ai</a>):
+    it fires each standard query at every terminal under a nested Xvfb and records the reply. A
+    <span class="no">Leaks</span> cell shows a real captured response; <span class="yes">Silent</span>
+    means the terminal answered nothing.</p>
+  <div class="cmp-wrap"><table class="cmp">
+    <thead><tr><th>Query</th><th>What an answer leaks</th><th>A typical terminal (xterm)</th>
+      <th>secure-terminal (CLI + TUI)</th></tr></thead>
+    <tbody>
+      <tr><td>Primary device attributes (DA1)</td><td>the feature set / emulator family</td>
+          <td><span class="no">Leaks</span> <code>?64;1;2;6;9;...</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Secondary device attributes (DA2)</td><td>terminal type + firmware version</td>
+          <td><span class="no">Leaks</span> <code>&gt;41;398;0</code> (xterm v398)</td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Tertiary device attributes (DA3)</td><td>a unit-ID string</td>
+          <td><span class="no">Leaks</span> <code>!|00000000</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Name + version (XTVERSION)</td><td>the exact emulator NAME and version</td>
+          <td><span class="no">Leaks</span> <code>XTerm(398)</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Cursor position (DSR 6)</td><td>the cursor row/column</td>
+          <td><span class="no">Leaks</span> <code>1;1R</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Terminal status (DSR 5)</td><td>that the terminal is present</td>
+          <td><span class="no">Leaks</span> <code>0n</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Foreground colour (OSC 10)</td><td>your exact text colour (theme)</td>
+          <td><span class="no">Leaks</span> <code>rgb:0000/0000/0000</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Background colour (OSC 11)</td><td>your exact background colour (theme)</td>
+          <td><span class="no">Leaks</span> <code>rgb:ffff/ffff/ffff</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Palette colour (OSC 4)</td><td>your exact palette (theme)</td>
+          <td><span class="no">Leaks</span> <code>rgb:cdcd/0000/0000</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Synchronised-output mode (DECRQM 2026)</td><td>which private modes it supports</td>
+          <td><span class="no">Leaks</span> <code>?2026;0</code></td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Text-area / cell pixel size (CSI 14 t / 16 t)</td><td>window + font pixel size</td>
+          <td><span class="yes">Silent</span> (this build)</td><td><span class="yes">Silent</span></td></tr>
+      <tr><td>Report window title (CSI 21 t)</td><td>the window TITLE text</td>
+          <td><span class="yes">Silent</span> (this build)</td><td><span class="yes">Silent</span></td></tr>
+    </tbody>
+    <tfoot><tr><td><b>Total answered</b></td><td></td>
+      <td><b>10 of 13</b></td><td><b>0 of 13</b></td></tr></tfoot>
+  </table></div>
+  <p class="catdesc" style="margin-top:12px">A typical terminal hands a program its name, version,
+    feature set and your exact theme colours on request; secure-terminal answers <b>nothing</b>, in
+    both CLI and TUI mode, because it strips every escape and never writes a reply back (the query
+    capabilities <code>u6</code>-<code>u9</code> are cancelled too). So the honest picture is the
+    reverse of the usual worry: the custom <code>TERM</code> name is a weak passive label, while
+    against the <em>strong</em> vector - a program actively interrogating the terminal -
+    secure-terminal is the LEAST fingerprintable of the three, not the most. Re-run the probe
+    yourself with <code>secure-terminal-fingerprint</code>.</p>
+</div></section>
+
 <section class="cat" id="tui"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#tui">The 10 most popular full-screen (TUI) programs</a></h2>
   <p class="catdesc">Curses and full-screen programs are driven entirely by escape sequences,
