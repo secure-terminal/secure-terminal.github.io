@@ -167,6 +167,46 @@
       is running, since it owns the terminal. The entry is a short, readable source file:
       <a href="https://github.com/secure-terminal/secure-terminal/blob/master/usr/share/secure-terminal/terminfo/secure-terminal.ti" rel="noopener"><code>secure-terminal.ti</code></a>.</p>
   </div>
+
+  <p class="catdesc" style="margin-top:18px">Why a custom entry, and not the standard
+    <code>dumb</code>? <code>dumb</code> is the classic "line-oriented, no cursor control" terminal
+    every system already ships. It reaches the same core safety - no cursor addressing, no
+    alternate screen, no way to probe the terminal - but it does so by having almost NOTHING:
+    <code>am</code>, <code>cols#80</code>, a bell, and a newline. No colour, no bold, not even
+    cursor-left, so an interactive shell cannot edit within a line or show syntax colour.
+    <code>secure-terminal</code> keeps the safe, useful, line-local half of a real terminal and
+    cancels only the dangerous half.</p>
+  <div class="cmp-wrap">
+  <table class="cmp">
+    <thead><tr><th>Capability</th><th><code>dumb</code></th><th><code>secure-terminal</code></th></tr></thead>
+    <tbody>
+      <tr><td>No cursor addressing / alternate screen (no full-screen redraw)</td>
+          <td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
+      <tr><td>Tab-completions are LISTED, never drawn as a cursor menu</td>
+          <td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
+      <tr><td>Terminal is never probed (<code>u6</code>-<code>u9</code> device queries absent)</td>
+          <td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
+      <tr><td>16-colour output and text attributes (bold, dim, underline, reverse)</td>
+          <td><span class="no">No</span></td><td><span class="yes">Yes</span> (from <code>xterm-16color</code>)</td></tr>
+      <tr><td>In-line editing: cursor left/right, erase-to-end-of-line (<code>cub</code>/<code>cuf</code>/<code>el</code>)</td>
+          <td><span class="no">No</span></td><td><span class="yes">Yes</span></td></tr>
+      <tr><td>Named keys defined: arrows, Home/End, function keys</td>
+          <td><span class="no">No</span></td><td><span class="yes">Yes</span></td></tr>
+      <tr><td>In the base terminfo db - resolves on any host, including over ssh</td>
+          <td><span class="yes">Yes</span></td><td><span class="no">No</span> (local install)</td></tr>
+      <tr><td>Fingerprint-neutral - does not name this terminal to a remote host</td>
+          <td><span class="yes">Yes</span></td><td><span class="no">No</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="catdesc" style="margin-top:12px">So the two agree on every <em>safety</em> row - both
+    refuse cursor addressing, list completions, and never answer a probe. They differ on richness
+    versus reach: <code>secure-terminal</code> keeps colour and real line editing that
+    <code>dumb</code> throws away, at the price of being a custom entry a remote host does not have.
+    That is the deliberate split with TUI mode: a shell you ssh into wants a portable, capable entry,
+    so TUI mode reports <code>xterm-256color</code>; a local CLI shell wants the safe-but-comfortable
+    middle ground, so it reports <code>secure-terminal</code>. Either way, safety rests on the
+    renderer stripping escapes, never on <code>TERM</code>.</p>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
