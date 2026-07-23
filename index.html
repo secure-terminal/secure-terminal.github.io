@@ -140,7 +140,8 @@
         configurable: <b>always</b>, <b>only when a paste carries unicode or control</b> (the default), or
         <b>never</b>. <b>never</b> turns off the <em>prompt</em>, not the safety - the paste is still sanitized to
         ASCII, because feeding raw control or bidi bytes to your shell is the exact thing this terminal exists to
-        prevent; there is no mode that pastes them through. A plain-ASCII paste is never interrupted.</p>
+        prevent; there is no mode that pastes them through. A single plain-ASCII line is never interrupted; a
+        multi-line paste is held for review too, so a hidden second command cannot run the instant you paste.</p>
       <p><b>Copy is reviewed the same way, in the other direction.</b> The same bar guards text <em>leaving</em> via
         copy: after <code>cat evil-log</code>, selecting and copying in Show mode (where the real glyphs are kept)
         would otherwise put a look-alike straight on the system clipboard - so you choose to copy it stripped to
