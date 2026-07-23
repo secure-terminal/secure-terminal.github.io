@@ -52,8 +52,10 @@
   <h1>Everything you read runs.<br>Nothing you read can act.</h1>
   <p class="lede">secure-terminal has two modes. <b>CLI mode</b> (the default, line-oriented)
     interprets no cursor or screen escapes: a program's output is reduced to printable ASCII
-    plus safe, contrast-guarded colour, so ordinary command output looks right yet a hostile
-    log cannot redraw your screen. <b>TUI mode</b> (opt-in, per tab) interprets escapes inside
+    plus safe, contrast-guarded colour, and is <b>append-only and tamper-evident</b> (output can
+    only be added, never moved or erased), so ordinary command output looks right yet a hostile
+    log cannot redraw your screen or rewrite what you already saw. <b>TUI mode</b> (opt-in, per tab)
+    interprets escapes inside
     an isolated in-memory screen so full-screen programs render, while every cell is still
     character-filtered and the terminal still answers no query and touches no clipboard. The tables below are backed by real tests,
     not claims: the top programs run in both modes, and every protocol, control byte
