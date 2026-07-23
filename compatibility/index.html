@@ -198,8 +198,6 @@
           <td><span class="no">No</span></td><td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
       <tr><td>In the base terminfo db - resolves on any host, incl. over ssh</td>
           <td><span class="yes">Yes</span></td><td><span class="no">No</span> (local)</td><td><span class="yes">Yes</span></td></tr>
-      <tr><td>Fingerprint-neutral - does not name this terminal to a remote host</td>
-          <td><span class="yes">Yes</span></td><td><span class="no">No</span></td><td><span class="yes">Yes</span></td></tr>
     </tbody>
   </table>
   </div>
@@ -215,6 +213,16 @@
     terminfo - is what keeps it safe. That is why a shell you ssh into uses TUI's portable
     <code>xterm-256color</code>, while a local CLI shell uses <code>secure-terminal</code>. Either
     way, safety rests on the renderer, never on <code>TERM</code>.</p>
+  <p class="catdesc" style="margin-top:8px">Isn't a custom <code>TERM</code> name a fingerprint? Only
+    a weak one, and not a property worth claiming. A remote host is told the <em>string</em>
+    "secure-terminal", but terminals are identified far more reliably by <b>behaviour</b> - how they
+    answer device queries (DA/DSR), their size, their quirks - than by a <code>TERM</code> value that
+    many emulators share anyway. If anything CLI mode is <em>harder</em> to probe: it answers no
+    queries at all (the <code>u6</code>-<code>u9</code> capabilities are cancelled and every escape is
+    stripped). So the honest cost of the custom entry is not fingerprinting - it is
+    <b>compatibility</b>: a remote host has no <code>secure-terminal</code> terminfo, so a curses
+    program there sees an unknown terminal. That is the reason to ssh in TUI mode, whose
+    <code>xterm-256color</code> every host already has.</p>
   <p class="catdesc" style="margin-top:12px"><b>Does the richer entry widen the attack surface for
     hostile DATA?</b> No. Malicious output - a log full of embedded escapes that you
     <code>cat</code> - emits raw bytes WITHOUT consulting terminfo, so it can send the exact same
