@@ -168,45 +168,65 @@
       <a href="https://github.com/secure-terminal/secure-terminal/blob/master/usr/share/secure-terminal/terminfo/secure-terminal.ti" rel="noopener"><code>secure-terminal.ti</code></a>.</p>
   </div>
 
-  <p class="catdesc" style="margin-top:18px">Why a custom entry, and not the standard
-    <code>dumb</code>? <code>dumb</code> is the classic "line-oriented, no cursor control" terminal
-    every system already ships. It reaches the same core safety - no cursor addressing, no
-    alternate screen, no way to probe the terminal - but it does so by having almost NOTHING:
-    <code>am</code>, <code>cols#80</code>, a bell, and a newline. No colour, no bold, not even
-    cursor-left, so an interactive shell cannot edit within a line or show syntax colour.
-    <code>secure-terminal</code> keeps the safe, useful, line-local half of a real terminal and
-    cancels only the dangerous half.</p>
+  <p class="catdesc" style="margin-top:18px">Three terminfo entries, three points on a spectrum:
+    <code>dumb</code> (the classic "line-oriented, no cursor control" entry every system already
+    ships), <code>secure-terminal</code> (CLI mode's safe-but-comfortable subset), and
+    <code>xterm-256color</code> (TUI mode's full standard entry). CLI's two entries WITHHOLD cursor
+    addressing so a program cannot redraw; TUI advertises the full entry and instead confines what a
+    program draws to a neutralised pyte grid. Note that <code>dumb</code> reaches the core safety by
+    having almost nothing - no colour, no bold, not even cursor-left, so an interactive shell cannot
+    edit within a line - while <code>secure-terminal</code> keeps the safe, useful, line-local half
+    of a real terminal and cancels only the dangerous half.</p>
   <div class="cmp-wrap">
   <table class="cmp">
-    <thead><tr><th>Capability</th><th><code>dumb</code></th><th><code>secure-terminal</code></th></tr></thead>
+    <thead><tr><th>The entry advertises...</th><th><code>dumb</code></th>
+      <th><code>secure-terminal</code><br>(CLI mode)</th>
+      <th><code>xterm-256color</code><br>(TUI mode)</th></tr></thead>
     <tbody>
-      <tr><td>No cursor addressing / alternate screen (no full-screen redraw)</td>
-          <td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
-      <tr><td>Tab-completions are LISTED, never drawn as a cursor menu</td>
-          <td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
-      <tr><td>Terminal is never probed (<code>u6</code>-<code>u9</code> device queries absent)</td>
-          <td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
-      <tr><td>16-colour output and text attributes (bold, dim, underline, reverse)</td>
-          <td><span class="no">No</span></td><td><span class="yes">Yes</span> (from <code>xterm-16color</code>)</td></tr>
-      <tr><td>In-line editing: cursor left/right, erase-to-end-of-line (<code>cub</code>/<code>cuf</code>/<code>el</code>)</td>
-          <td><span class="no">No</span></td><td><span class="yes">Yes</span></td></tr>
-      <tr><td>Named keys defined: arrows, Home/End, function keys</td>
-          <td><span class="no">No</span></td><td><span class="yes">Yes</span></td></tr>
-      <tr><td>In the base terminfo db - resolves on any host, including over ssh</td>
-          <td><span class="yes">Yes</span></td><td><span class="no">No</span> (local install)</td></tr>
+      <tr><td>Cursor addressing / alternate screen (full-screen redraw)</td>
+          <td><span class="yes">Refused</span></td><td><span class="yes">Refused</span></td>
+          <td>Advertised <sup>*</sup></td></tr>
+      <tr><td>Tab-completions</td>
+          <td>Listed</td><td>Listed</td><td>Drawn as a cursor menu</td></tr>
+      <tr><td>Answers device queries (<code>u6</code>-<code>u9</code>)</td>
+          <td><span class="yes">No</span></td><td><span class="yes">No</span></td><td>Yes <sup>*</sup></td></tr>
+      <tr><td>Colours + attributes (bold, dim, underline, reverse)</td>
+          <td><span class="no">None</span></td><td>16-colour</td><td>256-colour</td></tr>
+      <tr><td>In-line editing: cursor left/right, erase-to-EOL (<code>cub</code>/<code>cuf</code>/<code>el</code>)</td>
+          <td><span class="no">No</span></td><td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
+      <tr><td>Named keys: arrows, Home/End, function keys</td>
+          <td><span class="no">No</span></td><td><span class="yes">Yes</span></td><td><span class="yes">Yes</span></td></tr>
+      <tr><td>In the base terminfo db - resolves on any host, incl. over ssh</td>
+          <td><span class="yes">Yes</span></td><td><span class="no">No</span> (local)</td><td><span class="yes">Yes</span></td></tr>
       <tr><td>Fingerprint-neutral - does not name this terminal to a remote host</td>
-          <td><span class="yes">Yes</span></td><td><span class="no">No</span></td></tr>
+          <td><span class="yes">Yes</span></td><td><span class="no">No</span></td><td><span class="yes">Yes</span></td></tr>
     </tbody>
   </table>
   </div>
-  <p class="catdesc" style="margin-top:12px">So the two agree on every <em>safety</em> row - both
-    refuse cursor addressing, list completions, and never answer a probe. They differ on richness
-    versus reach: <code>secure-terminal</code> keeps colour and real line editing that
-    <code>dumb</code> throws away, at the price of being a custom entry a remote host does not have.
-    That is the deliberate split with TUI mode: a shell you ssh into wants a portable, capable entry,
-    so TUI mode reports <code>xterm-256color</code>; a local CLI shell wants the safe-but-comfortable
-    middle ground, so it reports <code>secure-terminal</code>. Either way, safety rests on the
-    renderer stripping escapes, never on <code>TERM</code>.</p>
+  <p class="catdesc" style="margin-top:12px"><sup>*</sup> TUI mode advertises the full entry on
+    purpose - a full-screen program needs cursor addressing - and is kept safe NOT by withholding
+    capabilities but by interpreting every escape into a confined
+    <a href="#tui">pyte screen grid</a> where each glyph is neutralised. A capability it advertises
+    is one the renderer contains, not a hole.</p>
+  <p class="catdesc" style="margin-top:8px">The progression is the whole design: <code>dumb</code>
+    strips everything for maximum portability; <code>secure-terminal</code> keeps colour and line
+    editing while still refusing the full-screen and probe capabilities CLI mode cannot safely draw;
+    <code>xterm-256color</code> restores the full set for TUI mode, where the confined grid - not the
+    terminfo - is what keeps it safe. That is why a shell you ssh into uses TUI's portable
+    <code>xterm-256color</code>, while a local CLI shell uses <code>secure-terminal</code>. Either
+    way, safety rests on the renderer, never on <code>TERM</code>.</p>
+  <div class="issue">
+    <p><b>Does the richer entry widen the attack surface for hostile DATA?</b> No. Malicious output
+      - a log full of embedded escapes that you <code>cat</code> - emits raw bytes WITHOUT consulting
+      terminfo, so it can send the exact same sequences whichever entry is advertised; a richer
+      <code>TERM</code> hands it nothing. And the neutralising renderer never reads <code>TERM</code>
+      at all (its only environment read is <code>NO_COLOR</code>): it strips or contains the same
+      fixed set of sequences regardless. So <code>cat hostile.log</code> renders byte-for-byte
+      identically under <code>secure-terminal</code> and under <code>dumb</code> - the
+      <code>OSC 0</code> title hijack stripped, the stuck colour and the DEC line-drawing shift
+      neutralised to plain text. The terminfo entry only changes what <b>well-behaved</b> programs
+      choose to emit; it grants hostile data no extra reach.</p>
+  </div>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
