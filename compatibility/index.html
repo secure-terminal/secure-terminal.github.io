@@ -179,9 +179,10 @@
     of a real terminal and cancels only the dangerous half.</p>
   <div class="cmp-wrap">
   <table class="cmp">
-    <thead><tr><th>The entry advertises...</th><th><code>dumb</code></th>
-      <th><code>secure-terminal</code><br>(CLI mode)</th>
-      <th><code>xterm-256color</code><br>(TUI mode)</th></tr></thead>
+    <thead><tr><th>The entry advertises...<br><span style="font-weight:normal;font-size:.85em">(all three are values secure-terminal sets for <code>TERM</code>)</span></th>
+      <th><code>TERM=dumb</code></th>
+      <th><code>TERM=secure-terminal</code><br>(CLI mode)</th>
+      <th><code>TERM=xterm-256color</code><br>(TUI mode)</th></tr></thead>
     <tbody>
       <tr><td>Cursor addressing / alternate screen (full-screen redraw)</td>
           <td><span class="yes">Refused</span></td><td><span class="yes">Refused</span></td>
