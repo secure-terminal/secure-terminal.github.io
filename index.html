@@ -92,7 +92,7 @@
   </article>
 
   <article class="issue">
-    <h3 id="no-escape-parser"><a class="h-anchor" href="#no-escape-parser">No escape parser in the default mode</a></h3>
+    <h3 id="no-escape-parser"><a class="h-anchor" href="#no-escape-parser">No escape parser in CLI mode</a></h3>
     <p>By default there is no ANSI parser to attack. The terminal honors no cursor moves, alternate screens or OSC
       hyperlinks from the child process. Parsing attacker-influenced escapes is the entire vulnerability class; a
       terminal that will not parse them cannot fall for them. Out of the box it has no terminal side-effects at
@@ -159,7 +159,7 @@
         confusable with ASCII wears a louder colour than honest foreign text - while the invisible, bidi and
         control classes, which have no visible glyph, still show as a coloured placeholder).</p>
       <p class="modenote"><b>Show does not mean run.</b> All four modes remove escape sequences first
-        (there is no escape parser at all), so nothing a program prints - a title change, a clipboard write,
+        (there is no escape parser in CLI mode), so nothing a program prints - a title change, a clipboard write,
         a cursor move - is ever interpreted, in <b>any</b> mode, Show included. A bare escape or
         control byte is still neutralized to a coloured placeholder in Show; the mode only changes how the
         remaining, already-safe characters are drawn, never whether escapes are interpreted.</p>
@@ -372,7 +372,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
       real cases the
       <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a>
       collects, most from the last few years. secure-terminal closes the whole class
-      <em>by design</em> - its default mode runs no escape parser and answers no
+      <em>by design</em> - CLI mode runs no escape parser and answers no
       query sequence, so output can never become input. See the
       <a href="/comparison/">comparison</a>, measured with screenshots.</p>
   </div>
