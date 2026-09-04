@@ -310,33 +310,22 @@
 
 <section class="cat" id="reproduce"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#reproduce">Run the evidence yourself</a></h2>
-  <p class="catdesc">None of this is take-our-word-for-it. Every check above runs from two public repos, in a sandbox VM.</p>
+  <p class="catdesc">None of this is take-our-word-for-it. The adversarial corpus - the check that proves the neutralization claims - is clone-and-run in a sandbox VM.</p>
   <div class="trybox">
-    <div class="trycols">
-      <div>
-        <h4>The adversarial corpus <span class="sbtag">sandbox VM only</span></h4>
-        <p class="sub">real disclosed attacks, hex at rest - asserts secure-terminal neutralizes each</p>
-        <p class="cmdlabel"># clone the corpus (read SAFETY.md first):</p>
-        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus &amp;&amp; cd terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <p class="cmdlabel"># drive secure-terminal with every PoC and assert each is neutralized:</p>
-        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <p class="cmdlabel"># the reflection-class spec surface (the "output becomes input" invariant):</p>
-        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/conformance.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
-      </div>
-      <div>
-        <h4>The full test suite</h4>
-        <p class="sub">unit, GUI, the formal proof, and the always-on resilience suite - in dist-ai</p>
-        <p class="cmdlabel"># clone the app and the out-of-tree tests:</p>
-        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/secure-terminal</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <div class="copybox"><code class="cmd">git clone https://github.com/org-ai-assisted/dist-ai</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <p class="cmdlabel"># unit + GUI + the Z3 formal proof over all 1,114,112 code points, against your checkout:</p>
-        <div class="copybox"><code class="cmd">SECURE_TERMINAL_REPO=secure-terminal dist-ai/usr/bin/secure-terminal-tests</code><button class="copybtn" type="button" hidden>Copy</button></div>
-      </div>
-    </div>
+    <h4>The adversarial corpus <span class="sbtag">sandbox VM only</span></h4>
+    <p class="sub">real disclosed attacks, hex at rest - asserts secure-terminal neutralizes each</p>
+    <p class="cmdlabel"># clone the corpus (read SAFETY.md first):</p>
+    <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus &amp;&amp; cd terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
+    <p class="cmdlabel"># drive secure-terminal with every PoC and assert each is neutralized:</p>
+    <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
+    <p class="cmdlabel"># the reflection-class spec surface (the "output becomes input" invariant):</p>
+    <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/conformance.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
     <p class="toolnote">Every PoC doubles as a test fixture: <code>index.json</code> records each one's class, CVE and
       expected-safe behaviour; payloads are hex-encoded and canary-forked (the few real decoder/DoS triggers are
-      risk-tiered and sandbox-gated). The formal proof lives in
-      <a href="https://github.com/org-ai-assisted/dist-ai">dist-ai</a>'s <code>verify_formal.py</code>; the resilience and fuzz suites (<code>terminal-resilience-tests</code>, <code>secure-terminal-tests-fuzz</code>) run there too.</p>
+      risk-tiered and sandbox-gated). The rest of the suite - the unit, GUI and Z3 formal-proof runner
+      (<code>secure-terminal-tests</code>, run against a secure-terminal checkout via <code>SECURE_TERMINAL_REPO</code>),
+      the resilience suite (<code>terminal-resilience-tests</code>) and the fuzzers - lives in
+      <a href="https://github.com/org-ai-assisted/dist-ai">dist-ai</a>.</p>
   </div>
 </div></section>
 </main>
