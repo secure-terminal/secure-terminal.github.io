@@ -83,7 +83,7 @@
   <p class="catdesc">a hostile <code>curl | bash</code> paste held before a byte reaches the shell, every hidden character named inline.</p>
   <div class="shotgrid"><figure class="shot"><a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal paste review bar holding a hostile paste, every hidden character named inline."></a></figure></div>
   <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> <span class="rnote">&middot; a pasted attack, not cat - Ctrl-Shift-V into secure-terminal and the review bar holds it</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 tools/reproduce.py bracketed-paste-bypass-2021 --out paste.payload
-xclip -selection clipboard &lt; paste.payload    # then Ctrl-Shift-V into secure-terminal</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+xclip -selection clipboard &lt; paste.payload    # or wl-copy on Wayland, then Ctrl-Shift-V into secure-terminal</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="shot-copy-review"><a class="h-anchor" href="#shot-copy-review">Copy review bar</a></h3>
   <p class="catdesc">the same review applied to text leaving for the system clipboard.</p>
@@ -219,7 +219,8 @@ xclip -selection clipboard &lt; paste.payload    # then Ctrl-Shift-V into secure
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.random-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.random-tui.webp" width="1722" height="910" loading="lazy" alt="secure-terminal: Random bytes, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.random-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.random-tui-show.webp" width="1722" height="912" loading="lazy" alt="secure-terminal: Random bytes, TUI, Show mode."></a></figure>
   </div>
-  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; plain random data - run in a throwaway terminal (<code>reset</code> restores)</span></div><div class="copybox"><code class="cmd">head -c 1200 /dev/urandom &gt; random.payload &amp;&amp; cat random.payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; the exact shot bytes - a fixed, deterministic seed-0 field (ESC-filtered, so byte-identical); a throwaway terminal, <code>reset</code> restores</span> &middot; <a href="https://github.com/org-ai-assisted/dist-ai/blob/master/usr/share/secure-terminal-shots/lib-capture.sh" rel="noopener">view the generator on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">python3 -c 'import random,sys;r=random.Random(0);sys.stdout.buffer.write(bytes(x for x in (r.getrandbits(8) for _ in range(2400)) if x!=0x1b)[:1200])' &gt; random.payload
+cat random.payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-art"><a class="h-anchor" href="#case-art">ANSI art</a></h3>
   <p class="catdesc">legitimate SGR colour art, kept readable.</p>
