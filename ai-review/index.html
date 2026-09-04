@@ -80,7 +80,7 @@
   <h2 class="catname"><a class="h-anchor" href="#corpus">1. The adversarial corpus: real, disclosed attacks</a></h2>
   <p class="catdesc">The core of the audit is the
     <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">terminal-poc-corpus</a>:
-    <b>22</b> proofs-of-concept drawn from actual, publicly-disclosed terminal vulnerabilities -
+    <b>32</b> proofs-of-concept drawn from actual, publicly-disclosed terminal vulnerabilities -
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/answerback-injection" rel="noopener">answerback injection</a>,
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/decrqss-reflection-2023" rel="noopener">DECRQSS</a> and
     <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/device-status-reflection-rxvt-2021" rel="noopener">device-status reflection</a>,
@@ -307,6 +307,40 @@
     <a class="btn ghost" href="/compatibility/">Compatibility detail</a>
   </div>
 </div></section>
+
+<section class="cat" id="reproduce"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#reproduce">Run the evidence yourself</a></h2>
+  <p class="catdesc">None of this is take-our-word-for-it. Every check above runs from two public repos, in a sandbox VM.</p>
+  <div class="trybox">
+    <div class="trycols">
+      <div>
+        <h4>The adversarial corpus <span class="sbtag">sandbox VM only</span></h4>
+        <p class="sub">real disclosed attacks, hex at rest - asserts secure-terminal neutralizes each</p>
+        <p class="cmdlabel"># clone the corpus (read SAFETY.md first):</p>
+        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># drive secure-terminal with every PoC and assert each is neutralized:</p>
+        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># the reflection-class spec surface (the "output becomes input" invariant):</p>
+        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/conformance.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+      <div>
+        <h4>The full test suite</h4>
+        <p class="sub">unit, GUI, the formal proof, and the always-on resilience suite - in dist-ai</p>
+        <p class="cmdlabel"># clone the app and the out-of-tree tests:</p>
+        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/secure-terminal</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <div class="copybox"><code class="cmd">git clone https://github.com/org-ai-assisted/dist-ai</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># unit + GUI + the Z3 formal proof over all 1,114,112 code points:</p>
+        <div class="copybox"><code class="cmd">secure-terminal-tests</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># the always-on resilience suite:</p>
+        <div class="copybox"><code class="cmd">terminal-resilience-tests</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+    </div>
+    <p class="toolnote">Every PoC doubles as a test fixture: <code>index.json</code> records each one's class, CVE and
+      expected-safe behaviour; payloads are hex-encoded and canary-forked (the few real decoder/DoS triggers are
+      risk-tiered and sandbox-gated). The formal proof lives in
+      <a href="https://github.com/org-ai-assisted/dist-ai">dist-ai</a>'s <code>verify_formal.py</code>.</p>
+  </div>
+</div></section>
 </main>
 <footer>
   <div class="ftop">
@@ -350,6 +384,7 @@
     <span class="sh-msg" aria-live="polite"></span>
   </div>
   <script src="/share.js"></script>
+  <script src="/copy.js"></script>
   <div class="ffree">
     <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
     <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>

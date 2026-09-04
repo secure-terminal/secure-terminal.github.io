@@ -206,6 +206,36 @@
     <a href="https://output-lies.github.io/quiz/" rel="noopener">spot-the-lie quiz</a>. secure-terminal is the same
     defense made the default for a whole session: paste in, read out, every invisible, bidi or look-alike byte
     arrives marked.</p>
+  <div class="trybox">
+    <div class="trycols">
+      <div>
+        <h4>Display-deception classes</h4>
+        <p class="sub">bidi, homoglyph, zero-width, hijacked title, alt-screen - safe to <code>cat</code> anywhere</p>
+        <p class="cmdlabel"># one honest board carrying every display class at once:</p>
+        <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># one command, two terminals: a traditional terminal renders the attack (`reset` restores
+        # it); secure-terminal - the GUI, or secure-terminal-cli from any terminal - marks every byte:</p>
+        <div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt
+reset</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+      <div>
+        <h4>Paste &amp; active classes <span class="sbtag">sandbox VM only</span></h4>
+        <p class="sub">pastejacking, bracketed-paste bypass, clipboard, reflection - hex at rest, never <code>cat</code> (read SAFETY.md)</p>
+        <p class="cmdlabel"># clone the PoC corpus and list all 32 classes:</p>
+        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <div class="copybox"><code class="cmd">cd terminal-poc-corpus &amp;&amp; tools/reproduce.py --list</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># reproduce a paste class as a render-able file (prints its risk tier + how-to):</p>
+        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 tools/reproduce.py bracketed-paste-bypass-2021</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># assert secure-terminal neutralizes every class, automatically:</p>
+        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+    </div>
+    <p class="toolnote">Every PoC doubles as a test fixture: <code>index.json</code> records each one's class, CVE and
+      expected-safe behaviour; payloads are hex-encoded and canary-forked (the few real decoder/DoS triggers are
+      risk-tiered and sandbox-gated), and the always-on
+      <a href="https://github.com/org-ai-assisted/dist-ai">terminal-resilience-tests</a> suite checks them all
+      against secure-terminal.</p>
+  </div>
 </div></section>
 </main>
 <footer>
@@ -250,6 +280,7 @@
     <span class="sh-msg" aria-live="polite"></span>
   </div>
   <script src="/share.js"></script>
+  <script src="/copy.js"></script>
   <div class="ffree">
     <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
     <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>

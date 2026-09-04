@@ -768,10 +768,10 @@
         <p class="sub">bidi, homoglyph, zero-width, hijacked title, alt-screen - safe to <code>cat</code> anywhere</p>
         <p class="cmdlabel"># one honest board carrying every display class at once:</p>
         <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <p class="cmdlabel"># what you see, then the same file through secure-terminal:</p>
+        <p class="cmdlabel"># one command, two terminals: a traditional terminal renders the attack (`reset` restores
+        # it); secure-terminal - the GUI, or secure-terminal-cli from any terminal - marks every byte:</p>
         <div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt
 reset</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <div class="copybox"><code class="cmd">secure-terminal-cli cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
       </div>
       <div>
         <h4>Active / reflection classes <span class="sbtag">sandbox VM only</span></h4>
