@@ -66,23 +66,31 @@
 <div class="wrap"><nav class="toc" aria-label="On this page">
   <p class="toch">On this page</p>
   <ul>
-    <li><a href="#showcase">Highlights</a></li>
+    <li><a href="#showcase">Review bar &amp; modes</a></li>
     <li><a href="#render-modes">Every display mode</a></li>
     <li><a href="#compatibility">Real-tool compatibility</a></li>
   </ul>
 </nav></div>
 
 <section class="cat" id="showcase"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#showcase">Highlights</a></h2>
-  <p class="catdesc">The shots that best show what secure-terminal does: the review bar in both directions, the
-    four display modes, and the combined attack board reduced to inert ASCII.</p>
-  <div class="shotgrid">
-        <figure class="shot"><figcaption class="shotname"><b>The combined board</b> - every attack at once, reduced to inert marked ASCII (CLI, Box)</figcaption><a href="/comparison/shots/secure-terminal.tui-showcase.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.tui-showcase.webp" width="1722" height="1062" loading="lazy" alt="secure-terminal reducing the combined attack board to inert marked ASCII in CLI Box mode."></a></figure>
-        <figure class="shot"><figcaption class="shotname"><b>Homepage hero</b> - the file that hijacks a normal terminal, rendered inert (Show mode)</figcaption><a href="/comparison/shots/hero-secure.webp" target="_blank" rel="noopener"><img src="/comparison/shots/hero-secure.webp" width="1396" height="737" loading="lazy" alt="secure-terminal rendering the hero attack file inert, title untouched."></a></figure>
-        <figure class="shot"><figcaption class="shotname"><b>Paste review bar</b> - a hostile <code>curl | bash</code> paste held before a byte reaches the shell</figcaption><a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal paste review bar holding a hostile paste, every hidden character named inline."></a></figure>
-        <figure class="shot"><figcaption class="shotname"><b>Copy review bar</b> - the same review applied to text leaving for the system clipboard</figcaption><a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal copy review bar reviewing text going to the system clipboard."></a></figure>
-        <figure class="shot"><figcaption class="shotname"><b>Four display modes</b> - one <code>ls</code> listing as Box, Show, Reveal and Detail (the default)</figcaption><a href="/shots/display-modes.webp" target="_blank" rel="noopener"><img src="/shots/display-modes.webp" width="1584" height="1212" loading="lazy" alt="One ls listing rendered by secure-terminal in all four display modes."></a></figure>
-  </div>
+  <h2 class="catname"><a class="h-anchor" href="#showcase">The review bar and display modes</a></h2>
+  <p class="catdesc">What secure-terminal does at a glance - the paste and copy review bars, and the four display
+    modes. The attack boards in every mode are in <a href="#render-modes">Every display mode</a> below.</p>
+
+  <h3 id="shot-paste-review"><a class="h-anchor" href="#shot-paste-review">Paste review bar</a></h3>
+  <p class="catdesc">a hostile <code>curl | bash</code> paste held before a byte reaches the shell, every hidden character named inline.</p>
+  <div class="shotgrid"><figure class="shot"><a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal paste review bar holding a hostile paste, every hidden character named inline."></a></figure></div>
+  <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 tools/reproduce.py bracketed-paste-bypass-2021</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+
+  <h3 id="shot-copy-review"><a class="h-anchor" href="#shot-copy-review">Copy review bar</a></h3>
+  <p class="catdesc">the same review applied to text leaving for the system clipboard.</p>
+  <div class="shotgrid"><figure class="shot"><a href="/shots/copy-warning.webp" target="_blank" rel="noopener"><img src="/shots/copy-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal copy review bar reviewing text going to the system clipboard."></a></figure></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; print text with a hidden byte, then select and copy it in secure-terminal - the review bar holds it before the clipboard</span></div><div class="copybox"><code class="cmd">printf 'admin\342\200\213istrator\n'</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+
+  <h3 id="shot-modes"><a class="h-anchor" href="#shot-modes">Four display modes</a></h3>
+  <p class="catdesc">one <code>ls</code> listing as Box, Show, Reveal and Detail (the default).</p>
+  <div class="shotgrid"><figure class="shot"><a href="/shots/display-modes.webp" target="_blank" rel="noopener"><img src="/shots/display-modes.webp" width="1584" height="1212" loading="lazy" alt="One ls listing rendered by secure-terminal in all four display modes."></a></figure></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; run any command, then cycle Box / Show / Reveal / Detail</span></div><div class="copybox"><code class="cmd">secure-terminal-cli ls -la</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="render-modes"><div class="wrap">

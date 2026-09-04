@@ -92,7 +92,7 @@
       resets it).
       <span class="herocmp-hint">Drag to compare, or click a side to open it full size.</span></figcaption>
   </figure>
-  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce this</a> <span class="rnote">&middot; every trick shown here is reproduced below - the display classes are safe to <code>cat</code>; the clipboard write runs only in a sandbox.</span></div></div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="/comparison/">Reproduce this</a> <span class="rnote">&middot; the same board, cat'd in two terminals - the corpus and copyable commands are on the <a href="/comparison/">comparison</a> and <a href="/screenshots/">screenshots</a> pages.</span></div></div>
 </div></section>
 
 <div class="whatis"><div class="wrap">
@@ -112,7 +112,6 @@
     <li><a href="#tui">TUI mode</a></li>
     <li><a href="#comforts">Comforts</a></li>
     <li><a href="#install">Install</a></li>
-    <li><a href="#reproduce">Reproduce</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#related">Related</a></li>
   </ul>
@@ -428,41 +427,6 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
   <div class="cta">
     <a class="btn primary" href="https://github.com/secure-terminal/secure-terminal">Get it on GitHub</a>
     <a class="btn ghost" href="https://output-lies.github.io">See the problem it removes</a>
-  </div>
-</div></section>
-
-<section class="cat" id="reproduce"><div class="wrap">
-  <h2 class="catname"><a class="h-anchor" href="#reproduce">Try it yourself</a></h2>
-  <p class="catdesc">The same bytes, two terminals. Feed a real attack payload to a stock terminal and to
-    secure-terminal and watch the difference. Every example is a published test fixture.</p>
-  <div class="trybox">
-    <div class="trycols">
-      <div>
-        <h4>Display-deception classes</h4>
-        <p class="sub">bidi, homoglyph, zero-width, hijacked title, alt-screen - safe to <code>cat</code> anywhere</p>
-        <p class="cmdlabel"># one honest board carrying every display class at once:</p>
-        <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <p class="cmdlabel"># view it: inert in secure-terminal, the attack in a plain terminal (`reset` restores):</p>
-        <div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt
-reset</code><button class="copybtn" type="button" hidden>Copy</button></div>
-      </div>
-      <div>
-        <h4>Active / reflection classes <span class="sbtag">sandbox VM only</span></h4>
-        <p class="sub">clipboard, answerback, notifications, decoder crashes - hex at rest, never <code>cat</code> (read SAFETY.md)</p>
-        <p class="cmdlabel"># clone the PoC corpus and list all 32 classes:</p>
-        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <div class="copybox"><code class="cmd">cd terminal-poc-corpus &amp;&amp; tools/reproduce.py --list</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <p class="cmdlabel"># reproduce one class as a render-able file (prints its risk tier + how-to):</p>
-        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 tools/reproduce.py osc52-clipboard-read</code><button class="copybtn" type="button" hidden>Copy</button></div>
-        <p class="cmdlabel"># assert secure-terminal neutralizes every class, automatically:</p>
-        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
-      </div>
-    </div>
-    <p class="toolnote">Every PoC doubles as a test fixture: <code>index.json</code> records each one's class, CVE and
-      expected-safe behaviour; payloads are hex-encoded and canary-forked (the few real decoder/DoS triggers are
-      risk-tiered and sandbox-gated), and the always-on
-      <a href="https://github.com/org-ai-assisted/dist-ai">terminal-resilience-tests</a> suite checks them all
-      against secure-terminal.</p>
   </div>
 </div></section>
 
