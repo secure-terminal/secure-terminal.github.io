@@ -7,13 +7,21 @@
     (function (box) {
       var cmd = box.querySelector(".cmd"), btn = box.querySelector(".copybtn");
       if (!cmd || !btn) return;
+      var base = btn.textContent, timer = null;
       btn.hidden = false;
+      function flash(label, ok) {
+        btn.textContent = label;
+        btn.classList.toggle("ok", !!ok);
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function () {
+          btn.textContent = base; btn.classList.remove("ok"); timer = null;
+        }, 1200);
+      }
       btn.addEventListener("click", function () {
-        navigator.clipboard.writeText(cmd.textContent).then(function () {
-          var prev = btn.textContent;
-          btn.textContent = "Copied"; btn.classList.add("ok");
-          setTimeout(function () { btn.textContent = prev; btn.classList.remove("ok"); }, 1200);
-        });
+        navigator.clipboard.writeText(cmd.textContent).then(
+          function () { flash("Copied", true); },
+          function () { flash("Press Ctrl+C", false); }
+        );
       });
     })(boxes[i]);
   }

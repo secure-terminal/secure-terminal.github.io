@@ -92,7 +92,7 @@
       resets it).
       <span class="herocmp-hint">Drag to compare, or click a side to open it full size.</span></figcaption>
   </figure>
-  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce this</a> <span class="rnote">&middot; the board above is one display-only-safe file - <code>cat</code> it in any terminal, then through secure-terminal, and watch the same bytes turn inert.</span></div></div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce this</a> <span class="rnote">&middot; every trick shown here is reproduced below - the display classes are safe to <code>cat</code>; the clipboard write runs only in a sandbox.</span></div></div>
 </div></section>
 
 <div class="whatis"><div class="wrap">
@@ -434,7 +434,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
 <section class="cat" id="reproduce"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#reproduce">Try it yourself</a></h2>
   <p class="catdesc">The same bytes, two terminals. Feed a real attack payload to a stock terminal and to
-    secure-terminal and watch the difference. Every example is a published, hex-at-rest test fixture.</p>
+    secure-terminal and watch the difference. Every example is a published test fixture.</p>
   <div class="trybox">
     <div class="trycols">
       <div>
@@ -443,7 +443,8 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
         <p class="cmdlabel"># one honest board carrying every display class at once:</p>
         <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
         <p class="cmdlabel"># what you see (raw bytes reach your terminal); `reset` restores it:</p>
-        <div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt
+reset</code><button class="copybtn" type="button" hidden>Copy</button></div>
         <p class="cmdlabel"># the same file through secure-terminal - each hidden, look-alike and bidi byte marked or boxed:</p>
         <div class="copybox"><code class="cmd">secure-terminal-cli cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
       </div>
@@ -454,7 +455,7 @@ sudo apt-get install -f                <span class="c"># pull dependencies (Debi
         <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
         <div class="copybox"><code class="cmd">cd terminal-poc-corpus &amp;&amp; tools/reproduce.py --list</code><button class="copybtn" type="button" hidden>Copy</button></div>
         <p class="cmdlabel"># reproduce one class as a render-able file (prints its risk tier + how-to):</p>
-        <div class="copybox"><code class="cmd">tools/reproduce.py osc52-clipboard-read</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 tools/reproduce.py osc52-clipboard-read</code><button class="copybtn" type="button" hidden>Copy</button></div>
         <p class="cmdlabel"># assert secure-terminal neutralizes every class, automatically:</p>
         <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
       </div>
