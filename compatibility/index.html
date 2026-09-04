@@ -425,6 +425,7 @@
     against the <em>strong</em> vector - a program actively interrogating the terminal -
     secure-terminal is the LEAST fingerprintable of the three, not the most. Re-run the probe
     yourself with <code>secure-terminal-fingerprint</code>.</p>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; fires every query probe at each terminal under a nested Xvfb and records the reply</span> &middot; <a href="https://github.com/org-ai-assisted/dist-ai/tree/master/usr/share/secure-terminal-fingerprint" rel="noopener">view the probe on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">secure-terminal-fingerprint</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
@@ -515,6 +516,7 @@
     conformance suites above only confirm ordinary programs still render. For the full picture of
     every automated check - the corpus, the spec-surface invariant, the unit, GUI, property and
     fuzz suites, AppArmor and the resilience test - see the <a href="/ai-review/">AI Review</a> page.</p>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">view the corpus on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="env"><div class="wrap">
@@ -754,6 +756,41 @@
     secure-terminal's promise is that reading text and pasting commands is safe by design;
     rendering arbitrary remote image bytes is not a promise it can keep while keeping that one.</p>
 </div></section>
+
+<section class="cat" id="reproduce"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#reproduce">Try it yourself</a></h2>
+  <p class="catdesc">Every guarantee on this page is measurable. The display classes ship as a read-safe board;
+    the active and reflection classes run only in a sandbox VM.</p>
+  <div class="trybox">
+    <div class="trycols">
+      <div>
+        <h4>Display-deception classes</h4>
+        <p class="sub">bidi, homoglyph, zero-width, hijacked title, alt-screen - safe to <code>cat</code> anywhere</p>
+        <p class="cmdlabel"># one honest board carrying every display class at once:</p>
+        <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># what you see, then the same file through secure-terminal:</p>
+        <div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <div class="copybox"><code class="cmd">secure-terminal-cli cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+      <div>
+        <h4>Active / reflection classes <span class="sbtag">sandbox VM only</span></h4>
+        <p class="sub">clipboard, answerback, notifications, decoder crashes - hex at rest, never <code>cat</code> (read SAFETY.md)</p>
+        <p class="cmdlabel"># clone the PoC corpus and list all 32 classes:</p>
+        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <div class="copybox"><code class="cmd">cd terminal-poc-corpus &amp;&amp; tools/reproduce.py --list</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># assert secure-terminal neutralizes every class, automatically:</p>
+        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># re-run the anti-fingerprint probe across every terminal:</p>
+        <div class="copybox"><code class="cmd">secure-terminal-fingerprint</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+    </div>
+    <p class="toolnote">Every PoC doubles as a test fixture: <code>index.json</code> records each one's class, CVE and
+      expected-safe behaviour; payloads are hex-encoded and canary-forked (the few real decoder/DoS triggers are
+      risk-tiered and sandbox-gated), and the always-on
+      <a href="https://github.com/org-ai-assisted/dist-ai">terminal-resilience-tests</a> suite checks them all
+      against secure-terminal.</p>
+  </div>
+</div></section>
 </main>
 
 <footer>
@@ -798,6 +835,7 @@
     <span class="sh-msg" aria-live="polite"></span>
   </div>
   <script src="/share.js"></script>
+  <script src="/copy.js"></script>
   <div class="ffree">
     <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
     <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>

@@ -320,13 +320,37 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 /* copy-paste-able command boxes (output-lies style); button is a JS enhancement */
 .cmdlabel{font-family:var(--mono);font-size:.78rem;color:var(--muted);margin:16px 0 5px;white-space:pre-wrap}
 .copybox{display:flex;align-items:stretch;margin:7px 0;border:1px solid #23262e;
-  border-radius:9px;overflow:hidden;background:var(--tbg)}
-.copybox .cmd{flex:1 1 auto;font-family:var(--mono);font-size:.82rem;color:var(--tfg);
+  border-radius:9px;overflow:hidden;background:var(--tbg);min-width:0}
+.copybox .cmd{flex:1 1 auto;min-width:0;font-family:var(--mono);font-size:.82rem;color:var(--tfg);
   padding:11px 13px;overflow-x:auto;white-space:pre;user-select:all;-webkit-user-select:all}
 .copybox .copybtn{flex:0 0 auto;border:0;border-left:1px solid #23262e;background:#1c1f26;
   color:#aab0bd;font:600 .72rem/1 var(--mono);padding:0 15px;cursor:pointer;letter-spacing:.05em}
 .copybox .copybtn:hover{background:#262b34;color:#fff}
 .copybox .copybtn.ok{color:var(--safe)}
+
+/* reproduce blocks (git-diffs-lie model): a per-example "Reproduce" strip plus the
+   shared "Try it yourself" section. Two safety variants -- display-only (safe to cat)
+   and .sandbox (poc-corpus, hex at rest, sandbox VM only). */
+.repro{margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--line)}
+.repro .reprohd{font-size:.9rem;color:var(--ink);margin:0 0 7px;line-height:1.5}
+.repro .reprohd a{color:var(--accent);white-space:nowrap}
+.repro .reprohd a.repro-try{font-weight:650}
+.repro .reprohd .rnote{color:var(--muted);font-weight:400;white-space:normal}
+.repro.sandbox .reprohd a.repro-try{color:var(--danger)}
+.repro .sbtag{display:inline-block;font:600 .68rem/1 var(--mono);letter-spacing:.03em;
+  color:var(--danger);border:1px solid #e6c3c3;background:#fbeeee;border-radius:5px;
+  padding:3px 6px;vertical-align:baseline}
+.toolnote{font-size:.86rem;color:var(--muted);max-width:72ch;margin:14px 0 0;
+  padding-left:12px;border-left:2px solid var(--line)}
+.toolnote code{font-size:.82em}
+/* shared "Try it yourself" card */
+.trybox{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:26px 28px;margin-top:16px}
+.trybox .lead{color:var(--ink);max-width:70ch;margin:0 0 6px}
+.trycols{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px}
+.trycols>div{flex:1 1 320px;min-width:0}
+.trycols h4{margin:0 0 2px;font-size:.98rem}
+.trycols .sub{font-size:.82rem;color:var(--muted);margin:0 0 8px}
 
   /* jump-to-anchor highlight: a red ring around the element you navigated to
      (the sticky header needs the scroll-margin so the target is not hidden). */

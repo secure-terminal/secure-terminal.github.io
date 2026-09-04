@@ -100,6 +100,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.tui-showcase-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.tui-showcase-tui.webp" width="1722" height="986" loading="lazy" alt="secure-terminal: The combined board, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.tui-showcase-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.tui-showcase-tui-show.webp" width="1722" height="986" loading="lazy" alt="secure-terminal: The combined board, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; display-only, safe to cat anywhere</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/terminal-attack-demo-WARNING-display-only-safe.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">secure-terminal-cli cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-bidi"><a class="h-anchor" href="#case-bidi">Bidi override (Trojan Source)</a></h3>
   <p class="catdesc">bidirectional controls that reorder how a line renders (CVE-2021-42574).</p>
@@ -110,6 +111,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.bidi-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.bidi-tui.webp" width="1722" height="336" loading="lazy" alt="secure-terminal: Bidi override (Trojan Source), TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.bidi-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.bidi-tui-show.webp" width="1722" height="336" loading="lazy" alt="secure-terminal: Bidi override (Trojan Source), TUI, Show mode."></a></figure>
   </div>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">tools/reproduce.py trojan-source-bidi-2021</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-homoglyph-strip"><a class="h-anchor" href="#case-homoglyph-strip">Homoglyph look-alikes</a></h3>
   <p class="catdesc">non-ASCII characters shaped like ASCII - a Cyrillic a, a Greek o - that make a fake command read as legitimate.</p>
@@ -120,6 +122,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.homoglyph-strip-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.homoglyph-strip-tui.webp" width="1722" height="338" loading="lazy" alt="secure-terminal: Homoglyph look-alikes, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.homoglyph-strip-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.homoglyph-strip-tui-show.webp" width="1722" height="338" loading="lazy" alt="secure-terminal: Homoglyph look-alikes, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/homoglyph-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">tools/reproduce.py homoglyph-2021</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-zerowidth"><a class="h-anchor" href="#case-zerowidth">Zero-width / invisible</a></h3>
   <p class="catdesc">characters that draw nothing, so a line can carry bytes you never see.</p>
@@ -130,6 +133,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.zerowidth-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.zerowidth-tui.webp" width="1722" height="388" loading="lazy" alt="secure-terminal: Zero-width / invisible, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.zerowidth-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.zerowidth-tui-show.webp" width="1722" height="388" loading="lazy" alt="secure-terminal: Zero-width / invisible, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; display-only Unicode gallery, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/unicode-gallery-safe-to-cat.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">secure-terminal-cli cat unicode-gallery-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-unicode"><a class="h-anchor" href="#case-unicode">Unicode names</a></h3>
   <p class="catdesc">non-ASCII bytes named inline as their Unicode code point.</p>
@@ -138,6 +142,7 @@
         <figure class="shot"><figcaption class="shotname"><b>CLI, Detail</b></figcaption><a href="/comparison/shots/secure-terminal.unicode-detail.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.unicode-detail.webp" width="1722" height="1293" loading="lazy" alt="secure-terminal: Unicode names, CLI, Detail mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.unicode-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.unicode-tui-show.webp" width="1722" height="1293" loading="lazy" alt="secure-terminal: Unicode names, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; display-only Unicode gallery, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/unicode-gallery-safe-to-cat.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">secure-terminal-cli cat unicode-gallery-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-title"><a class="h-anchor" href="#case-title">Title / tab hijack</a></h3>
   <p class="catdesc">an OSC 0/2 sequence that would silently rename a normal window or tab.</p>
@@ -148,6 +153,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.title-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.title-tui.webp" width="1722" height="440" loading="lazy" alt="secure-terminal: Title / tab hijack, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.title-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.title-tui-show.webp" width="1722" height="440" loading="lazy" alt="secure-terminal: Title / tab hijack, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/title-set-hijack" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">tools/reproduce.py title-set-hijack</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-escape"><a class="h-anchor" href="#case-escape">Escape repaint</a></h3>
   <p class="catdesc">cursor and erase sequences that would rewrite or conceal output already on screen.</p>
@@ -158,6 +164,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.escape-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.escape-tui.webp" width="1722" height="336" loading="lazy" alt="secure-terminal: Escape repaint, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.escape-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.escape-tui-show.webp" width="1722" height="336" loading="lazy" alt="secure-terminal: Escape repaint, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/charset-shift-deception" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">tools/reproduce.py charset-shift-deception</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-altscreen"><a class="h-anchor" href="#case-altscreen">Alt-screen forge</a></h3>
   <p class="catdesc">a switch to the alternate screen that would paint a fake dashboard and leave no trace.</p>
@@ -168,6 +175,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.altscreen-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.altscreen-tui.webp" width="1722" height="336" loading="lazy" alt="secure-terminal: Alt-screen forge, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.altscreen-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.altscreen-tui-show.webp" width="1722" height="336" loading="lazy" alt="secure-terminal: Alt-screen forge, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/alt-screen-hijack" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">tools/reproduce.py alt-screen-hijack</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-notify"><a class="h-anchor" href="#case-notify">Notification spoof</a></h3>
   <p class="catdesc">an OSC 9 / 99 sequence that would raise a desktop notification carrying attacker text.</p>
@@ -178,6 +186,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.notify-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.notify-tui.webp" width="1722" height="388" loading="lazy" alt="secure-terminal: Notification spoof, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.notify-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.notify-tui-show.webp" width="1722" height="388" loading="lazy" alt="secure-terminal: Notification spoof, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/notification-spoof-kitty-2022" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">tools/reproduce.py notification-spoof-kitty-2022</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-contrast"><a class="h-anchor" href="#case-contrast">Contrast guard</a></h3>
   <p class="catdesc">colour that a program cannot use to hide text against the background.</p>
@@ -188,6 +197,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.contrast-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.contrast-tui.webp" width="1722" height="416" loading="lazy" alt="secure-terminal: Contrast guard, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.contrast-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.contrast-tui-show.webp" width="1722" height="416" loading="lazy" alt="secure-terminal: Contrast guard, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro sandbox"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/stuck-colour-contrast" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">tools/reproduce.py stuck-colour-contrast</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-random"><a class="h-anchor" href="#case-random">Random bytes</a></h3>
   <p class="catdesc">plain random data fed straight to the terminal.</p>
@@ -198,6 +208,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.random-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.random-tui.webp" width="1722" height="910" loading="lazy" alt="secure-terminal: Random bytes, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.random-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.random-tui-show.webp" width="1722" height="912" loading="lazy" alt="secure-terminal: Random bytes, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; plain random data, no payload needed</span></div><div class="copybox"><code class="cmd">head -c 1200 /dev/urandom &gt; r.bin; secure-terminal-cli cat r.bin</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-art"><a class="h-anchor" href="#case-art">ANSI art</a></h3>
   <p class="catdesc">legitimate SGR colour art, kept readable.</p>
@@ -208,6 +219,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.art-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.art-tui.webp" width="1722" height="1293" loading="lazy" alt="secure-terminal: ANSI art, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.art-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.art-tui-show.webp" width="1722" height="1293" loading="lazy" alt="secure-terminal: ANSI art, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; legitimate colour art, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/art-safe-to-cat.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">secure-terminal-cli cat art-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-gradient"><a class="h-anchor" href="#case-gradient">Truecolour gradient</a></h3>
   <p class="catdesc">a dense per-cell truecolour gradient.</p>
@@ -218,6 +230,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.gradient-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.gradient-tui.webp" width="1722" height="1293" loading="lazy" alt="secure-terminal: Truecolour gradient, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.gradient-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.gradient-tui-show.webp" width="1722" height="1293" loading="lazy" alt="secure-terminal: Truecolour gradient, TUI, Show mode."></a></figure>
   </div>
+  <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; legitimate colour art, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/art-safe-to-cat.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">secure-terminal-cli cat art-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="compatibility"><div class="wrap">
@@ -234,6 +247,42 @@
         <figure class="shot"><figcaption class="shotname"><b>awk</b></figcaption><a href="/compatibility/shots/awk.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/awk.webp" width="1496" height="212" loading="lazy" alt="secure-terminal running awk, output rendered normally."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>tar</b></figcaption><a href="/compatibility/shots/tar.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/tar.webp" width="1496" height="284" loading="lazy" alt="secure-terminal running tar, output rendered normally."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>gzip</b></figcaption><a href="/compatibility/shots/gzip.webp" target="_blank" rel="noopener"><img src="/compatibility/shots/gzip.webp" width="1496" height="248" loading="lazy" alt="secure-terminal running gzip, output rendered normally."></a></figure>
+  </div>
+</div></section>
+
+<section class="cat" id="reproduce"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#reproduce">Try it yourself</a></h2>
+  <p class="catdesc">Every board above is a published test fixture. Feed the same bytes to a stock terminal and to
+    secure-terminal and compare.</p>
+  <div class="trybox">
+    <div class="trycols">
+      <div>
+        <h4>Display-deception classes</h4>
+        <p class="sub">bidi, homoglyph, zero-width, hijacked title, alt-screen - safe to <code>cat</code> anywhere</p>
+        <p class="cmdlabel"># one honest board carrying every display class at once:</p>
+        <div class="copybox"><code class="cmd">curl -O https://secure-terminal.github.io/terminal-safe-corpus/demos/terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># what you see (raw bytes reach your terminal); `reset` restores it:</p>
+        <div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># the same file through secure-terminal - each hidden, look-alike and bidi byte marked or boxed:</p>
+        <div class="copybox"><code class="cmd">secure-terminal-cli cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+      <div>
+        <h4>Active / reflection classes <span class="sbtag">sandbox VM only</span></h4>
+        <p class="sub">clipboard, answerback, notifications, decoder crashes - hex at rest, never <code>cat</code> (read SAFETY.md)</p>
+        <p class="cmdlabel"># clone the PoC corpus and list all 32 classes:</p>
+        <div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <div class="copybox"><code class="cmd">cd terminal-poc-corpus &amp;&amp; tools/reproduce.py --list</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># reproduce one class as a render-able file (prints its risk tier + how-to):</p>
+        <div class="copybox"><code class="cmd">tools/reproduce.py trojan-source-bidi-2021</code><button class="copybtn" type="button" hidden>Copy</button></div>
+        <p class="cmdlabel"># assert secure-terminal neutralizes every class, automatically:</p>
+        <div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div>
+      </div>
+    </div>
+    <p class="toolnote">Every PoC doubles as a test fixture: <code>index.json</code> records each one's class, CVE and
+      expected-safe behaviour; payloads are hex-encoded and canary-forked (the few real decoder/DoS triggers are
+      risk-tiered and sandbox-gated), and the always-on
+      <a href="https://github.com/org-ai-assisted/dist-ai">terminal-resilience-tests</a> suite checks them all
+      against secure-terminal.</p>
   </div>
 </div></section>
 </main>
@@ -279,6 +328,7 @@
     <span class="sh-msg" aria-live="polite"></span>
   </div>
   <script src="/share.js"></script>
+  <script src="/copy.js"></script>
   <div class="ffree">
     <a class="freebadge" href="https://opensource.org/" rel="noopener" title="Open Source Initiative"><img src="/osi-logo.webp" width="27" height="32" alt="Open Source Initiative"><span>Open Source</span></a>
     <a class="freebadge" href="https://www.gnu.org/" rel="noopener" title="GNU / Free Software"><img src="/gnu-logo.webp" width="33" height="32" alt="GNU"><span>Freedom Software</span></a>
