@@ -20,7 +20,15 @@
       btn.addEventListener("click", function () {
         navigator.clipboard.writeText(cmd.textContent).then(
           function () { flash("Copied", true); },
-          function () { flash("Press Ctrl+C", false); }
+          function () {
+            // Clipboard write denied (focus/permission): select the command so the
+            // "Press Ctrl+C" hint actually copies something.
+            try {
+              var r = document.createRange(); r.selectNodeContents(cmd);
+              var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+            } catch (e) {}
+            flash("Press Ctrl+C", false);
+          }
         );
       });
     })(boxes[i]);

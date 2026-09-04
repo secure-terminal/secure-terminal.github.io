@@ -149,7 +149,7 @@
         <span class="sw" style="background:#f5a623"></span>&nbsp;zero-width/invisible,
         <span class="sw" style="background:#3b9eff"></span>&nbsp;control bytes,
         <span class="sw" style="background:#a06cff"></span>&nbsp;other non-ASCII (honest foreign text).</p>
-          <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; display-only, safe to cat anywhere</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/terminal-attack-demo-WARNING-display-only-safe.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div></div></div></td></tr>
+          <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; display-only, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/terminal-attack-demo-WARNING-display-only-safe.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">cat terminal-attack-demo-WARNING-display-only-safe.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div></div></div></td></tr>
 
           <tr class="mrow" id="row-escape">
             <th scope="row"><a class="rowlink" href="#row-escape">Escape sequences in output (repaint, cursor, hide text)</a></th>
@@ -379,7 +379,7 @@
             <div class="var x-alacritty"><figure class="shot"><figcaption class="shotname"><b>alacritty</b> - garbled.</figcaption><a href="shots/alacritty.random.webp" target="_blank" rel="noopener"><img src="shots/alacritty.random.webp" width="1094" height="701" loading="lazy" alt="alacritty displaying random bytes: garbled."></a></figure></div>
             <div class="var x-kitty"><figure class="shot"><figcaption class="shotname"><b>kitty</b> - garbled, replacement glyphs.</figcaption><a href="shots/kitty.random.webp" target="_blank" rel="noopener"><img src="shots/kitty.random.webp" width="1442" height="771" loading="lazy" alt="kitty displaying random bytes: garbled with replacement glyphs."></a></figure></div>
             </div>
-          <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; plain random data, no payload needed</span></div><div class="copybox"><code class="cmd">head -c 1200 /dev/urandom &gt; random.payload &amp;&amp; cat random.payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div></div></div></td></tr>
+          <div class="repro"><div class="reprohd"><a class="repro-try" href="#reproduce">Reproduce</a> <span class="rnote">&middot; plain random data - run in a throwaway terminal (<code>reset</code> restores)</span></div><div class="copybox"><code class="cmd">head -c 1200 /dev/urandom &gt; random.payload &amp;&amp; cat random.payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div></div></div></td></tr>
 
           <tr class="mrow" id="row-paste">
             <th scope="row"><a class="rowlink" href="#row-paste">Pasted-command smuggling (pastejacking, bracketed-paste bypass)</a></th>

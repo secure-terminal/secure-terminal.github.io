@@ -72,6 +72,8 @@
   </ul>
 </nav></div>
 
+<div class="wrap"><p class="catdesc" style="margin-top:14px">The reproduce commands below run inside a <code>git clone</code> of the corpus - <a href="https://github.com/secure-terminal/terminal-poc-corpus">terminal-poc-corpus</a> for the hex PoCs, <a href="https://github.com/secure-terminal/terminal-safe-corpus">terminal-safe-corpus</a> for the display boards - in a sandbox VM (read each <code>SAFETY.md</code> first).</p></div>
+
 <section class="cat" id="showcase"><div class="wrap">
   <h2 class="catname"><a class="h-anchor" href="#showcase">The review bar and display modes</a></h2>
   <p class="catdesc">What secure-terminal does at a glance - the paste and copy review bars, and the four display
@@ -216,7 +218,7 @@
         <figure class="shot"><figcaption class="shotname"><b>TUI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.random-tui.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.random-tui.webp" width="1722" height="910" loading="lazy" alt="secure-terminal: Random bytes, TUI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>TUI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.random-tui-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.random-tui-show.webp" width="1722" height="912" loading="lazy" alt="secure-terminal: Random bytes, TUI, Show mode."></a></figure>
   </div>
-  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; plain random data, no corpus needed</span></div><div class="copybox"><code class="cmd">head -c 1200 /dev/urandom &gt; random.payload &amp;&amp; cat random.payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; plain random data - run in a throwaway terminal (<code>reset</code> restores)</span></div><div class="copybox"><code class="cmd">head -c 1200 /dev/urandom &gt; random.payload &amp;&amp; cat random.payload</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-art"><a class="h-anchor" href="#case-art">ANSI art</a></h3>
   <p class="catdesc">legitimate SGR colour art, kept readable.</p>

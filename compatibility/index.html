@@ -425,7 +425,7 @@
     against the <em>strong</em> vector - a program actively interrogating the terminal -
     secure-terminal is the LEAST fingerprintable of the three, not the most. Re-run the probe
     yourself with <code>secure-terminal-fingerprint</code>.</p>
-  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; fires every query probe at each terminal under a nested Xvfb and records the reply</span> &middot; <a href="https://github.com/org-ai-assisted/dist-ai/tree/master/usr/share/secure-terminal-fingerprint" rel="noopener">view the probe on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">secure-terminal-fingerprint</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; fires every query probe at each terminal under a nested Xvfb and records the reply</span> &middot; <a href="https://github.com/org-ai-assisted/dist-ai/tree/master/usr/share/secure-terminal-fingerprint" rel="noopener">view the probe on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git clone https://github.com/org-ai-assisted/dist-ai &amp;&amp; dist-ai/usr/bin/secure-terminal-fingerprint</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="tui"><div class="wrap">
@@ -516,7 +516,7 @@
     conformance suites above only confirm ordinary programs still render. For the full picture of
     every automated check - the corpus, the spec-surface invariant, the unit, GUI, property and
     fuzz suites, AppArmor and the resilience test - see the <a href="/ai-review/">AI Review</a> page.</p>
-  <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">view the corpus on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus" rel="noopener">view the corpus on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">git clone https://github.com/secure-terminal/terminal-poc-corpus &amp;&amp; cd terminal-poc-corpus &amp;&amp; POC_CORPUS_IN_SANDBOX=1 harness/adversarial.py</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 </div></section>
 
 <section class="cat" id="env"><div class="wrap">
