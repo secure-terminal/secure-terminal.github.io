@@ -334,9 +334,9 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .repro{margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--line)}
 .repro .reprohd{font-size:.9rem;color:var(--ink);margin:0 0 7px;line-height:1.5}
 .repro .reprohd a{color:var(--accent);white-space:nowrap}
-.repro .reprohd a.repro-try{font-weight:650}
+.repro .reprohd .repro-try{font-weight:650;color:var(--accent)}
 .repro .reprohd .rnote{color:var(--muted);font-weight:400;white-space:normal}
-.repro.sandbox .reprohd a.repro-try{color:var(--danger)}
+.repro.sandbox .reprohd .repro-try{color:var(--danger)}
 .repro .sbtag{display:inline-block;font:600 .68rem/1 var(--mono);letter-spacing:.03em;
   color:var(--danger);border:1px solid #e6c3c3;background:#fbeeee;border-radius:5px;
   padding:3px 6px;vertical-align:baseline}
