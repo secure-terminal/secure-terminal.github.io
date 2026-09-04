@@ -82,7 +82,8 @@
   <h3 id="shot-paste-review"><a class="h-anchor" href="#shot-paste-review">Paste review bar</a></h3>
   <p class="catdesc">a hostile <code>curl | bash</code> paste held before a byte reaches the shell, every hidden character named inline.</p>
   <div class="shotgrid"><figure class="shot"><a href="/shots/paste-warning.webp" target="_blank" rel="noopener"><img src="/shots/paste-warning.webp" width="2376" height="622" loading="lazy" alt="secure-terminal paste review bar holding a hostile paste, every hidden character named inline."></a></figure></div>
-  <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 tools/reproduce.py bracketed-paste-bypass-2021</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
+  <div class="repro sandbox"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="sbtag">sandbox VM only</span> <span class="rnote">&middot; a pasted attack, not cat - Ctrl-Shift-V into secure-terminal and the review bar holds it</span> &middot; <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/bracketed-paste-bypass-2021" rel="noopener">view the PoC on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">POC_CORPUS_IN_SANDBOX=1 tools/reproduce.py bracketed-paste-bypass-2021 --out paste.payload
+xclip -selection clipboard &lt; paste.payload    # then Ctrl-Shift-V into secure-terminal</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="shot-copy-review"><a class="h-anchor" href="#shot-copy-review">Copy review bar</a></h3>
   <p class="catdesc">the same review applied to text leaving for the system clipboard.</p>
@@ -155,7 +156,7 @@
   <div class="repro"><div class="reprohd"><span class="repro-try">Reproduce</span> <span class="rnote">&middot; display-only Unicode gallery, safe to cat</span> &middot; <a href="https://github.com/secure-terminal/terminal-safe-corpus/blob/master/demos/unicode-gallery-safe-to-cat.txt" rel="noopener">view the file on GitHub &rarr;</a></div><div class="copybox"><code class="cmd">cat unicode-gallery-safe-to-cat.txt</code><button class="copybtn" type="button" hidden>Copy</button></div></div>
 
   <h3 id="case-title"><a class="h-anchor" href="#case-title">Title / tab hijack</a></h3>
-  <p class="catdesc">an OSC 0/2 sequence that would silently rename a normal window or tab.</p>
+  <p class="catdesc">an OSC 0/2 sequence that would silently rename a normal window or tab. The yellow banner naming the blocked escape is a CLI-mode advisory; TUI mode still refuses the title (it stays untouched) but shows no per-escape banner.</p>
   <div class="shotgrid">
         <figure class="shot"><figcaption class="shotname"><b>CLI, Box</b></figcaption><a href="/comparison/shots/secure-terminal.title.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.title.webp" width="1722" height="516" loading="lazy" alt="secure-terminal: Title / tab hijack, CLI, Box mode."></a></figure>
         <figure class="shot"><figcaption class="shotname"><b>CLI, Show</b></figcaption><a href="/comparison/shots/secure-terminal.title-show.webp" target="_blank" rel="noopener"><img src="/comparison/shots/secure-terminal.title-show.webp" width="1722" height="516" loading="lazy" alt="secure-terminal: Title / tab hijack, CLI, Show mode."></a></figure>
