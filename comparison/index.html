@@ -68,6 +68,7 @@
     <p class="toch">On this page</p>
     <ul>
       <li><a href="#compare">Comparison table</a></li>
+      <li><a href="#line-edit-attack">Line-editing attack</a></li>
       <li><a href="#behaviour">Method &amp; evidence</a></li>
     </ul>
   </nav>
@@ -452,6 +453,23 @@ cat random.payload</code><button class="copybtn" type="button" hidden>Copy</butt
       <p class="cmp-hint" aria-hidden="true">Swipe the table sideways to see the verdict columns -&gt;</p>
     </div>
   </fieldset>
+</div></section>
+
+<section class="cat" id="line-edit-attack"><div class="wrap">
+  <h2 class="catname"><a class="h-anchor" href="#line-edit-attack">A line-editing attack: carriage-return overwrite</a></h2>
+  <p class="catdesc">A lower-impact trick, but a real one: a hostile line of output can <b>carriage-return
+    over itself</b> to hide what it first printed. It prints a warning, then a carriage return
+    (<code>\r</code>) plus an erase-to-end-of-line redraws a reassuring cover on top. On a traditional
+    terminal only the cover survives, so the warning is gone. This is a display redraw, not a parser bug,
+    so secure-terminal's <b>line-editing</b> modes are what decide how much in-place redraw is allowed.
+    Below, the same payload prints <code>apt: signature verified -- WAIT: fingerprint MISMATCH, do not
+    install</code> and then carriage-returns <code>apt: signature verified</code> over it. Switch modes
+    under <b>Settings -&gt; Text rendering -&gt; Line editing</b>.</p>
+  <div class="shotgrid" id="line-edit-attack-grid">
+    <figure class="shot" id="shot-cr-deception-full"><figcaption class="shotname"><b>full</b> - carriage return and erase-line both honoured, so the cover cleanly replaces the warning: the MISMATCH line is <em>hidden</em>, exactly as on a traditional terminal - the deception works.</figcaption><a href="shots/cr-deception-full.webp" target="_blank" rel="noopener"><img src="shots/cr-deception-full.webp" width="1724" height="403" loading="lazy" alt="secure-terminal in full line-editing mode: the carriage-return cover has overwritten the warning, so only 'apt: signature verified' shows and the fingerprint-mismatch warning is hidden."></a></figure>
+    <figure class="shot" id="shot-cr-deception-read-safe"><figcaption class="shotname"><b>read-safe</b> - carriage return still returns to column zero, but the erase-line escape is dropped, so the cover overwrites only its matching prefix and the warning's tail survives: <code>MISMATCH, do not install</code> stays visible - the deception is <em>defeated</em>.</figcaption><a href="shots/cr-deception-read-safe.webp" target="_blank" rel="noopener"><img src="shots/cr-deception-read-safe.webp" width="1724" height="403" loading="lazy" alt="secure-terminal in read-safe line-editing mode: the cover overwrote its matching prefix but the erase-line was dropped, so the full warning 'apt: signature verified -- WAIT: fingerprint MISMATCH, do not install' remains visible."></a></figure>
+    <figure class="shot" id="shot-cr-deception-append-only"><figcaption class="shotname"><b>append-only</b> - carriage return is neutralised, so the redraw cannot overwrite anything: the warning and the cover each keep their own line, the redraw attempt flagged in the left gutter - the deception is <em>fully exposed</em>.</figcaption><a href="shots/cr-deception-append-only.webp" target="_blank" rel="noopener"><img src="shots/cr-deception-append-only.webp" width="1724" height="429" loading="lazy" alt="secure-terminal in append-only line-editing mode: the warning line and the cover line are kept separately with the carriage-return redraw attempt flagged by a left-gutter marker, so the fingerprint-mismatch warning is fully visible."></a></figure>
+  </div>
 </div></section>
 
 <section class="cat" id="behaviour"><div class="wrap">
