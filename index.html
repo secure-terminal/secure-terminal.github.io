@@ -39,7 +39,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="755" height="70" alt="secure-terminal"></a>
+    <a class="brand" href="/" aria-label="secure-terminal home"><img class="brandmark" src="/logo-wide.webp" width="755" height="70" alt="secure-terminal"></a>
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
@@ -361,7 +361,7 @@
     <p>What you give up: a program can draw a <em>misleading interface</em> within its own screen, so only run
       programs you trust. This is "restricted-emulator safe," not "safe by design." The default CLI mode,
       and everything the guarantee rests on, is unchanged.</p>
-    <div class="term" style="margin-top:10px"><span class="d"># in TUI mode, verified end to end:</span>
+    <div class="term" style="margin-top:10px" tabindex="0"><span class="d"># in TUI mode, verified end to end:</span>
 <span class="y">ssh</span>, <span class="y">vim</span>, <span class="y">htop</span>, <span class="y">tmux</span> and apt's progress bar all render correctly,
 with every cell still filtered, the clipboard off-limits, and any program-set title quarantined.</div>
   </article>
@@ -391,7 +391,7 @@ with every cell still filtered, the clipboard off-limits, and any program-set ti
       <span class="ititle">Run from a checkout</span><span class="ibadge ok">no install</span></summary>
     <div class="ibody">
       <p>Clone and run it in place, no packaging step:</p>
-      <div class="pre">git clone https://github.com/secure-terminal/secure-terminal
+      <div class="pre" tabindex="0">git clone https://github.com/secure-terminal/secure-terminal
 cd secure-terminal
 ./usr/bin/secure-terminal              <span class="c"># the GUI</span>
 ./usr/bin/secure-terminal-cli          <span class="c"># the sanitizing CLI wrapper</span></div>
@@ -403,7 +403,7 @@ cd secure-terminal
     <summary><svg class="ilogo" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7zM12 4.2 18.5 8 12 11.8 5.5 8zM5 9.6l6 3.5v7L5 16.6zm14 0v7l-6 3.5v-7z"/></svg>
       <span class="ititle">Build the Debian package</span><span class="ibadge ok">.deb</span></summary>
     <div class="ibody">
-      <div class="pre">git clone https://github.com/secure-terminal/secure-terminal
+      <div class="pre" tabindex="0">git clone https://github.com/secure-terminal/secure-terminal
 cd secure-terminal
 dpkg-buildpackage -us -uc -b
 sudo dpkg -i ../secure-terminal_*.deb

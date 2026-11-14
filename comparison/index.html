@@ -34,7 +34,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
+    <a class="brand" href="/" aria-label="secure-terminal home"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
@@ -117,7 +117,7 @@
       <input class="expand-all-cb" type="checkbox" id="expand-all">
       <label class="expand-all" for="expand-all"><span class="expand-txt">Expand all rows</span><span class="collapse-txt">Collapse all rows</span></label>
 
-      <div class="cmp-wrap"><table class="matrix">
+      <div class="cmp-wrap" tabindex="0"><table class="matrix">
         <thead><tr>
           <th scope="col">Attack / behaviour</th>
           <th scope="col" class="col-st">secure-terminal</th>
@@ -254,7 +254,7 @@
           </tr>
           <tr class="minfo"><td colspan="3"><div class="rowinfo"><input class="rowtoggle" type="checkbox" id="ri-clipwrite"><label class="rowsum" for="ri-clipwrite">We measured it: which terminals let output set your clipboard<span class="ihint"><span class="ihint-show">Show</span><span class="ihint-hide">Hide</span></span></label><div class="ibody">
             <p>The <b>OSC 52 clipboard write</b> is the one class a screenshot cannot show - its effect is on your system clipboard, not the screen. So we measured it directly: for each terminal we seeded the X clipboard with a sentinel, <code>cat</code>'d the corpus <a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/osc52-clipboard-write" rel="noopener"><code>osc52-clipboard-write</code></a> payload, and read the real clipboard back (via PyQt6). If the token landed, output overwrote your clipboard. Tested <b>2026-08-12</b> on shipped defaults, window focused.</p>
-            <div class="cmp-wrap"><table class="cmp">
+            <div class="cmp-wrap" tabindex="0"><table class="cmp">
               <thead><tr><th>Terminal</th><th>OSC 52 clipboard write (shipped default)</th></tr></thead>
               <tbody>
                 <tr><td>konsole (KDE), alacritty (GPU), kitty (GPU)</td><td><span class="no">Honored</span> - viewing the payload silently overwrote the clipboard.</td></tr>
@@ -491,7 +491,7 @@ cat random.payload</code><button class="copybtn" type="button" hidden>Copy</butt
       <p>Every emulator was launched with a <strong>fresh, empty config</strong> - a throwaway <code>HOME</code> and
         <code>XDG_CONFIG_HOME</code> - so each ran on its <em>shipped defaults</em>; the only options passed are
         window size and font. Here is the exact default behind each title-hijack result:</p>
-      <div class="cmp-wrap"><table class="cmp">
+      <div class="cmp-wrap" tabindex="0"><table class="cmp">
         <thead><tr><th>Terminal</th><th>The shipped default that produces it</th><th>Verify</th></tr></thead>
         <tbody>
           <tr><td>gnome-terminal, xfce4-terminal, mate-terminal (VTE)</td><td>VTE applies the OSC 0/2 title; all three apps default to writing the program-set title, and VTE implements bidi so it reorders the Trojan-Source row.</td><td><a href="https://gitlab.gnome.org/GNOME/vte" rel="noopener">VTE source</a></td></tr>

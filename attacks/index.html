@@ -34,7 +34,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
+    <a class="brand" href="/" aria-label="secure-terminal home"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
@@ -132,7 +132,7 @@
     <a href="https://output-lies.github.io/terminal/#classes" rel="noopener">output-lies explainer</a>, and the
     <a href="/comparison/">comparison matrix</a> for the per-terminal verdict, with the "how secure-terminal
     handles it" answer in its own column.</p>
-  <div class="cmp-wrap"><table class="cmp">
+  <div class="cmp-wrap" tabindex="0"><table class="cmp">
     <thead><tr><th>Still-applicable issue</th><th>What it does</th><th>secure-terminal</th></tr></thead>
     <tbody>
       <tr><td><a href="https://github.com/secure-terminal/terminal-poc-corpus/tree/master/poc/trojan-source-bidi-2021" rel="noopener"><b>Trojan Source</b> (bidi override)</a> - <a href="https://nvd.nist.gov/vuln/detail/CVE-2021-42574" rel="noopener">CVE-2021-42574</a></td><td>Bidirectional control characters reorder how a line renders, so the code you read is not the code that runs. Shown live in the <a href="/comparison/#combined">combined board</a>. <b>Reach:</b> any bidi-aware renderer - code hosts, editors, and terminals that implement bidi.</td><td>Every bidi control renders as an inert, risk-coloured box or a named <code>&lt;U+202E&gt;</code> badge, so the reorder never happens (<a href="/comparison/#row-bidi" aria-label="measured Safe (/comparison/#row-bidi)">measured Safe</a>) - dissected on <a href="https://output-lies.github.io/git-diffs-lie/#bidi" rel="noopener" aria-label="output lies (output-lies.github.io/git-diffs-lie/#bidi)">output lies</a>.</td></tr>

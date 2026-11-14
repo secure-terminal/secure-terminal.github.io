@@ -34,7 +34,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
+    <a class="brand" href="/" aria-label="secure-terminal home"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
@@ -239,7 +239,7 @@
   <h2 class="catname"><a class="h-anchor" href="#unit">5. Unit, GUI, property and fuzz tests</a></h2>
   <p class="catdesc">The application itself carries a large suite that runs in CI on every change,
     shipped as packages in <a href="https://github.com/org-ai-assisted/dist-ai" rel="noopener">dist-ai</a>.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Suite</th><th>What it checks</th></tr></thead>
     <tbody>
@@ -266,7 +266,7 @@
   <h2 class="catname"><a class="h-anchor" href="#scanners">6. Static analysis and continuous scanners</a></h2>
   <p class="catdesc">Alongside the tests, several static analysers run on the repository. Each is a
     committed GitHub Actions workflow.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Scanner</th><th>What it looks for</th><th>Runs</th></tr></thead>
     <tbody>

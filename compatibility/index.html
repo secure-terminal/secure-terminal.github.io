@@ -34,7 +34,7 @@
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="/"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
+    <a class="brand" href="/" aria-label="secure-terminal home"><img class="brandmark" src="/logo-wide.webp" width="729" height="70" alt="secure-terminal"></a>
     <a class="status" href="/human-review/" title="This site is AI-generated and pending human review">unreviewed</a>
     <input type="checkbox" class="navtoggle" id="navtoggle" aria-label="Toggle navigation menu">
     <label class="menubtn" for="navtoggle">Menu</label>
@@ -134,7 +134,7 @@
     <code>curl</code>, <code>gpg</code>, <code>rsync</code>) cannot be captured byte-for-byte, so
     they were confirmed by hand. (Colour is on by default; turn it off with the Colors toggle
     or <code>NO_COLOR</code>.)</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Program (package)</th><th>Popcon rank</th><th>CLI mode (default)</th></tr></thead>
     <tbody>
@@ -348,7 +348,7 @@
     having almost nothing - no colour, no bold, not even cursor-left, so an interactive shell cannot
     edit within a line - while <code>secure-terminal</code> keeps the safe, useful, line-local half
     of a real terminal and cancels only the dangerous half.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>The entry advertises...<br><span style="font-weight:normal;font-size:.85em">(all three are values secure-terminal sets for <code>TERM</code>)</span></th>
       <th><code>TERM=dumb</code></th>
@@ -418,7 +418,7 @@
     it fires each standard query at every terminal under a nested Xvfb and records the reply. A
     <span class="no">Leaks</span> cell shows a real captured response; <span class="yes">Silent</span>
     means the terminal answered nothing.</p>
-  <div class="cmp-wrap"><table class="cmp">
+  <div class="cmp-wrap" tabindex="0"><table class="cmp">
     <thead><tr><th>Query</th><th>What an answer leaks</th><th>A typical terminal (xterm)</th>
       <th>secure-terminal (CLI + TUI)</th></tr></thead>
     <tbody>
@@ -475,7 +475,7 @@
     mode. Either way, layout and
     text are faithful, and the terminal still answers no query and cannot touch the clipboard; a
     program-set title is shown only on the quarantined, untrusted tab line, never as the trusted label.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Program (package)</th><th>Popcon rank</th><th>TUI mode (opt-in)</th></tr></thead>
     <tbody>
@@ -521,7 +521,7 @@
     implements, and still answers no query. We track these suites not to pass them but as a
     corpus of every sequence a real program might emit, to confirm our stripping (CLI) and our
     subset (TUI) behave. Each was reviewed for malicious content before use.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Suite</th><th>What it checks</th><th>In CLI mode</th><th>In TUI mode</th></tr></thead>
     <tbody>
@@ -559,7 +559,7 @@
     the size is taken from the kernel, colour is advertised as a fixed value, and every
     host-emulator fingerprint variable is scrubbed so a child (or a host it SSHes into) cannot
     learn which terminal you use or correlate your session.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Variable</th><th>secure-terminal behaviour</th><th>What it is for / effect</th></tr></thead>
     <tbody>
@@ -588,7 +588,7 @@
     nothing on the output path ever writes to the pseudo-terminal. That closes the whole
     "output becomes input" reflection / echoback / answerback CVE class by design. The
     single, strictly opt-in and human-gated exception is clipboard read.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Protocol</th><th>Query</th><th>secure-terminal</th><th>Who asks, and what happens without a reply</th></tr></thead>
     <tbody>
@@ -617,7 +617,7 @@
   <h3 style="margin-top:22px" id="dec-modes"><a class="h-anchor" href="#dec-modes">DEC private modes (mouse, bracketed paste, focus, alternate screen)</a></h3>
   <p class="catdesc">The <code>ESC [ ? Ps h/l</code> modes a program uses to change how the terminal
     behaves are handled by mode, same as everything else:</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Mode</th><th>What a program uses it for</th><th>CLI mode (default)</th><th>TUI mode (opt-in)</th></tr></thead>
     <tbody>
@@ -641,7 +641,7 @@
     <b>Box mode</b>, or a <code>&lt;U+XXXX&gt;</code> badge in <b>Reveal mode</b> - all ASCII, so
     what you copy or save from them is pure ASCII (<b>Show mode</b>, which draws the real glyph,
     is the one exception, and a copy from it is reviewed first).</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Byte</th><th>Name</th><th>CLI mode</th></tr></thead>
     <tbody>
@@ -693,7 +693,7 @@
     untrusted output even on a plain console or over SSH where no GUI can run. It is stricter
     and simpler; the automated CLI-mode tests above were run through it. Both strip escapes and
     keep output safe.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Capability</th><th>secure-terminal (GUI app)</th><th>secure-terminal-cli (wrapper)</th></tr></thead>
     <tbody>
@@ -722,7 +722,7 @@
     risk, and even then its value is validated and sanitised to plain ASCII first. This closes
     clipboard exfiltration, hyperlink phishing and notification spoofing by default, and contains
     title spoofing by quarantine.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>OSC code</th><th>Feature</th><th>Default</th><th>Opt-in?</th><th>Risk</th><th>When you opt in</th></tr></thead>
     <tbody>
@@ -778,7 +778,7 @@
     one of these protocols works by having the terminal parse an escape sequence and render
     arbitrary attacker-supplied bytes, which is exactly the parser and the attack surface
     CLI mode (the default) removes by design.</p>
-  <div class="cmp-wrap">
+  <div class="cmp-wrap" tabindex="0">
   <table class="cmp">
     <thead><tr><th>Feature</th><th>How it works</th><th>Used by</th><th>secure-terminal</th></tr></thead>
     <tbody>
