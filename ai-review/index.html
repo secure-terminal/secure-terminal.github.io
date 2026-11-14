@@ -5,7 +5,11 @@
   Source: https://github.com/secure-terminal/secure-terminal.github.io
 -->
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-sahKEA9TULQayVrIEubBQwOXCaXywLzaFHCWx96kC18='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<!-- Speculation Rules: same-origin prefetch on hover/pointerdown (Chromium). Pure progressive
+     enhancement; Firefox/Tor Browser ignore it. Byte-identical to the wikis + sibling sites, so
+     the one script-src sha256 above covers it. Full-size image links carry [data-no-instant]. -->
+<script type="speculationrules">{"prefetch":[{"where":{"and":[{"href_matches":"/*"},{"not":{"selector_matches":"[data-no-instant]"}}]},"eagerness":"moderate"}]}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="ai-disclosure" content="ai-assisted">
 <title>secure-terminal AI Review: the automated checks</title>

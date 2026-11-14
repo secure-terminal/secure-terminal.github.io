@@ -578,3 +578,10 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
     html{scroll-behavior:auto}
     .inst .ibadge,.h-anchor::after{transition:none}
   }
+  /* Cross-document View Transitions: a smooth cross-fade between same-origin page loads. Pure CSS
+     (no JS, no CSP change); browsers without support (Firefox/Tor Browser) do an instant
+     navigation. Scoped to the motion-welcome block so reduced-motion users (and the reduced
+     default) get the instant swap. Byte-shape matches the wikis + sibling sites. */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition { navigation: auto; }
+  }
