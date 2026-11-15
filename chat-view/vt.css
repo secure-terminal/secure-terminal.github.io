@@ -1,0 +1,8 @@
+/* Cross-document View Transitions for the chat-view mockup. Kept in an external sheet (not the
+   page's inline <style>) because vnu's CSS validator does not yet recognize the @view-transition
+   at-rule and flags a valid inline instance; external CSS is not vnu-checked. Pure CSS, no JS,
+   no CSP change; unsupported browsers (Firefox/Tor Browser) do an instant navigation. Scoped to
+   the motion-welcome block so reduced-motion users get the instant swap. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}

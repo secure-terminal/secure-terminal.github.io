@@ -312,6 +312,12 @@ footer .ffree{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;max-w
 .matrix th[scope=row] a.rowlink::after{content:"#";margin-left:.35em;color:var(--muted);
   font-weight:400;opacity:0;transition:opacity .12s}
 .matrix th[scope=row]:hover a.rowlink::after,.matrix a.rowlink:focus::after{opacity:.55}
+/* WCAG 2.5.8 tap targets: a link that is a table cell's sole content (the comparison-matrix
+   row header, or a reference-cell link marked .celllink) gets a >=24px hit area via padding.
+   Inline links in a cell's flowing prose stay exempt and untouched. */
+.matrix th[scope=row] a.rowlink,a.celllink{display:inline-block;box-sizing:border-box;
+  min-height:24px;padding-block:3px}
+a.celllink{min-width:24px;padding-inline:2px}
 
 /* memory-safety language badge (per-terminal, linked to the parser source) */
 .matrix td.verdict a.langbadge{display:inline-block;line-height:0}

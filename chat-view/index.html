@@ -9,19 +9,16 @@
      the one script-src sha256 above covers it. Full-size image links carry [data-no-instant]. -->
 <script type="speculationrules">{"prefetch":[{"where":{"and":[{"href_matches":"/*"},{"not":{"selector_matches":"[data-no-instant]"}}]},"eagerness":"moderate"}]}</script>
 <title>secure-terminal chat view mockup</title>
+<!-- View Transitions live in an EXTERNAL sheet (not the inline <style> below): vnu's CSS
+     backend does not yet recognize @view-transition and would flag a valid inline at-rule;
+     external CSS is not vnu-validated, matching how the sibling sites carry the rule. -->
+<link rel="stylesheet" href="/chat-view/vt.css">
 <style>
 /*
   STATIC, NON-FUNCTIONAL MOCKUP of a proposed "terminal chat" redesign of
   secure-terminal. Optics only. No real terminal, no shell, no features.
   ASCII-only source; all icons are inline SVG (no emoji / unicode glyphs).
 */
-/* Cross-document View Transitions: a smooth cross-fade between same-origin page loads. Pure CSS
-   (no JS, no CSP change); unsupported browsers (Firefox/Tor Browser) do an instant navigation.
-   Scoped to the motion-welcome block so reduced-motion users get the instant swap. This mockup
-   carries its own inline stylesheet, so the rule lives here (not the shared style.css). */
-@media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-}
 :root{
   --bg:#ffffff; --panel:#f7f7f8; --sidebar:#f9f9f9; --header:#ffffff;
   --border:#e5e5e5; --border-strong:#d7d7d9;
