@@ -43,6 +43,4 @@
       var cap=document.getElementById('umcap'); if(cap) cap.textContent=umlabel[nx];
     });
   });
-  // open scrolled to the newest block (real chat behavior), so the latest output shows
-  try{ chat.scrollTop = chat.scrollHeight; }catch(e){}
 })();
